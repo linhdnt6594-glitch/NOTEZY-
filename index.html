@@ -105,6 +105,19 @@
             100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
         }
 
+        /* 3D Floating Asset */
+        .floating-img {
+            width: 220px;
+            animation: float-3d 3s ease-in-out infinite;
+            filter: drop-shadow(0 15px 20px rgba(0,0,0,0.2));
+            margin-bottom: 20px;
+        }
+        @keyframes float-3d {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
         /* Workspace Page */
         #workspace-page {
             padding: 24px;
@@ -191,6 +204,15 @@
 
     <!-- Trang 1: Landing Page -->
     <div id="landing-page" class="screen active">
+        <div style="font-size: 100px; text-align: center; animation: float 3s ease-in-out infinite; filter: drop-shadow(0 0 20px rgba(255,255,255,0.5)); margin-bottom: 20px;">📓</div>
+
+<style>
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+}
+</style>
         <h1 class="title-3d" id="greeting-text">Hi! Muốn note gì đó cưng?</h1>
         <div class="glass mic-btn-huge" id="main-mic-btn" onclick="startGlobalVoiceInput()">
             <span class="material-icons-round">mic</span>
@@ -201,7 +223,7 @@
     <!-- Trang 2: Workspace Page -->
     <div id="workspace-page" class="screen hidden">
         <header>
-            <div style="font-size: 80px; text-align: center; margin-top: 20px;">📓</div>
+            <h1>HoloNotes</h1>
             <p id="current-date">Hôm nay</p>
         </header>
 
@@ -451,4 +473,4 @@
 
     </script>
 </body>
-</htm
+</html>

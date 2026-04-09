@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NOTEZY V20 - SMART CƯNG</title>
+    <title>NOTEZY V21 - MASTERPIECE</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,116 +15,116 @@
 
     <style>
         :root {
-            /* 🎨 BỘ MÀU MATTE STONE & LAVENDER (CHUẨN SANG) 🎨 */
-            --bg-base: #F1F5F9;
-            --stone-gray: #D1D5DB;
-            --lavender: #B794F4;
-            --dusty-pink: #F687B3;
-            --text-dark: #1F2937;
-            --card-glass: rgba(255, 255, 255, 0.9);
+            --bg-stone: #D8D8D8;
+            --lavender: #E0CFFC;
+            --blush: #F8E0F2;
+            --deep-lavender: #B794F4;
+            --text-main: #2D3748;
+            --glass: rgba(255, 255, 255, 0.5);
+            --card-white: rgba(255, 255, 255, 0.85);
         }
 
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             font-family: 'Inter', sans-serif; overflow: hidden;
-            background: var(--bg-base); color: var(--text-dark);
+            background: var(--bg-stone); color: var(--text-main);
         }
 
-        /* Nền mượt không lỗi */
-        .bg-gradient {
+        /* Nền loang nhẹ đúng gu cưng duyệt */
+        .bg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%);
+            background: radial-gradient(circle at 10% 20%, var(--lavender) 0%, transparent 45%),
+                        radial-gradient(circle at 90% 80%, var(--blush) 0%, transparent 45%);
             z-index: -1;
         }
 
         .screen {
             position: absolute; width: 100%; height: 100%;
             transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-            display: flex; flex-direction: column; padding: 35px 25px; box-sizing: border-box;
+            display: flex; flex-direction: column; padding: 40px 25px; box-sizing: border-box;
         }
         .hidden { transform: translateY(100vh); opacity: 0; pointer-events: none; }
         .active { transform: translateY(0); opacity: 1; z-index: 10; }
 
-        /* Trang 1 */
+        /* Trang 1: Thiết kế cưng vừa ưng */
         #landing { justify-content: center; align-items: center; text-align: center; }
-        .book-3d {
-            font-size: 160px; animation: float 4s ease-in-out infinite; cursor: pointer;
-            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));
-        }
-        @keyframes float { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-25px);} }
+        .book-3d { width: 220px; height: 300px; background: var(--glass); border-radius: 40px; border: 2px solid white; display: flex; justify-content: center; align-items: center; animation: float 4s infinite; backdrop-filter: blur(15px); box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
+        .book-3d::after { content: '📓'; font-size: 130px; filter: saturate(0.5); }
+        @keyframes float { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-20px);} }
 
-        /* Trang 2 */
-        .header h1 { font-weight: 900; letter-spacing: -1px; margin: 0; font-size: 1.6rem; color: var(--lavender); }
+        /* Trang 2: Giao diện Clean & Glass */
+        .header { margin-bottom: 30px; }
+        .workspace-title { font-size: 1.6rem; font-weight: 900; letter-spacing: -1px; margin: 0; }
         
-        .tab-bar { display: flex; gap: 12px; margin: 25px 0; }
-        .tab-btn {
-            flex: 1; padding: 16px; border-radius: 20px; text-align: center;
-            font-weight: 900; background: white; border: 2px solid transparent;
-            transition: 0.3s; color: #9CA3AF; box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-        }
-        .active-w { border-color: var(--lavender); color: var(--lavender); }
-        .active-p { border-color: var(--dusty-pink); color: var(--dusty-pink); }
+        .tab-bar { display: flex; gap: 12px; margin-bottom: 25px; background: rgba(0,0,0,0.03); padding: 6px; border-radius: 25px; }
+        .tab-btn { flex: 1; padding: 12px; border-radius: 20px; text-align: center; font-weight: 900; transition: 0.3s; color: #718096; border: none; cursor: pointer; background: transparent; }
+        .active-w { background: white; color: var(--deep-lavender); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .active-p { background: white; color: var(--blush); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* Note Cards */
-        .list { flex: 1; overflow-y: auto; padding-bottom: 120px; }
-        .card {
-            background: var(--card-glass); padding: 22px; border-radius: 25px; margin-bottom: 15px;
-            display: flex; align-items: center; border: 1px solid white;
-            animation: pop 0.4s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-        }
+        .list-wrap { flex: 1; overflow-y: auto; padding-bottom: 110px; }
+        .card { background: var(--card-white); padding: 22px; border-radius: 24px; margin-bottom: 12px; display: flex; align-items: center; backdrop-filter: blur(10px); animation: slide 0.4s ease-out; }
         .card.done span { text-decoration: line-through; opacity: 0.4; }
-        @keyframes pop { from {opacity: 0; transform: scale(0.95);} }
+        @keyframes slide { from {opacity: 0; transform: translateY(15px);} }
 
-        /* Checkbox */
-        .check-box {
-            width: 26px; height: 26px; border-radius: 8px; border: 3px solid #E5E7EB;
-            margin-right: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-        }
+        .check-box { width: 24px; height: 24px; border-radius: 8px; border: 3px solid #E2E8F0; margin-right: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: 0.2s; }
         .check-box.checked { background: #4ADE80; border-color: #4ADE80; }
         .check-box.checked::after { content: '✓'; color: white; font-weight: 900; }
 
-        /* Bottom Buttons */
-        .btn-wrap { position: fixed; bottom: 35px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; z-index: 100; }
-        .btn-icon { width: 80px; height: 80px; border-radius: 50%; background: white; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); cursor: pointer; }
-        .mic-on { background: #ff4d4d; color: white; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% {box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.4);} 70% {box-shadow: 0 0 0 25px rgba(255, 77, 77, 0);} }
+        /* Dock công cụ dưới đáy chuẩn trang 1 */
+        .dock-wrap { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: white; border-radius: 40px; padding: 10px 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.8); z-index: 100; }
+        .dock-btn { display: flex; align-items: center; gap: 8px; padding: 10px 15px; border-radius: 30px; cursor: pointer; font-weight: 800; font-size: 13px; transition: 0.2s; }
+        .dock-btn.speech { background: rgba(183, 148, 244, 0.1); color: var(--deep-lavender); }
+        .dock-btn.speech.on { background: #ff4d4d; color: white; }
     </style>
 </head>
 <body>
 
-<div class="bg-gradient"></div>
+<div class="bg-overlay"></div>
 
-<div id="landing" class="screen active" onclick="switchPage('workspace')">
-    <div class="book-3d">📓</div>
-    <p style="margin-top:40px; font-weight:900; color: var(--lavender);">BẤM ĐỂ MỞ SỔ<br>ĐI CƯNG ƠI!</p>
+<div id="landing" class="screen active">
+    <div class="book-3d" onclick="switchPage('workspace')"></div>
+    <div style="background: white; padding: 10px 25px; border-radius: 30px; margin: 40px 0 20px; font-weight: 800; color: var(--deep-lavender); box-shadow: 0 4px 10px rgba(0,0,0,0.03);">ĐANG ĐỢI CƯNG...</div>
+    <h2 style="font-weight: 900; margin: 0;">BẤM ĐỂ MỞ SỔ<br>ĐI CƯNG ƠI!</h2>
+    <div class="dock-wrap" style="bottom: 50px;">
+        <div class="dock-btn" onclick="openModal()" style="background: rgba(0,0,0,0.03);"><span class="material-icons-round" style="font-size: 18px;">add_circle_outline</span> ADD</div>
+        <div class="dock-btn speech" id="mic-l"><span class="material-icons-round" style="font-size: 18px;">mic_none</span> SPEECH</div>
+    </div>
 </div>
 
 <div id="workspace" class="screen hidden">
     <div class="header">
-        <h1>Não lag? Mở Notezy 😎</h1>
+        <h1 class="workspace-title">Não lag? Mở Notezy 😎</h1>
     </div>
     <div class="tab-bar">
-        <div id="t-w" class="tab-btn active-w" onclick="setTab('work')">CÔNG VIỆC</div>
-        <div id="t-p" class="tab-btn" onclick="setTab('personal')">CÁ NHÂN</div>
+        <div id="t-w" class="tab-btn active-w" onclick="setTab('work')">WORK</div>
+        <div id="t-p" class="tab-btn" onclick="setTab('personal')">PERSONAL</div>
     </div>
-    <div id="list" class="list"></div>
+    <div id="list" class="list-wrap"></div>
+    
+    <div class="dock-wrap">
+        <div class="dock-btn" onclick="openModal()" style="background: rgba(0,0,0,0.03);"><span class="material-icons-round" style="font-size: 18px;">add_circle_outline</span> ADD</div>
+        <div class="dock-btn speech" id="mic-w"><span class="material-icons-round" style="font-size: 18px;">mic_none</span> SPEECH</div>
+    </div>
 </div>
 
-<div class="btn-wrap">
-    <div class="btn-icon" onclick="addManual()"><span class="material-icons-round" style="font-size: 35px;">add</span></div>
-    <div class="btn-icon" id="mic"><span class="material-icons-round" style="font-size: 40px;">mic</span></div>
+<div id="inputModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:none; justify-content:center; align-items:center; z-index:2000; backdrop-filter:blur(10px);">
+    <div style="background:white; padding:30px; border-radius:35px; width:85%; max-width:400px; box-sizing:border-box;">
+        <h3 style="margin:0 0 20px; font-weight:900;">Ghi đi nà cưng</h3>
+        <input type="text" id="manualInput" placeholder="Nhập nhanh..." style="width:100%; padding:18px; border-radius:20px; border:2px solid #F1F5F9; font-size:16px; outline:none; box-sizing:border-box; margin-bottom:20px;">
+        <button onclick="addManual()" style="width:100%; padding:18px; border-radius:20px; border:none; background:var(--deep-lavender); color:white; font-weight:900; font-size:16px;">LƯU LẠI</button>
+    </div>
 </div>
 
 <script>
     const API_KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
-    let notes = JSON.parse(localStorage.getItem('notezy_v20')) || [];
+    let notes = JSON.parse(localStorage.getItem('notezy_v21')) || [];
     let currentTab = 'work';
     let rec, isListening = false;
 
     function initSpeech() {
         const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
         rec = new Speech(); rec.lang = 'vi-VN'; rec.continuous = true;
-        rec.onstart = () => { isListening = true; document.getElementById('mic').classList.add('mic-on'); };
+        rec.onstart = () => { isListening = true; updateMicUI(true); };
         rec.onresult = (e) => { processAI(e.results[e.results.length - 1][0].transcript); };
         rec.onend = () => { if(isListening) rec.start(); };
         rec.start();
@@ -132,11 +132,8 @@
 
     async function processAI(txt) {
         if(document.getElementById('landing').classList.contains('active')) switchPage('workspace');
-        
-        // Nhận diện từ khóa hoàn thành
-        const isDone = txt.toLowerCase().includes("xong") || txt.toLowerCase().includes("đã") || txt.toLowerCase().includes("rồi");
-
-        const p = `Bạn là trợ lý nanh nọc. Phân loại "${txt}" vào "work" hoặc "personal". Trả về JSON: {"type": "work/personal", "reply": "câu khịa gọi cưng", "text": "nội dung"}`;
+        const isDone = /xong|đã|rồi/.test(txt.toLowerCase());
+        const p = `Bạn là trợ lý nữ miền Nam nanh nọc. Phân loại "${txt}" vào "work" hoặc "personal". Trả về JSON: {"type": "work/personal", "reply": "câu khịa gọi cưng", "text": "nội dung"}`;
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -144,49 +141,46 @@
             });
             const d = await res.json();
             const resAI = JSON.parse(d.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, ""));
-            
             notes.unshift({ id: Date.now(), text: resAI.text, type: resAI.type, done: isDone });
             save();
-            if(isDone) {
-                responsiveVoice.speak("Ghi rồi, mà cưng làm xong luôn rồi hả? Ghê ta!", "Vietnamese Female");
-            } else {
-                responsiveVoice.speak(resAI.reply, "Vietnamese Female");
-            }
+            responsiveVoice.speak(isDone ? "Cưng làm xong rồi hả? Giỏi ta!" : resAI.reply, "Vietnamese Female");
             setTab(resAI.type);
         } catch(e) { notes.unshift({ id: Date.now(), text: txt, type: currentTab, done: isDone }); save(); }
     }
 
-    function addManual() {
-        const val = prompt("Ghi gì đi cưng:");
-        if(val) {
-            notes.unshift({ id: Date.now(), text: val, type: currentTab, done: false });
-            save();
-            responsiveVoice.speak("Lưu rồi nhen cưng!", "Vietnamese Female");
-        }
+    function updateMicUI(on) {
+        const ml = document.getElementById('mic-l'), mw = document.getElementById('mic-w');
+        ml.className = mw.className = on ? 'dock-btn speech on' : 'dock-btn speech';
     }
 
-    function toggleDone(id) {
-        const n = notes.find(x => x.id === id);
-        n.done = !n.done;
-        if(n.done) responsiveVoice.speak("Xong rồi hả cưng? Giỏi quá ta!", "Vietnamese Female");
-        save();
-    }
-
-    function save() { localStorage.setItem('notezy_v20', JSON.stringify(notes)); render(); }
+    function save() { localStorage.setItem('notezy_v21', JSON.stringify(notes)); render(); }
     function render() {
         const l = document.getElementById('list'); l.innerHTML = '';
         notes.filter(n => n.type === currentTab).forEach(n => {
             l.innerHTML += `<div class="card ${n.done?'done':''}">
                 <div class="check-box ${n.done?'checked':''}" onclick="toggleDone(${n.id})"></div>
-                <span style="flex:1; font-weight:600;">${n.text}</span>
-                <span class="material-icons-round" style="opacity:0.2; cursor:pointer;" onclick="del(${n.id})">delete</span>
+                <span style="flex:1; font-weight:800; font-size:1.1rem;">${n.text}</span>
+                <span class="material-icons-round" style="opacity:0.1; cursor:pointer;" onclick="del(${n.id})">delete</span>
             </div>`;
         });
     }
 
-    function del(id) { notes = notes.filter(n => n.id !== id); save(); }
+    function toggleDone(id) {
+        const n = notes.find(x => x.id === id); n.done = !n.done;
+        if(n.done) responsiveVoice.speak("Xong rồi hả cưng? Giỏi nha!", "Vietnamese Female");
+        save();
+    }
+
+    function addManual() {
+        const val = document.getElementById('manualInput').value;
+        if(val) { notes.unshift({ id: Date.now(), text: val, type: currentTab, done: false }); save(); closeModal(); document.getElementById('manualInput').value=''; responsiveVoice.speak("Lưu rồi nhen cưng!", "Vietnamese Female"); }
+    }
+
     function setTab(t) { currentTab = t; document.getElementById('t-w').className = t==='work'?'tab-btn active-w':'tab-btn'; document.getElementById('t-p').className = t==='personal'?'tab-btn active-p':'tab-btn'; render(); }
     function switchPage(p) { document.getElementById('landing').className='screen hidden'; document.getElementById('workspace').className='screen active'; render(); }
+    function openModal() { document.getElementById('inputModal').style.display='flex'; }
+    function closeModal() { document.getElementById('inputModal').style.display='none'; }
+    function del(id) { notes = notes.filter(n => n.id !== id); save(); }
 
     window.onclick = () => { if(!isListening) { initSpeech(); responsiveVoice.speak("Notezy hóng lệnh nè cưng!", "Vietnamese Female"); } };
     window.onload = render;

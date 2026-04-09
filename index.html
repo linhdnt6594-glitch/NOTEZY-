@@ -3,204 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NOTEZY V8 SUPER IMMORTAL</title>
-    
+    <title>NOTEZY V10 - 100 CÂU KHỊA</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/4200/4200052.png">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 
     <style>
         :root {
-            --work: #3B82F6; --pers: #EC4899;
-            --bg: linear-gradient(-45deg, #FFDEE9, #B5FFFC, #D4C4FB, #FFDEE9);
+            --bg: #E2E8F0;
+            --accent-p: #B794F4;
+            --accent-h: #F687B3;
+            --text: #2D3748;
         }
-
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            font-family: 'Inter', sans-serif; overflow: hidden;
-            background: var(--bg); background-size: 400% 400%;
-            animation: gradient 10s ease infinite;
-        }
-
-        @keyframes gradient { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
-
-        .screen {
-            position: absolute; width: 100%; height: 100%;
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-            display: flex; flex-direction: column; padding: 25px; box-sizing: border-box;
-        }
-        .hidden { transform: translateY(100vh); opacity: 0; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Inter', sans-serif; overflow: hidden; background: var(--bg); color: var(--text); }
+        .bg-glow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 10% 20%, rgba(183,148,244,0.15) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(246,135,179,0.15) 0%, transparent 40%); z-index: -1; }
+        .screen { position: absolute; width: 100%; height: 100%; transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); display: flex; flex-direction: column; padding: 35px 25px; box-sizing: border-box; }
+        .hidden { transform: translateY(100vh); opacity: 0; pointer-events: none; }
         .active { transform: translateY(0); opacity: 1; z-index: 10; }
-
-        /* Trang 1: Siêu Hologram */
-        #landing { justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px); }
-        
-        .logo-3d {
-            font-size: 200px; cursor: pointer;
-            animation: float 4s ease-in-out infinite, glow 2s ease-in-out infinite;
-            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
-            user-select: none;
-        }
-
-        @keyframes float { 0%, 100% {transform: translateY(0) scale(1);} 50% {transform: translateY(-30px) scale(1.05);} }
-        @keyframes glow {
-            0%, 100% { filter: drop-shadow(0 0 20px rgba(236, 72, 153, 0.3)); }
-            50% { filter: drop-shadow(0 0 40px rgba(181, 255, 252, 0.6)); }
-        }
-
-        .status-pill {
-            background: rgba(255, 255, 255, 0.4); padding: 10px 20px; border-radius: 30px;
-            font-weight: 800; font-size: 14px; margin-top: 40px;
-            border: 1px solid rgba(255,255,255,0.5); display: flex; align-items: center; gap: 8px;
-        }
-        .dot { width: 10px; height: 10px; background: #ff4757; border-radius: 50%; animation: blink 1s infinite; }
-        @keyframes blink { 0%, 100% {opacity: 1;} 50% {opacity: 0.3;} }
-
-        /* Trang 2: Workspace */
-        .tab-bar { display: flex; gap: 10px; margin: 20px 0; }
-        .tab { 
-            flex: 1; padding: 15px; border-radius: 20px; text-align: center; font-weight: 800;
-            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); transition: 0.3s;
-        }
-        .active-work { background: var(--work) !important; color: white; }
-        .active-pers { background: var(--pers) !important; color: white; }
-
-        .note-list { flex: 1; overflow-y: auto; padding-bottom: 100px; }
-        .card { 
-            background: rgba(255,255,255,0.25); backdrop-filter: blur(10px);
-            padding: 20px; border-radius: 25px; margin-bottom: 15px;
-            border: 1px solid rgba(255,255,255,0.4); display: flex; align-items: center;
-            animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        @keyframes pop { from {transform: scale(0.8); opacity: 0;} to {transform: scale(1); opacity: 1;} }
-
-        /* Mic luôn sẵn sàng */
-        .mic-fixed {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: 80px; height: 80px; border-radius: 50%; background: white;
-            display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 100;
-        }
-        .mic-active { background: #ff4757; color: white; animation: ripple 1.5s infinite; }
-        @keyframes ripple { 0% {box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4);} 70% {box-shadow: 0 0 0 20px rgba(255, 71, 87, 0);} 100% {box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);} }
+        #landing { justify-content: center; align-items: center; text-align: center; }
+        .hologram-box { width: 260px; height: 340px; background: rgba(255,255,255,0.25); border-radius: 40px; border: 2px solid rgba(255,255,255,0.6); display: flex; justify-content: center; align-items: center; animation: float 4s ease-in-out infinite; backdrop-filter: blur(15px); box-shadow: 0 25px 50px rgba(0,0,0,0.05); cursor: pointer; }
+        .hologram-box::before { content: '📓'; font-size: 160px; animation: glow 3s infinite; }
+        @keyframes float { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-25px);} }
+        @keyframes glow { 0%, 100% {opacity: 0.8;} 50% {opacity: 1; filter: drop-shadow(0 0 15px rgba(183,148,244,0.4));} }
+        .status { margin-top: 50px; background: white; padding: 12px 30px; border-radius: 40px; display: flex; align-items: center; gap: 10px; font-weight: 900; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
+        .dot { width: 10px; height: 10px; background: #9F7AEA; border-radius: 50%; animation: blink 1.5s infinite; }
+        @keyframes blink { 0%, 100% {opacity: 1;} 50% {opacity: 0.2;} }
+        .tab-bar { display: flex; gap: 12px; margin-bottom: 25px; }
+        .tab-btn { flex: 1; padding: 18px; border-radius: 20px; text-align: center; font-weight: 900; background: rgba(255,255,255,0.5); border: 2px solid transparent; color: #718096; }
+        .active-w { border-color: var(--accent-p); color: var(--accent-p); background: white; }
+        .active-p { border-color: var(--accent-h); color: var(--accent-h); background: white; }
+        .list { flex: 1; overflow-y: auto; padding-bottom: 120px; }
+        .card { background: white; padding: 22px; border-radius: 25px; margin-bottom: 15px; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid white; animation: slideIn 0.5s ease-out; }
+        @keyframes slideIn { from {opacity: 0; transform: translateY(20px);} to {opacity: 1;} }
+        .mic { position: fixed; bottom: 35px; left: 50%; transform: translateX(-50%); width: 90px; height: 90px; border-radius: 50%; background: white; display: flex; justify-content: center; align-items: center; box-shadow: 0 15px 35px rgba(0,0,0,0.08); z-index: 100; }
+        .mic-on { background: #9F7AEA; color: white; animation: rip 1.5s infinite; }
+        @keyframes rip { 0% {box-shadow: 0 0 0 0 rgba(159, 122, 234, 0.4);} 70% {box-shadow: 0 0 0 30px rgba(159, 122, 234, 0);} }
     </style>
 </head>
 <body>
-
+<div class="bg-glow"></div>
 <div id="landing" class="screen active">
-    <div class="logo-3d">📓</div>
-    <div class="status-pill"><div class="dot"></div> ĐANG HÓNG CHUYỆN...</div>
-    <p style="margin-top:20px; font-weight:600; color: #64748B;">Cứ nói đi, tui nghe hết!</p>
+    <div class="hologram-box" onclick="testKhia()"></div>
+    <div class="status"><div class="dot"></div> ĐANG HÓNG CHUYỆN...</div>
 </div>
-
 <div id="workspace" class="screen hidden">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h1 style="font-weight:900; letter-spacing:-1px;">SỔ TAY PRO</h1>
-        <span class="material-icons-round" onclick="location.reload()">refresh</span>
-    </div>
-    
+    <h1 style="font-weight:900; letter-spacing:-1.5px;">SỔ TAY HOÀNG GIA</h1>
     <div class="tab-bar">
-        <div id="t-work" class="tab active-work" onclick="setTab('work')">CÔNG VIỆC</div>
-        <div id="t-pers" class="tab" onclick="setTab('personal')">CÁ NHÂN</div>
+        <div id="t-w" class="tab-btn active-w" onclick="setTab('work')">CÔNG VIỆC</div>
+        <div id="t-p" class="tab-btn" onclick="setTab('personal')">CÁ NHÂN</div>
     </div>
-
-    <div class="note-list" id="list"></div>
+    <div id="list" class="list"></div>
 </div>
-
-<div class="mic-fixed" id="master-mic">
-    <span class="material-icons-round" style="font-size: 35px;">mic</span>
-</div>
+<div class="mic" id="master-mic"><span class="material-icons-round" style="font-size: 45px;">mic</span></div>
 
 <script>
     const KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
+    let notes = JSON.parse(localStorage.getItem('notezy_v10')) || [];
     let currentTab = 'work';
-    let notes = JSON.parse(localStorage.getItem('notezy_v8')) || [];
-    let rec;
-    let isActive = false;
+    let rec, isListening = false;
 
-    // 1. Tự khởi động Mic ngay khi mở
-    function startListening() {
+    // TỔNG HỢP 100 CÂU KHỊA CHỦ TỊCH CÁ VÀNG
+    const g = [
+        "Có vậy cũng note đồ cá vàng!", "Ghi vô đi chứ não cưng chứa toàn nước không hà!", "Não cưng reset sau 3 giây tui biết hết nhen!", "Ghi lẹ đi đồ hay quên, tui chờ muốn mọc râu!", "Bộ nhớ cưng chắc bằng cái ổ đĩa mềm thời xưa, hở tí là đầy.", "Sống sao cho người ta thương, chứ nết hay quên ai độ nổi!", "Ghi xong nhớ đọc nha, đừng ghi cho sang cái nết cá vàng.", "Não cưng cài chế độ tự xóa sau 5 giây hả?", "Cưng mà không có tui chắc quên luôn cách thở quá.", "Trông cũng sang mà nết hay quên thì thua nha cưng.",
+        "Ghi lẹ tui còn đi ngủ, nhìn cưng lề mề tui mệt quá.", "Note cái này chi? Mai cưng cũng có nhớ đâu mà nhìn.", "Ủa rồi ghi xong có làm không hay ghi cho vui vậy cưng?", "Cá vàng còn nhớ được lâu hơn cưng đó, thiệt sự!", "Nè, tui lưu rồi đó, mai đừng có hỏi 'ủa cái này ở đâu ra' nhen.", "Cưng note chuyện này thấy cũng thường, kiếm chuyện gì chấn động coi.", "Não bộ cưng chắc đang bảo trì định kỳ hả? Quên hoài!", "Ghi vô sổ đi, chứ để trong đầu nó bốc hơi lẹ lắm.", "Ghi xong rồi đó, bớt ngáo lại giùm tui cái nha cưng.", "Trời ơi, chuyện vặt vãnh này cũng bắt tui lưu, rảnh quá nè.",
+        "Nè cưng, ghi rồi đó, ráng mà nhớ nha đồ cá vàng.", "Tui thấy cưng giống máy tính đời cũ, chạy thì chậm mà nhanh hết ram.", "Cưng định note hết cả thế giới vô đây hả đồ lười nhớ.", "Lưu rồi nhen, đừng có làm mất máy rồi đổ thừa tui à.", "Não cưng chắc chỉ dùng để trang trí cho cân đối cái đầu hả?", "Ghi đi cưng, ghi cho con cháu sau này nó biết cưng hay quên cỡ nào.", "Ủa chuyện này hồi nãy nói rồi mà? Ghi lại chi nữa?", "Tui ghi rồi đó, đừng có lảm nhảm bên tai tui nữa nha.", "Cưng ơi, note ít thôi, tui mỏi tay... à mỏi chip rồi nè.", "Lại là chuyện cá nhân, cưng rảnh rang quá hen.",
+        "Note rồi đó, giờ đi làm việc đi đừng có ngồi đó ngắm tui.", "Cưng mà đi thi Đường lên đỉnh Olympia chắc rớt từ vòng gửi xe vì hay quên.", "Tui lưu cái này vô mục 'Những chuyện nhảm nhí nhất' nhen.", "Ghi đi cưng, kẻo tí nữa cưng lại quên luôn tên tui thì khổ.", "Ủa rồi cái này là cái gì? Cưng nói tui chả hiểu gì nhưng vẫn lưu nè.", "Cưng có bộ não rất quý, vì nó còn mới nguyên chưa xài.", "Đừng tự ti vì hay quên, hãy tự hào vì mình... đặc biệt ngáo.", "Ghi vô sổ đi, cho người ta tưởng cưng là người bận rộn.", "Tui ghi rồi đó, bớt hỏi 'ủa sao tui chưa ghi' nha đồ cá vàng.", "Nhìn mặt cưng là biết sắp quên cái gì nữa rồi đó.",
+        "Ghi lẹ đi, tui còn đi ăn chè, đừng làm mất thời gian.", "Note rồi nhen, chúc cưng may mắn với trí nhớ siêu ngắn của mình.", "Cưng giống như điện thoại sạc không vào pin, nói đâu quên đó.", "Lại một chuyện nữa cần ghi, não cưng chắc đang biểu tình hả?", "Tui lưu rồi, nhớ trả công tui bằng cách bớt ngáo lại nhen.", "Ghi đi cưng, ghi cho nó chuyên nghiệp cái nết cá vàng.", "Ủa chuyện này quan trọng hả? Sao tui thấy nó cứ xàm xàm.", "Ghi xong rồi đó, giờ cưng có muốn tui nhắc gì nữa không đồ lười?", "Cưng đừng có nhìn tui đắm đuối, ghi bài đi kẻo quên.", "Tui thấy cưng ghi nhiều mà chả làm bao nhiêu, kỳ cục kẹo nè.",
+        "Nói thiệt nha, cưng là quán quân trong làng hay quên đó.", "Ghi rồi đó, đừng có nhảy dựng lên hỏi tui nhen.", "Cưng mà là cá chắc cưng quên luôn đường bơi về nhà.", "Note rồi nhen, cái đồ não cá vàng chánh hiệu.", "Tui thấy cưng cũng thông minh, mà là thông minh đột xuất còn ngu thì thường xuyên.", "Ghi đi cưng, kẻo mai lại bảo 'tui đâu có nói vậy'.", "Não cưng chắc đang để ở chế độ máy bay hả? Không kết nối được gì hết.", "Tui ghi rồi, giờ cưng im lặng cho tui nghỉ ngơi xíu coi.", "Note chuyện này thấy cũng sang, mà nết hay quên làm nó bớt sang đi.", "Cưng ơi, ghi xong rồi thì tắt app đi làm việc đi, đừng có bấm hoài.",
+        "Lưu rồi nha, đồ cá vàng cao cấp.", "Cưng ghi nhiều vậy bộ định mở tiệm bán giấy hả?", "Não cưng chắc bị virus 'Hay quên' nó gặm hết rồi.", "Ghi lẹ đi, nhìn cưng ngơ ngơ tui muốn táng cho tỉnh ghê.", "Tui ghi rồi, đừng có lèo nhèo nữa nha cưng.", "Note chuyện này xong thấy mình cũng rảnh quá nè.", "Cưng ơi, ráng mà nhớ nhen, tui không nhắc lần thứ hai đâu.", "Não cưng có bộ lọc 'Xóa sạch chuyện quan trọng' đúng không?", "Ghi rồi đó, đồ cái nết cá vàng không ai bằng.", "Tui thấy cưng cũng đẹp, mà đẹp theo kiểu... thiếu muối.",
+        "Ghi lẹ đi cưng, tui hết kiên nhẫn với cái trí nhớ của cưng rồi.", "Note rồi nhen, cái đồ hay quên từ trong trứng nước.", "Não cưng chắc đang ở thời kỳ đồ đá, chậm chạp quá đi.", "Ghi đi cưng, ghi cho đời nó nể cái nết hay quên của mình.", "Tui ghi rồi, đừng có làm bộ làm tịch nữa nha.", "Cưng ghi xong rồi có thấy mình thông minh hơn chút nào không?", "Note chuyện này thấy cũng hay, mà cưng quên lẹ quá làm nó hết hay.", "Lưu rồi đó, đồ cá vàng sống lâu năm.", "Cưng ơi, ghi xong rồi thì nhớ làm, đừng có để đó mọc rêu.", "Não cưng chắc chỉ để chứa nhạc với phim thôi hả?",
+        "Ghi rồi nha, đồ cá vàng thứ thiệt.", "Tui thấy cưng cũng siêng ghi, mà siêng quên còn nhiều hơn.", "Ghi đi cưng, ghi cho nó bớt cái sự ngơ ngác lại.", "Note rồi nhen, cái đồ trí nhớ ngắn hơn cả cái kẹo.", "Tui lưu rồi, mai mà quên là tui cười vô mặt đó.", "Cưng ơi, ghi xong rồi thì nhớ cảm ơn tui nhen.", "Não cưng chắc bị rò rỉ bộ nhớ rồi, ghi đâu mất đó.", "Ghi rồi đó, đồ cái nết cá vàng không lối thoát.", "Tui thấy cưng cũng tài, tài lanh với tài quên là giỏi nhất.", "Note xong rồi đó, giờ biến đi cho tui nhờ!",
+        "Lưu rồi nhen cưng, đừng có lảm nhảm nữa.", "Ghi đi cưng, ghi cho nó có phong cách người thành đạt.", "Não cưng chắc đang bận nghĩ về trà sữa nên quên hết việc hả?", "Ghi rồi đó, cái đồ hay quên truyền kiếp.", "Tui thấy cưng ghi mà tui cũng mệt lây cho cái não của cưng.", "Note rồi nhen, đồ cá vàng không đối thủ.", "Cưng ơi, ghi xong rồi thì đừng có hỏi 'ủa ai ghi dị'.", "Não cưng chắc bị lỗi phần mềm 'Ghi nhớ' rồi, đi sửa đi.", "Ghi rồi đó, cái đồ trí nhớ chim sẻ.", "Câu cuối nè: Ghi rồi, bớt cá vàng lại cho tui nhờ nghe chưa cưng!"
+    ];
+
+    function startRec() {
         const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-        rec = new Speech();
-        rec.lang = 'vi-VN';
-        rec.continuous = true; // Luôn luôn nghe
-        rec.interimResults = false;
-
-        rec.onstart = () => { 
-            isActive = true; 
-            document.getElementById('master-mic').classList.add('mic-active');
-        };
-        rec.onresult = (e) => {
-            const txt = e.results[e.results.length - 1][0].transcript;
-            processAI(txt);
-        };
-        rec.onend = () => { rec.start(); }; // Tự động bật lại nếu bị ngắt
+        rec = new Speech(); rec.lang = 'vi-VN'; rec.continuous = true;
+        rec.onstart = () => { isListening = true; document.getElementById('master-mic').classList.add('mic-on'); };
+        rec.onresult = (e) => { processAI(e.results[e.results.length - 1][0].transcript); };
+        rec.onend = () => { if(isListening) rec.start(); };
         rec.start();
     }
 
     async function processAI(txt) {
-        // Tự chuyển sang trang 2 nếu đang ở trang 1
         document.getElementById('landing').className = 'screen hidden';
         document.getElementById('workspace').className = 'screen active';
-
-        const prompt = `Bạn là trợ lý nữ miền Nam nanh nọc. Phân loại câu "${txt}" vào "work" hoặc "personal". Trả về JSON: {"type": "work/personal", "reply": "câu khịa", "item": "nội dung"}`;
-        
+        const p = `Bạn là trợ lý nữ miền Nam nanh nọc. Phân loại câu "${txt}" vào "work" hoặc "personal". Trả về JSON: {"type": "work/personal", "reply": "1 câu khịa hài hước về nết cá vàng", "text": "nội dung"}`;
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${KEY}`, {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                body: JSON.stringify({ contents: [{ parts: [{ text: p }] }] })
             });
             const d = await res.json();
             const clean = d.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, "");
             const resAI = JSON.parse(clean);
-
-            notes.push({ id: Date.now(), text: resAI.item, type: resAI.type });
-            localStorage.setItem('notezy_v8', JSON.stringify(notes));
+            notes.unshift({ id: Date.now(), text: resAI.text, type: resAI.type });
+            localStorage.setItem('notezy_v10', JSON.stringify(notes));
             responsiveVoice.speak(resAI.reply, "Vietnamese Female");
             setTab(resAI.type);
         } catch(e) {
-            notes.push({ id: Date.now(), text: txt, type: currentTab });
+            notes.unshift({ id: Date.now(), text: txt, type: currentTab });
             render();
         }
     }
 
     function setTab(t) {
         currentTab = t;
-        document.getElementById('t-work').className = t === 'work' ? 'tab active-work' : 'tab';
-        document.getElementById('t-pers').className = t === 'personal' ? 'tab active-pers' : 'tab';
+        document.getElementById('t-w').className = t === 'work' ? 'tab-btn active-w' : 'tab-btn';
+        document.getElementById('t-p').className = t === 'personal' ? 'tab-btn active-p' : 'tab-btn';
         render();
     }
 
     function render() {
-        const l = document.getElementById('list');
-        l.innerHTML = '';
-        notes.filter(n => n.type === currentTab).reverse().forEach(n => {
-            l.innerHTML += `<div class="card">
-                <div style="width:10px; height:10px; border-radius:50%; background:${n.type==='work'?'#3B82F6':'#EC4899'}; margin-right:15px;"></div>
-                <span style="flex:1; font-weight:700;">${n.text}</span>
-                <span class="material-icons-round" onclick="del(${n.id})" style="opacity:0.2">delete</span>
-            </div>`;
+        const list = document.getElementById('list'); list.innerHTML = '';
+        notes.filter(n => n.type === currentTab).forEach(n => {
+            list.innerHTML += `<div class="card"><div style="width:12px; height:12px; border-radius:50%; background:${n.type==='work'?'#9F7AEA':'#F687B3'}; margin-right:18px;"></div><span style="flex:1; font-weight:900; font-size:1.1rem;">${n.text}</span><span class="material-icons-round" onclick="del(${n.id})" style="opacity:0.2; cursor:pointer;">delete</span></div>`;
         });
     }
 
-    function del(id) {
-        notes = notes.filter(n => n.id !== id);
-        localStorage.setItem('notezy_v8', JSON.stringify(notes));
-        render();
+    function del(id) { notes = notes.filter(n => n.id !== id); localStorage.setItem('notezy_v10', JSON.stringify(notes)); render(); }
+    
+    function testKhia() { 
+        const r = g[Math.floor(Math.random() * g.length)]; 
+        responsiveVoice.speak(r, "Vietnamese Female"); 
     }
 
-    // Kích hoạt khi chạm lần đầu (Bắt buộc do bảo mật trình duyệt)
-    window.onclick = () => {
-        if(!isActive) {
-            startListening();
-            responsiveVoice.speak("Sẵn sàng nghe lệnh Chủ tịch!", "Vietnamese Female");
-        }
-    };
-
+    window.onclick = () => { if(!isListening) { startRec(); responsiveVoice.speak("Sẵn sàng hóng chuyện Chủ tịch!", "Vietnamese Female"); } };
     window.onload = render;
 </script>
 </body>

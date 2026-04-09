@@ -2,15 +2,12 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NOTEZY V24</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Notezy V25</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Notezy">
-    
     <link rel="apple-touch-icon" href="icon.png">
-    <link rel="icon" href="icon.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
@@ -18,76 +15,159 @@
 
     <style>
         :root {
-            --bg-stone: #F1F5F9; --lavender: #E0CFFC; --blush: #F8E0F2;
-            --deep-lavender: #B794F4; --text-main: #2D3748;
+            --bg-stone: #D8D8D8; 
+            --lavender: #E0CFFC; 
+            --blush: #F8E0F2;
+            --deep-lavender: #B794F4;
+            --card-white: #FFFFFF;
         }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Inter', sans-serif; overflow: hidden; background: #D8D8D8; color: var(--text-main); }
-        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 10% 10%, var(--lavender) 0%, transparent 45%), radial-gradient(circle at 90% 90%, var(--blush) 0%, transparent 45%); z-index: -1; }
-        .screen { position: absolute; width: 100%; height: 100%; transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); display: flex; flex-direction: column; padding: 40px 25px; box-sizing: border-box; align-items: center; }
-        .hidden { transform: translateY(100vh); opacity: 0; pointer-events: none; }
+
+        /* Fix lỗi chiều cao trên điện thoại */
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100dvh; 
+            font-family: 'Inter', sans-serif; overflow: hidden; 
+            background: var(--bg-stone);
+        }
+
+        .bg-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: radial-gradient(circle at 10% 10%, var(--lavender) 0%, transparent 45%), 
+                        radial-gradient(circle at 90% 90%, var(--blush) 0%, transparent 45%); 
+            z-index: -1; 
+        }
+
+        .screen { 
+            position: absolute; width: 100%; height: 100dvh; 
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
+            display: flex; flex-direction: column; padding: 20px 25px; 
+            box-sizing: border-box; align-items: center; 
+        }
+        .hidden { transform: translateY(100%); opacity: 0; pointer-events: none; }
         .active { transform: translateY(0); opacity: 1; z-index: 10; }
-        
-        /* Giao diện đồng bộ bản cưng duyệt */
-        .book-frame { width: 220px; height: 300px; background: white; border-radius: 35px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 20px 40px rgba(0,0,0,0.05); animation: float 4s infinite; }
-        .dock-container { position: fixed; bottom: 40px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(15px); padding: 8px; border-radius: 40px; display: flex; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid white; }
-        .dock-btn { display: flex; align-items: center; gap: 8px; padding: 12px 25px; border-radius: 30px; font-weight: 900; font-size: 12px; cursor: pointer; background: white; }
-        .card { background: white; padding: 22px; border-radius: 24px; margin-bottom: 15px; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+
+        /* Trang 1 */
+        #landing { justify-content: center; padding-top: 60px; }
+        .book-frame { 
+            width: 200px; height: 260px; background: white; border-radius: 35px; 
+            display: flex; flex-direction: column; justify-content: center; 
+            align-items: center; box-shadow: 0 15px 35px rgba(0,0,0,0.05); 
+            animation: float 4s infinite; margin-bottom: 20px;
+        }
+        @keyframes float { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-15px);} }
+
+        /* Trang 2 */
+        .workspace-header { width: 100%; text-align: left; padding-top: env(safe-area-inset-top); margin-bottom: 15px; }
+        .tab-bar { 
+            display: flex; width: 100%; gap: 15px; margin-bottom: 15px; 
+            font-weight: 900; color: #718096; font-size: 13px; 
+            border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 10px; 
+        }
+
+        /* List Note - Quan trọng nhất để không bị đè */
+        .list-wrap { 
+            width: 100%; flex: 1; overflow-y: auto; 
+            padding-bottom: 100px; /* Tạo khoảng trống cho Dock */
+            -webkit-overflow-scrolling: touch;
+        }
+        .card { 
+            background: white; padding: 18px; border-radius: 22px; 
+            margin-bottom: 12px; display: flex; align-items: center; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02); 
+        }
         .card.done span { text-decoration: line-through; opacity: 0.4; }
-        .check-box { width: 26px; height: 26px; border-radius: 8px; border: 3px solid #EDF2F7; margin-right: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        .check-box { 
+            width: 24px; height: 24px; border-radius: 8px; border: 3px solid #EDF2F7; 
+            margin-right: 15px; cursor: pointer; flex-shrink: 0; 
+            display: flex; align-items: center; justify-content: center;
+        }
         .check-box.checked { background: #4ADE80; border-color: #4ADE80; }
         .check-box.checked::after { content: '✓'; color: white; font-weight: 900; }
-        @keyframes float { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-15px);} }
+
+        /* Dock fixed dưới đáy */
+        .dock-container { 
+            position: fixed; bottom: calc(20px + env(safe-area-inset-bottom)); 
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(15px); 
+            padding: 8px; border-radius: 40px; display: flex; gap: 10px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid white; z-index: 50;
+        }
+        .dock-btn { 
+            display: flex; align-items: center; gap: 8px; padding: 12px 22px; 
+            border-radius: 30px; font-weight: 900; font-size: 12px; 
+            cursor: pointer; background: white; border: none;
+        }
+        .btn-speech.on { background: #ff4d4d !important; color: white !important; }
+
+        /* Modal nhập liệu - Luôn trên cùng */
+        #inputModal { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.5); display: none; justify-content: center; 
+            align-items: center; z-index: 1000; backdrop-filter: blur(8px); 
+        }
+        .modal-content { 
+            background: white; padding: 25px; border-radius: 30px; 
+            width: 85%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); 
+        }
+        input { 
+            width: 100%; padding: 15px; border-radius: 15px; border: 1px solid #eee; 
+            outline: none; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; 
+        }
+        .save-btn { 
+            width: 100%; padding: 15px; border-radius: 15px; border: none; 
+            background: var(--deep-lavender); color: white; font-weight: 900; 
+        }
     </style>
 </head>
 <body>
+
 <div class="bg-overlay"></div>
 
 <div id="landing" class="screen active">
-    <div style="position: absolute; top: 50px; left: 25px; text-align: left;">
-        <h1 style="font-weight: 900; margin: 0; font-size: 1.4rem;">NOTEZY V24</h1>
-        <p style="margin: 5px 0; font-size: 12px; color: #718096;">Refined 'Royal Pastel'</p>
-    </div>
     <div class="book-frame" onclick="switchPage('workspace')">
-        <div style="font-size: 110px; margin-bottom: 20px; filter: saturate(0.5);">📓</div>
-        <div style="background: #F1F5F9; padding: 8px 18px; border-radius: 20px; font-size: 10px; font-weight: 900; color: var(--deep-lavender);">ĐANG ĐỢI CƯNG...</div>
+        <div style="font-size: 100px; margin-bottom: 15px; filter: saturate(0.5);">📓</div>
+        <div style="background: #F1F5F9; padding: 6px 15px; border-radius: 20px; font-size: 10px; font-weight: 900; color: var(--deep-lavender);">ĐANG ĐỢI CƯNG...</div>
     </div>
-    <h2 style="font-weight: 900; margin-top: 35px; text-align: center;">BẤM ĐỂ MỞ SỔ ĐI CƯNG!</h2>
+    <h2 style="font-weight: 900; margin: 0; text-align: center;">BẤM ĐỂ MỞ SỔ<br>ĐI CƯNG ƠI!</h2>
     <div class="dock-container">
-        <div class="dock-btn" onclick="openModal()" style="color:#718096;"><span class="material-icons-round">add_circle_outline</span> ADD</div>
+        <div class="dock-btn" onclick="openModal()"><span class="material-icons-round">add_circle_outline</span> ADD</div>
         <div class="dock-btn btn-speech" id="mic-l" style="color:var(--deep-lavender);"><span class="material-icons-round">mic_none</span> SPEECH</div>
     </div>
 </div>
 
 <div id="workspace" class="screen hidden">
-    <h1 style="font-weight:900; margin:0 0 20px 0; width:100%;">Não lag? Mở Notezy 😎</h1>
-    <div style="display:flex; width:100%; gap:15px; margin-bottom:20px; font-weight:900; color:#718096; font-size:12px; border-bottom:1px solid #E2E8F0; padding-bottom:10px;">
+    <div class="workspace-header">
+        <h1 style="font-weight:900; margin:0; font-size: 1.4rem;">Não lag? Mở Notezy 😎</h1>
+    </div>
+    <div class="tab-bar">
         <span id="tab-w" style="color:var(--deep-lavender); cursor:pointer;" onclick="setTab('work')">Work</span>
         <span id="tab-p" style="cursor:pointer;" onclick="setTab('personal')">Personal</span>
     </div>
-    <div id="list" style="width:100%; flex:1; overflow-y:auto; padding-bottom:120px;"></div>
+    <div id="list" class="list-wrap"></div>
     <div class="dock-container">
-        <div class="dock-btn" onclick="openModal()" style="color:#718096;"><span class="material-icons-round">add_circle_outline</span> ADD</div>
+        <div class="dock-btn" onclick="openModal()"><span class="material-icons-round">add_circle_outline</span> ADD</div>
         <div class="dock-btn btn-speech" id="mic-w" style="color:var(--deep-lavender);"><span class="material-icons-round">mic_none</span> SPEECH</div>
     </div>
 </div>
 
-<div id="inputModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); display:none; justify-content:center; align-items:center; z-index:2000; backdrop-filter:blur(10px);">
-    <div style="background:white; padding:30px; border-radius:30px; width:85%; max-width:400px;">
-        <h3 style="margin:0 0 20px; font-weight:900;">Ghi đi nà cưng</h3>
-        <input type="text" id="manualInput" placeholder="Nhập nhanh..." style="width:100%; padding:15px; border-radius:15px; border:1px solid #eee; outline:none; margin-bottom:20px; font-size:16px;">
-        <button onclick="addManual()" style="width:100%; padding:15px; border-radius:15px; border:none; background:var(--deep-lavender); color:white; font-weight:900;">LƯU LẠI</button>
+<div id="inputModal">
+    <div class="modal-content">
+        <h3 style="margin:0 0 15px; font-weight:900;">Ghi đi nà cưng</h3>
+        <input type="text" id="manualInput" placeholder="Nhập gì đó...">
+        <button class="save-btn" onclick="addManual()">LƯU LẠI</button>
+        <p onclick="closeModal()" style="text-align:center; color:#999; font-size:12px; margin-top:15px; font-weight:600;">Đóng</p>
     </div>
 </div>
 
 <script>
     const API_KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
-    let notes = JSON.parse(localStorage.getItem('notezy_v24')) || [];
+    let notes = JSON.parse(localStorage.getItem('notezy_v25')) || [];
     let currentTab = 'work', rec, isListening = false;
 
     function initSpeech() {
         const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if(!Speech) return;
         rec = new Speech(); rec.lang = 'vi-VN'; rec.continuous = true;
-        rec.onstart = () => { isListening = true; document.getElementById('mic-l').style.background = document.getElementById('mic-w').style.background = '#ff4d4d'; document.getElementById('mic-l').style.color = document.getElementById('mic-w').style.color = 'white'; };
+        rec.onstart = () => { isListening = true; updateUI(true); };
         rec.onresult = (e) => { processAI(e.results[e.results.length - 1][0].transcript); };
         rec.onend = () => { if(isListening) rec.start(); };
         rec.start();
@@ -112,14 +192,14 @@
         } catch(e) { console.log(e); }
     }
 
-    function save() { localStorage.setItem('notezy_v24', JSON.stringify(notes)); render(); }
+    function save() { localStorage.setItem('notezy_v25', JSON.stringify(notes)); render(); }
     function render() {
         const l = document.getElementById('list'); l.innerHTML = '';
         notes.filter(n => n.type === currentTab).forEach(n => {
             l.innerHTML += `<div class="card ${n.done?'done':''}">
                 <div class="check-box ${n.done?'checked':''}" onclick="toggleDone(${n.id})"></div>
-                <span style="flex:1; font-weight:800;">${n.text}</span>
-                <span class="material-icons-round" style="opacity:0.1; cursor:pointer;" onclick="del(${n.id})">delete</span>
+                <span style="flex:1; font-weight:800; font-size:1rem;">${n.text}</span>
+                <span class="material-icons-round" style="opacity:0.1; padding-left:10px;" onclick="del(${n.id})">delete</span>
             </div>`;
         });
     }
@@ -134,13 +214,29 @@
         if(val) { notes.unshift({ id: Date.now(), text: val, type: currentTab, done: false }); save(); closeModal(); document.getElementById('manualInput').value=''; }
     }
 
-    function setTab(t) { currentTab = t; document.getElementById('tab-w').style.color = t==='work' ? 'var(--deep-lavender)' : '#718096'; document.getElementById('tab-p').style.color = t==='personal' ? 'var(--deep-lavender)' : '#718096'; render(); }
+    function setTab(t) { 
+        currentTab = t; 
+        document.getElementById('tab-w').style.color = t==='work' ? 'var(--deep-lavender)' : '#718096';
+        document.getElementById('tab-p').style.color = t==='personal' ? 'var(--deep-lavender)' : '#718096';
+        render(); 
+    }
+
+    function updateUI(on) { 
+        const micL = document.getElementById('mic-l'), micW = document.getElementById('mic-w');
+        micL.classList.toggle('on', on); micW.classList.toggle('on', on);
+    }
+
     function switchPage(p) { document.getElementById('landing').className='screen hidden'; document.getElementById('workspace').className='screen active'; render(); }
     function openModal() { document.getElementById('inputModal').style.display='flex'; }
     function closeModal() { document.getElementById('inputModal').style.display='none'; }
-    function del(id) { notes = notes.filter(n => n.id !== id); save(); }
+    function del(id) { if(confirm('Xoá nha cưng?')) { notes = notes.filter(n => n.id !== id); save(); } }
 
-    window.onclick = () => { if(!isListening) { initSpeech(); responsiveVoice.speak("Hóng lệnh nà cưng!", "Vietnamese Female"); } };
+    window.onclick = (e) => { 
+        if(!isListening && !e.target.closest('.dock-btn') && !e.target.closest('#inputModal')) { 
+            initSpeech(); 
+            responsiveVoice.speak("Hóng nà cưng!", "Vietnamese Female"); 
+        } 
+    };
     window.onload = render;
 </script>
 </body>

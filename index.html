@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Notezy V28 - Final Omega</title>
+    <title>Notezy V30 - Auto Hearing</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,127 +15,65 @@
 
     <style>
         :root {
-            --bg-stone: #D8D8D8; 
-            --lavender: #E0CFFC; 
-            --blush: #F8E0F2;
-            --deep-lavender: #B794F4;
-            --text-main: #2D3748;
+            --bg-stone: #D8D8D8; --lavender: #E0CFFC; --blush: #F8E0F2;
+            --deep-lavender: #B794F4; --text-main: #2D3748;
         }
 
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100dvh; 
-            font-family: 'Inter', sans-serif; overflow: hidden; 
-            background: var(--bg-stone); color: var(--text-main);
-        }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100dvh; font-family: 'Inter', sans-serif; overflow: hidden; background: var(--bg-stone); color: var(--text-main); }
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 10% 10%, var(--lavender) 0%, transparent 45%), radial-gradient(circle at 90% 90%, var(--blush) 0%, transparent 45%); z-index: -1; }
 
-        .bg-overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: radial-gradient(circle at 10% 10%, var(--lavender) 0%, transparent 45%), 
-                        radial-gradient(circle at 90% 90%, var(--blush) 0%, transparent 45%); 
-            z-index: -1; 
-        }
-
-        .screen { 
-            position: absolute; width: 100%; height: 100dvh; 
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
-            display: flex; flex-direction: column; padding: 20px 25px; 
-            box-sizing: border-box; align-items: center; 
-        }
+        .screen { position: absolute; width: 100%; height: 100dvh; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); display: flex; flex-direction: column; padding: 20px 25px; box-sizing: border-box; align-items: center; }
         .hidden { transform: translateY(100%); opacity: 0; pointer-events: none; }
         .active { transform: translateY(0); opacity: 1; z-index: 10; }
 
-        /* TRANG 1: CLEAN LANDING */
+        /* Trang 1 */
         #landing { justify-content: center; }
-        .book-frame { 
-            width: 240px; height: 320px; background: white; border-radius: 40px; 
-            display: flex; justify-content: center; align-items: center; 
-            box-shadow: 0 20px 45px rgba(0,0,0,0.06); 
-            animation: float 4s infinite; border: 1px solid rgba(255,255,255,0.8);
-            cursor: pointer;
-        }
+        .book-frame { width: 240px; height: 320px; background: white; border-radius: 40px; display: flex; justify-content: center; align-items: center; box-shadow: 0 20px 45px rgba(0,0,0,0.06); animation: float 4s infinite; border: 1px solid rgba(255,255,255,0.8); cursor: pointer; }
         .book-icon { font-size: 130px; filter: saturate(0.5) opacity(0.8); }
         @keyframes float { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-20px);} }
 
-        /* TRANG 2: WORKSPACE */
+        /* Trang 2 */
         .workspace-header { width: 100%; text-align: left; padding-top: env(safe-area-inset-top); margin-bottom: 20px; }
-        .tab-bar { 
-            display: flex; width: 100%; gap: 20px; margin-bottom: 15px; 
-            font-weight: 900; color: #718096; font-size: 14px; 
-            border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 10px; 
-        }
-
-        .list-wrap { 
-            width: 100%; flex: 1; overflow-y: auto; 
-            padding-bottom: 120px;
-            -webkit-overflow-scrolling: touch;
-        }
-        .card { 
-            background: white; padding: 22px; border-radius: 26px; 
-            margin-bottom: 12px; display: flex; align-items: center; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02); 
-            animation: slideUp 0.4s ease-out;
-        }
+        .tab-bar { display: flex; width: 100%; gap: 20px; margin-bottom: 15px; font-weight: 900; color: #718096; font-size: 14px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 10px; }
+        .list-wrap { width: 100%; flex: 1; overflow-y: auto; padding-bottom: 120px; -webkit-overflow-scrolling: touch; }
+        .card { background: white; padding: 22px; border-radius: 26px; margin-bottom: 12px; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .card.done span { text-decoration: line-through; opacity: 0.4; }
-        @keyframes slideUp { from {opacity: 0; transform: translateY(15px);} }
-
-        .check-box { 
-            width: 26px; height: 26px; border-radius: 9px; border: 3px solid #EDF2F7; 
-            margin-right: 18px; cursor: pointer; flex-shrink: 0; 
-            display: flex; align-items: center; justify-content: center;
-        }
+        .check-box { width: 26px; height: 26px; border-radius: 9px; border: 3px solid #EDF2F7; margin-right: 18px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
         .check-box.checked { background: #4ADE80; border-color: #4ADE80; }
         .check-box.checked::after { content: '✓'; color: white; font-weight: 900; }
 
-        /* THANH DOCK VIÊN THUỐC */
-        .dock-container { 
-            position: fixed; bottom: calc(30px + env(safe-area-inset-bottom)); 
-            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); 
-            padding: 8px; border-radius: 45px; display: flex; gap: 10px; 
-            box-shadow: 0 10px 35px rgba(0,0,0,0.1); border: 1px solid white; z-index: 100;
-        }
-        .dock-btn { 
-            display: flex; align-items: center; gap: 8px; padding: 12px 25px; 
-            border-radius: 35px; font-weight: 900; font-size: 12px; 
-            cursor: pointer; background: white; border: none;
-        }
-        .btn-speech.on { background: #ff4d4d !important; color: white !important; }
+        /* Dock fixed */
+        .dock-container { position: fixed; bottom: calc(30px + env(safe-area-inset-bottom)); background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); padding: 8px; border-radius: 45px; display: flex; gap: 10px; box-shadow: 0 10px 35px rgba(0,0,0,0.1); border: 1px solid white; z-index: 100; }
+        .dock-btn { display: flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: 35px; font-weight: 900; font-size: 12px; cursor: pointer; background: white; border: none; }
+        .btn-speech.on { background: #ff4d4d !important; color: white !important; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% {box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.4);} 70% {box-shadow: 0 0 0 15px rgba(255, 77, 77, 0);} }
 
-        /* MODAL */
-        #inputModal { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.4); display: none; justify-content: center; 
-            align-items: center; z-index: 2000; backdrop-filter: blur(10px); 
-        }
+        #inputModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(10px); }
         .modal-content { background: white; padding: 30px; border-radius: 35px; width: 85%; max-width: 400px; }
         input { width: 100%; padding: 18px; border-radius: 18px; border: 1px solid #eee; outline: none; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; }
-        .save-btn { width: 100%; padding: 18px; border-radius: 18px; border: none; background: var(--deep-lavender); color: white; font-weight: 900; }
     </style>
 </head>
 <body>
-
 <div class="bg-overlay"></div>
 
 <div id="landing" class="screen active">
     <div style="position: absolute; top: 50px; left: 30px; text-align: left;">
-        <h1 style="font-weight: 900; margin: 0; font-size: 1.5rem; letter-spacing: -1px;">NOTEZY V28</h1>
-        <p style="margin: 5px 0; font-size: 12px; color: #718096; font-weight: 600;">THE FINAL OMEGA</p>
+        <h1 style="font-weight: 900; margin: 0; font-size: 1.5rem; letter-spacing: -1px;">NOTEZY V30</h1>
+        <p style="margin: 5px 0; font-size: 12px; color: #718096; font-weight: 600;">AUTO HEARING</p>
     </div>
-
     <div class="book-frame" onclick="switchPage('workspace')">
         <div class="book-icon">📓</div>
     </div>
-    
-    <h2 style="font-weight: 900; margin-top: 35px; text-align: center; font-size: 1.2rem;">BẤM ĐỂ MỞ SỔ ĐI CƯNG!</h2>
-
+    <h2 style="font-weight: 900; margin-top: 35px; text-align: center;">BẤM SPEECH ĐỂ BẮT ĐẦU<br>HÓNG LỆNH CƯNG!</h2>
     <div class="dock-container">
         <div class="dock-btn" onclick="openModal()" style="color:#718096;"><span class="material-icons-round">add_circle_outline</span> ADD</div>
-        <div class="dock-btn btn-speech" id="mic-l" style="color:var(--deep-lavender);"><span class="material-icons-round">mic_none</span> SPEECH</div>
+        <div class="dock-btn btn-speech" id="mic-l" onclick="startContinuousListening()" style="color:var(--deep-lavender);"><span class="material-icons-round">mic_none</span> SPEECH</div>
     </div>
 </div>
 
 <div id="workspace" class="screen hidden">
     <div class="workspace-header">
-        <h1 style="font-weight:900; margin:0; font-size: 1.6rem;">Não lag? Mở Notezy 😎</h1>
+        <h1 style="font-weight:900; margin:0;">Não lag? Mở Notezy 😎</h1>
     </div>
     <div class="tab-bar">
         <span id="tab-w" style="color:var(--deep-lavender); cursor:pointer;" onclick="setTab('work')">Work</span>
@@ -144,7 +82,7 @@
     <div id="list" class="list-wrap"></div>
     <div class="dock-container">
         <div class="dock-btn" onclick="openModal()" style="color:#718096;"><span class="material-icons-round">add_circle_outline</span> ADD</div>
-        <div class="dock-btn btn-speech" id="mic-w" style="color:var(--deep-lavender);"><span class="material-icons-round">mic_none</span> SPEECH</div>
+        <div class="dock-btn btn-speech" id="mic-w" onclick="startContinuousListening()" style="color:var(--deep-lavender);"><span class="material-icons-round">mic_none</span> SPEECH</div>
     </div>
 </div>
 
@@ -152,30 +90,55 @@
     <div class="modal-content">
         <h3 style="margin:0 0 20px; font-weight:900;">Ghi đi nà cưng</h3>
         <input type="text" id="manualInput" placeholder="Ghi gì nà...">
-        <button class="save-btn" onclick="addManual()">LƯU LẠI</button>
+        <button onclick="addManual()" style="width:100%; padding:18px; border-radius:18px; border:none; background:var(--deep-lavender); color:white; font-weight:900;">LƯU LẠI</button>
         <p onclick="closeModal()" style="text-align:center; color:#999; font-size:13px; margin-top:20px; font-weight:600; cursor:pointer;">Đóng</p>
     </div>
 </div>
 
 <script>
     const API_KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
-    let notes = JSON.parse(localStorage.getItem('notezy_v28')) || [];
+    let notes = JSON.parse(localStorage.getItem('notezy_v30')) || [];
     let currentTab = 'work', rec, isListening = false;
+
+    function startContinuousListening() {
+        if (isListening) return; 
+        initSpeech();
+        responsiveVoice.speak("Sẵn sàng nghe nà cưng! Cứ nói đi tui lưu cho.", "Vietnamese Female");
+    }
 
     function initSpeech() {
         const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if(!Speech) return;
-        rec = new Speech(); rec.lang = 'vi-VN'; rec.continuous = true;
+        if(!Speech) { alert("Trình duyệt hổng hỗ trợ Mic nhen cưng!"); return; }
+        
+        rec = new Speech(); 
+        rec.lang = 'vi-VN'; 
+        rec.continuous = true; // Nghe liên tục không ngừng
+        rec.interimResults = false;
+
         rec.onstart = () => { isListening = true; updateUI(true); };
-        rec.onresult = (e) => { processAI(e.results[e.results.length - 1][0].transcript); };
-        rec.onend = () => { if(isListening) rec.start(); };
+        rec.onresult = (e) => { 
+            const result = e.results[e.results.length - 1][0].transcript;
+            processAI(result); 
+        };
+        rec.onend = () => { 
+            // Tự động khởi động lại nếu bị ngắt kết nối đột ngột
+            if(isListening) rec.start(); 
+        };
+        rec.onerror = (event) => {
+            console.error("Mic error:", event.error);
+            if (event.error === 'not-allowed') {
+                isListening = false;
+                updateUI(false);
+                alert("Cưng chưa cho phép dùng Mic kìa!");
+            }
+        };
         rec.start();
     }
 
     async function processAI(txt) {
         if(document.getElementById('landing').classList.contains('active')) switchPage('workspace');
         const isDone = /xong|đã|rồi/.test(txt.toLowerCase());
-        const p = `Phân loại "${txt}" vào "work" hoặc "personal". Trả về JSON: {"type": "work/personal", "reply": "khịa cưng hay quên", "text": "nội dung"}`;
+        const p = `Phân loại "${txt}" vào "work" hoặc "personal". Trả về JSON: {"type": "work/personal", "reply": "khịa cưng", "text": "nội dung"}`;
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -184,15 +147,14 @@
             const d = await res.json();
             const resAI = JSON.parse(d.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, ""));
             let cleanText = resAI.text.replace(/xong|đã|rồi/gi, "").trim();
-            
             notes.unshift({ id: Date.now(), text: cleanText || resAI.text, type: resAI.type, done: isDone });
             save();
             responsiveVoice.speak(isDone ? "Cưng làm xong rồi hả? Giỏi ta!" : resAI.reply, "Vietnamese Female");
             setTab(resAI.type);
-        } catch(e) { console.error(e); }
+        } catch(e) { console.log("AI Error:", e); }
     }
 
-    function save() { localStorage.setItem('notezy_v28', JSON.stringify(notes)); render(); }
+    function save() { localStorage.setItem('notezy_v30', JSON.stringify(notes)); render(); }
     function render() {
         const l = document.getElementById('list'); l.innerHTML = '';
         notes.filter(n => n.type === currentTab).forEach(n => {
@@ -214,29 +176,17 @@
         if(val) { notes.unshift({ id: Date.now(), text: val, type: currentTab, done: false }); save(); closeModal(); document.getElementById('manualInput').value=''; }
     }
 
-    function setTab(t) { 
-        currentTab = t; 
-        document.getElementById('tab-w').style.color = t==='work' ? 'var(--deep-lavender)' : '#718096';
-        document.getElementById('tab-p').style.color = t==='personal' ? 'var(--deep-lavender)' : '#718096';
-        render(); 
-    }
-
+    function setTab(t) { currentTab = t; document.getElementById('tab-w').style.color = t==='work' ? 'var(--deep-lavender)' : '#718096'; document.getElementById('tab-p').style.color = t==='personal' ? 'var(--deep-lavender)' : '#718096'; render(); }
     function updateUI(on) { 
-        document.getElementById('mic-l').classList.toggle('on', on);
-        document.getElementById('mic-w').classList.toggle('on', on);
+        const micL = document.getElementById('mic-l'), micW = document.getElementById('mic-w');
+        micL.classList.toggle('on', on); micW.classList.toggle('on', on);
+        micL.innerHTML = micW.innerHTML = on ? '<span class="material-icons-round">mic</span> HEARING' : '<span class="material-icons-round">mic_none</span> SPEECH';
     }
-
     function switchPage(p) { document.getElementById('landing').className='screen hidden'; document.getElementById('workspace').className='screen active'; render(); }
     function openModal() { document.getElementById('inputModal').style.display='flex'; }
     function closeModal() { document.getElementById('inputModal').style.display='none'; }
     function del(id) { notes = notes.filter(n => n.id !== id); save(); }
 
-    window.onclick = (e) => { 
-        if(!isListening && !e.target.closest('.dock-btn') && !e.target.closest('#inputModal')) { 
-            initSpeech(); 
-            responsiveVoice.speak("Hóng lệnh nà cưng!", "Vietnamese Female"); 
-        } 
-    };
     window.onload = render;
 </script>
 </body>

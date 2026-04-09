@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NOTEZY V22 - VISUAL CLONE</title>
+    <title>NOTEZY V23 - ZERO BUG</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,12 +15,11 @@
 
     <style>
         :root {
-            --bg-stone: #F8F9FA;
+            --bg-stone: #F1F5F9;
             --lavender: #E0CFFC;
             --blush: #F8E0F2;
             --deep-lavender: #B794F4;
             --text-main: #2D3748;
-            --glass: rgba(255, 255, 255, 0.7);
             --card-white: #FFFFFF;
         }
 
@@ -30,12 +29,10 @@
             background: #D8D8D8; color: var(--text-main);
         }
 
-        /* Hiệu ứng nền loang cực mịn như ảnh thiết kế */
         .bg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 10% 10%, var(--lavender) 0%, transparent 40%),
-                        radial-gradient(circle at 90% 90%, var(--blush) 0%, transparent 40%),
-                        radial-gradient(circle at 50% 50%, #FFFFFF 0%, transparent 100%);
+            background: radial-gradient(circle at 10% 10%, var(--lavender) 0%, transparent 45%),
+                        radial-gradient(circle at 90% 90%, var(--blush) 0%, transparent 45%);
             z-index: -1;
         }
 
@@ -48,68 +45,48 @@
         .hidden { transform: translateY(100vh); opacity: 0; pointer-events: none; }
         .active { transform: translateY(0); opacity: 1; z-index: 10; }
 
-        /* TRANG 1: GIỐNG ẢNH THIẾT KẾ 99% */
+        /* TRANG 1 */
         #landing { justify-content: center; }
-        
         .title-top { position: absolute; top: 50px; left: 25px; text-align: left; }
-        .title-top h1 { font-weight: 900; margin: 0; font-size: 1.4rem; letter-spacing: -1px; }
-        .title-top p { margin: 5px 0; font-size: 12px; color: #718096; font-weight: 600; }
+        .title-top h1 { font-weight: 900; margin: 0; font-size: 1.4rem; }
+        .title-top p { margin: 5px 0; font-size: 12px; color: #718096; }
 
         .book-frame {
-            width: 200px; height: 280px;
-            background: white; border-radius: 30px;
+            width: 220px; height: 300px; background: white; border-radius: 35px;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
-            border: 1px solid rgba(255,255,255,0.8);
-            position: relative; animation: float 4s infinite;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.8);
+            animation: float 4s infinite;
         }
-        .book-icon { font-size: 100px; margin-bottom: 20px; filter: saturate(0.5); }
-        
-        .waiting-pill {
-            background: #F1F5F9; padding: 8px 20px; border-radius: 20px;
-            font-size: 10px; font-weight: 900; color: var(--deep-lavender);
-            display: flex; align-items: center; gap: 8px;
-        }
-        .dot { width: 6px; height: 6px; background: var(--deep-lavender); border-radius: 50%; animation: blink 1s infinite; }
-
+        .book-icon { font-size: 110px; margin-bottom: 20px; filter: saturate(0.5); }
+        .waiting-pill { background: #F1F5F9; padding: 8px 18px; border-radius: 20px; font-size: 10px; font-weight: 900; color: var(--deep-lavender); display: flex; align-items: center; gap: 8px; }
         @keyframes float { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-15px);} }
-        @keyframes blink { 0%, 100% {opacity: 1;} 50% {opacity: 0.3;} }
 
-        /* THANH DOCK VIÊN THUỐC CHUẨN DESIGN */
-        .dock-container {
-            position: fixed; bottom: 40px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(15px);
-            padding: 8px; border-radius: 40px;
-            display: flex; gap: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            border: 1px solid white;
-        }
-        .dock-btn {
-            display: flex; align-items: center; gap: 10px;
-            padding: 12px 25px; border-radius: 30px;
-            font-weight: 900; font-size: 12px; cursor: pointer;
-            transition: 0.2s; border: 1px solid transparent;
-        }
-        .btn-add { background: white; color: #718096; }
-        .btn-speech { background: white; color: var(--deep-lavender); }
-        .btn-speech.on { background: #ff4d4d; color: white; }
-
-        /* TRANG 2: CÁC THẺ GHI CHÚ */
+        /* TRANG 2 */
         .workspace-header { width: 100%; text-align: left; margin-bottom: 20px; }
-        .list-wrap { width: 100%; flex: 1; overflow-y: auto; padding-bottom: 100px; }
+        .list-wrap { width: 100%; flex: 1; overflow-y: auto; padding-bottom: 120px; }
         .card {
-            background: white; padding: 20px; border-radius: 22px;
-            margin-bottom: 12px; display: flex; align-items: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            background: white; padding: 22px; border-radius: 24px; margin-bottom: 15px;
+            display: flex; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            animation: slide 0.4s ease-out;
         }
         .card.done span { text-decoration: line-through; opacity: 0.4; }
+        @keyframes slide { from {opacity: 0; transform: translateY(15px);} }
+
         .check-box {
-            width: 24px; height: 24px; border-radius: 8px; border: 2.5px solid #EDF2F7;
-            margin-right: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            width: 26px; height: 26px; border-radius: 8px; border: 3px solid #EDF2F7;
+            margin-right: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
-        .check-box.checked { background: #B794F4; border-color: #B794F4; }
+        .check-box.checked { background: #4ADE80; border-color: #4ADE80; }
         .check-box.checked::after { content: '✓'; color: white; font-weight: 900; }
+
+        /* DOCK */
+        .dock-container {
+            position: fixed; bottom: 40px; background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px); padding: 8px; border-radius: 40px;
+            display: flex; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid white;
+        }
+        .dock-btn { display: flex; align-items: center; gap: 8px; padding: 12px 25px; border-radius: 30px; font-weight: 900; font-size: 12px; cursor: pointer; }
+        .btn-speech.on { background: #ff4d4d; color: white; }
     </style>
 </head>
 <body>
@@ -118,20 +95,17 @@
 
 <div id="landing" class="screen active">
     <div class="title-top">
-        <h1>NOTEZY V22 - SMART CƯNG</h1>
+        <h1>NOTEZY V23</h1>
         <p>Current, Refined 'Royal Pastel'</p>
     </div>
-
     <div class="book-frame" onclick="switchPage('workspace')">
         <div class="book-icon">📓</div>
-        <div class="waiting-pill"><div class="dot"></div> ĐANG ĐỢI CƯNG...</div>
+        <div class="waiting-pill"><div style="width:6px; height:6px; background:var(--deep-lavender); border-radius:50%;"></div> ĐANG ĐỢI CƯNG...</div>
     </div>
-    
-    <h2 style="font-weight: 900; margin-top: 30px; text-align: center; font-size: 1.2rem;">BẤM ĐỂ MỞ SỔ<br>ĐI CƯNG ƠI!</h2>
-
+    <h2 style="font-weight: 900; margin-top: 35px; text-align: center;">BẤM ĐỂ MỞ SỔ ĐI CƯNG!</h2>
     <div class="dock-container">
-        <div class="dock-btn btn-add" onclick="openModal()"><span class="material-icons-round">add_circle_outline</span> ADD</div>
-        <div class="dock-btn btn-speech" id="mic-l"><span class="material-icons-round">mic_none</span> SPEECH</div>
+        <div class="dock-btn" onclick="openModal()" style="background:white; color:#718096;"><span class="material-icons-round">add_circle_outline</span> ADD</div>
+        <div class="dock-btn btn-speech" id="mic-l" style="background:white; color:var(--deep-lavender);"><span class="material-icons-round">mic_none</span> SPEECH</div>
     </div>
 </div>
 
@@ -139,17 +113,14 @@
     <div class="workspace-header">
         <h1 style="font-weight:900; margin:0;">Não lag? Mở Notezy 😎</h1>
     </div>
-
     <div style="display:flex; width:100%; gap:15px; margin-bottom:20px; font-weight:900; color:#718096; font-size:12px; border-bottom:1px solid #E2E8F0; padding-bottom:10px;">
         <span id="tab-w" style="color:var(--deep-lavender); cursor:pointer;" onclick="setTab('work')">Work</span>
         <span id="tab-p" style="cursor:pointer;" onclick="setTab('personal')">Personal</span>
     </div>
-
     <div id="list" class="list-wrap"></div>
-
     <div class="dock-container">
-        <div class="dock-btn btn-add" onclick="openModal()"><span class="material-icons-round">add_circle_outline</span> ADD</div>
-        <div class="dock-btn btn-speech" id="mic-w"><span class="material-icons-round">mic_none</span> SPEECH</div>
+        <div class="dock-btn" onclick="openModal()" style="background:white; color:#718096;"><span class="material-icons-round">add_circle_outline</span> ADD</div>
+        <div class="dock-btn btn-speech" id="mic-w" style="background:white; color:var(--deep-lavender);"><span class="material-icons-round">mic_none</span> SPEECH</div>
     </div>
 </div>
 
@@ -163,13 +134,13 @@
 
 <script>
     const API_KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
-    let notes = JSON.parse(localStorage.getItem('notezy_v22')) || [];
+    let notes = JSON.parse(localStorage.getItem('notezy_v23')) || [];
     let currentTab = 'work', rec, isListening = false;
 
     function initSpeech() {
         const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
         rec = new Speech(); rec.lang = 'vi-VN'; rec.continuous = true;
-        rec.onstart = () => { isListening = true; updateMicUI(true); };
+        rec.onstart = () => { isListening = true; updateUI(true); };
         rec.onresult = (e) => { processAI(e.results[e.results.length - 1][0].transcript); };
         rec.onend = () => { if(isListening) rec.start(); };
         rec.start();
@@ -178,7 +149,7 @@
     async function processAI(txt) {
         if(document.getElementById('landing').classList.contains('active')) switchPage('workspace');
         const isDone = /xong|đã|rồi/.test(txt.toLowerCase());
-        const p = `Bạn là trợ lý nữ miền Nam nanh nọc. Phân loại "${txt}" vào "work" hoặc "personal". Trả về JSON: {"type": "work/personal", "reply": "câu khịa gọi cưng", "text": "nội dung"}`;
+        const p = `Phân loại "${txt}" vào "work" hoặc "personal". Trả về JSON: {"type": "work/personal", "reply": "câu khịa cưng", "text": "nội dung"}`;
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -186,18 +157,18 @@
             });
             const d = await res.json();
             const resAI = JSON.parse(d.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, ""));
-            notes.unshift({ id: Date.now(), text: resAI.text, type: resAI.type, done: isDone });
+            
+            // LỌC BỎ CÁC TỪ KHOÁ XONG/ĐÃ/RỒI KHỎI TEXT HIỂN THỊ
+            let cleanText = resAI.text.replace(/xong|đã|rồi/gi, "").trim();
+            
+            notes.unshift({ id: Date.now(), text: cleanText || resAI.text, type: resAI.type, done: isDone });
             save();
-            responsiveVoice.speak(isDone ? "Xong rồi hả cưng? Giỏi ta!" : resAI.reply, "Vietnamese Female");
+            responsiveVoice.speak(isDone ? "Cưng làm xong rồi hả? Giỏi ta!" : resAI.reply, "Vietnamese Female");
             setTab(resAI.type);
-        } catch(e) { notes.unshift({ id: Date.now(), text: txt, type: currentTab, done: isDone }); save(); }
+        } catch(e) { console.error(e); }
     }
 
-    function updateMicUI(on) {
-        document.getElementById('mic-l').className = document.getElementById('mic-w').className = on ? 'dock-btn btn-speech on' : 'dock-btn btn-speech';
-    }
-
-    function save() { localStorage.setItem('notezy_v22', JSON.stringify(notes)); render(); }
+    function save() { localStorage.setItem('notezy_v23', JSON.stringify(notes)); render(); }
     function render() {
         const l = document.getElementById('list'); l.innerHTML = '';
         notes.filter(n => n.type === currentTab).forEach(n => {
@@ -210,14 +181,17 @@
     }
 
     function toggleDone(id) {
-        const n = notes.find(x => x.id === id); n.done = !n.done;
-        if(n.done) responsiveVoice.speak("Xong rồi hả cưng? Giỏi nha!", "Vietnamese Female");
-        save();
+        const n = notes.find(x => x.id === id); 
+        if(n) {
+            n.done = !n.done;
+            if(n.done) responsiveVoice.speak("Xong rồi hả cưng? Giỏi nha!", "Vietnamese Female");
+            save();
+        }
     }
 
     function addManual() {
         const val = document.getElementById('manualInput').value;
-        if(val) { notes.unshift({ id: Date.now(), text: val, type: currentTab, done: false }); save(); closeModal(); document.getElementById('manualInput').value=''; responsiveVoice.speak("Lưu rồi nhen cưng!", "Vietnamese Female"); }
+        if(val) { notes.unshift({ id: Date.now(), text: val, type: currentTab, done: false }); save(); closeModal(); document.getElementById('manualInput').value=''; }
     }
 
     function setTab(t) { 
@@ -226,12 +200,13 @@
         document.getElementById('tab-p').style.color = t==='personal' ? 'var(--deep-lavender)' : '#718096';
         render(); 
     }
+    function updateUI(on) { document.getElementById('mic-l').className = document.getElementById('mic-w').className = on ? 'dock-btn btn-speech on' : 'dock-btn btn-speech'; }
     function switchPage(p) { document.getElementById('landing').className='screen hidden'; document.getElementById('workspace').className='screen active'; render(); }
     function openModal() { document.getElementById('inputModal').style.display='flex'; }
     function closeModal() { document.getElementById('inputModal').style.display='none'; }
     function del(id) { notes = notes.filter(n => n.id !== id); save(); }
 
-    window.onclick = () => { if(!isListening) { initSpeech(); responsiveVoice.speak("Sổ tay của cưng sẵn sàng!", "Vietnamese Female"); } };
+    window.onclick = () => { if(!isListening) { initSpeech(); responsiveVoice.speak("Sẵn sàng nghe nà cưng!", "Vietnamese Female"); } };
     window.onload = render;
 </script>
 </body>

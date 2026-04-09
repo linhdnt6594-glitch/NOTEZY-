@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NOTEZY V19 - CƯNG EDITION</title>
+    <title>NOTEZY V20 - SMART CƯNG</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,26 +15,25 @@
 
     <style>
         :root {
-            /* 🎨 BỘ MÀU MỚI: CLOUDY LAVENDER & SHADOW GRAY 🎨 */
-            --bg-deep: #4A4E69; /* Xám xanh trầm lì */
-            --accent-purple: #9A8C98; /* Tím khói */
-            --accent-pink: #F2E9E4; /* Kem hồng nhạt */
-            --accent-mic: #C9ADA7; /* Nâu trầm Pastel */
-            --text-light: #F2E9E4;
-            --card-glass: rgba(255, 255, 255, 0.15);
+            /* 🎨 BỘ MÀU MATTE STONE & LAVENDER (CHUẨN SANG) 🎨 */
+            --bg-base: #F1F5F9;
+            --stone-gray: #D1D5DB;
+            --lavender: #B794F4;
+            --dusty-pink: #F687B3;
+            --text-dark: #1F2937;
+            --card-glass: rgba(255, 255, 255, 0.9);
         }
 
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             font-family: 'Inter', sans-serif; overflow: hidden;
-            background: var(--bg-deep); color: var(--text-light);
+            background: var(--bg-base); color: var(--text-dark);
         }
 
-        /* Hiệu ứng nền mờ ảo sang trọng */
-        .bg-overlay {
+        /* Nền mượt không lỗi */
+        .bg-gradient {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 10% 20%, #9A8C98 0%, transparent 40%),
-                        radial-gradient(circle at 90% 80%, #C9ADA7 0%, transparent 40%);
+            background: linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%);
             z-index: -1;
         }
 
@@ -46,103 +45,79 @@
         .hidden { transform: translateY(100vh); opacity: 0; pointer-events: none; }
         .active { transform: translateY(0); opacity: 1; z-index: 10; }
 
-        /* Trang 1: Landing */
+        /* Trang 1 */
         #landing { justify-content: center; align-items: center; text-align: center; }
-        .hologram-book {
-            width: 240px; height: 320px;
-            background: var(--card-glass);
-            border-radius: 40px; border: 1px solid rgba(255,255,255,0.2);
-            display: flex; justify-content: center; align-items: center;
-            animation: float 4s ease-in-out infinite;
-            backdrop-filter: blur(20px); box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-            cursor: pointer;
+        .book-3d {
+            font-size: 160px; animation: float 4s ease-in-out infinite; cursor: pointer;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));
         }
-        .hologram-book::after { content: '📓'; font-size: 140px; filter: drop-shadow(0 0 15px var(--accent-mic)); }
         @keyframes float { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-25px);} }
 
-        /* Trang 2: Workspace */
-        .workspace-title { font-size: 1.6rem; font-weight: 900; margin-bottom: 25px; letter-spacing: -1px; }
+        /* Trang 2 */
+        .header h1 { font-weight: 900; letter-spacing: -1px; margin: 0; font-size: 1.6rem; color: var(--lavender); }
         
-        .tab-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-bar { display: flex; gap: 12px; margin: 25px 0; }
         .tab-btn {
             flex: 1; padding: 16px; border-radius: 20px; text-align: center;
-            font-weight: 900; background: rgba(255,255,255,0.1); border: 2px solid transparent;
-            transition: 0.3s; color: var(--accent-pink);
+            font-weight: 900; background: white; border: 2px solid transparent;
+            transition: 0.3s; color: #9CA3AF; box-shadow: 0 4px 10px rgba(0,0,0,0.02);
         }
-        .active-w { border-color: var(--accent-purple); background: var(--card-glass); color: white; }
-        .active-p { border-color: var(--accent-mic); background: var(--card-glass); color: white; }
+        .active-w { border-color: var(--lavender); color: var(--lavender); }
+        .active-p { border-color: var(--dusty-pink); color: var(--dusty-pink); }
 
-        .list-wrap { flex: 1; overflow-y: auto; padding-bottom: 120px; }
-        .list-wrap::-webkit-scrollbar { display: none; }
-
+        /* Note Cards */
+        .list { flex: 1; overflow-y: auto; padding-bottom: 120px; }
         .card {
             background: var(--card-glass); padding: 22px; border-radius: 25px; margin-bottom: 15px;
-            display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.1);
-            animation: slideIn 0.5s ease-out; backdrop-filter: blur(10px);
+            display: flex; align-items: center; border: 1px solid white;
+            animation: pop 0.4s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
         .card.done span { text-decoration: line-through; opacity: 0.4; }
-        @keyframes slideIn { from {opacity: 0; transform: translateY(20px);} }
+        @keyframes pop { from {opacity: 0; transform: scale(0.95);} }
 
         /* Checkbox */
         .check-box {
-            width: 24px; height: 24px; border-radius: 8px; border: 2px solid var(--accent-pink);
-            margin-right: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            width: 26px; height: 26px; border-radius: 8px; border: 3px solid #E5E7EB;
+            margin-right: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
-        .check-box.checked { background: var(--accent-purple); border-color: var(--accent-purple); }
+        .check-box.checked { background: #4ADE80; border-color: #4ADE80; }
         .check-box.checked::after { content: '✓'; color: white; font-weight: 900; }
 
-        /* Buttons */
-        .btn-group { position: fixed; bottom: 35px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; z-index: 100; }
-        .btn-action { width: 80px; height: 80px; border-radius: 50%; background: var(--accent-pink); display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); cursor: pointer; color: var(--bg-deep); }
-        .mic-on { background: #ff4d4d !important; color: white; animation: pulse 1.5s infinite; }
+        /* Bottom Buttons */
+        .btn-wrap { position: fixed; bottom: 35px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; z-index: 100; }
+        .btn-icon { width: 80px; height: 80px; border-radius: 50%; background: white; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); cursor: pointer; }
+        .mic-on { background: #ff4d4d; color: white; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% {box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.4);} 70% {box-shadow: 0 0 0 25px rgba(255, 77, 77, 0);} }
-
-        /* Modal */
-        #inputModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(10px); }
-        .modal-content { background: var(--bg-deep); padding: 30px; border-radius: 30px; width: 85%; border: 1px solid var(--accent-purple); }
-        .modal-content input { width: 100%; padding: 15px; border-radius: 15px; border: none; background: rgba(255,255,255,0.1); color: white; outline: none; margin-bottom: 20px; box-sizing: border-box; }
-        .modal-content button { width: 100%; padding: 15px; border-radius: 15px; border: none; background: var(--accent-purple); color: white; font-weight: 900; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-<div class="bg-overlay"></div>
+<div class="bg-gradient"></div>
 
 <div id="landing" class="screen active" onclick="switchPage('workspace')">
-    <div class="hologram-book"></div>
-    <p style="margin-top:40px; font-weight:900; color: var(--accent-pink);">BẤM ĐỂ MỞ SỔ<br>ĐI CƯNG ƠI!</p>
+    <div class="book-3d">📓</div>
+    <p style="margin-top:40px; font-weight:900; color: var(--lavender);">BẤM ĐỂ MỞ SỔ<br>ĐI CƯNG ƠI!</p>
 </div>
 
 <div id="workspace" class="screen hidden">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-        <h1 class="workspace-title">Não lag? Mở Notezy 😎</h1>
-        <span class="material-icons-round" style="cursor:pointer;" onclick="location.reload()">refresh</span>
+    <div class="header">
+        <h1>Não lag? Mở Notezy 😎</h1>
     </div>
-    
     <div class="tab-bar">
         <div id="t-w" class="tab-btn active-w" onclick="setTab('work')">CÔNG VIỆC</div>
         <div id="t-p" class="tab-btn" onclick="setTab('personal')">CÁ NHÂN</div>
     </div>
-    <div id="list" class="list-wrap"></div>
+    <div id="list" class="list"></div>
 </div>
 
-<div class="btn-group">
-    <div class="btn-action" onclick="openModal()"><span class="material-icons-round" style="font-size: 35px;">add</span></div>
-    <div class="btn-action" id="mic"><span class="material-icons-round" style="font-size: 40px;">mic</span></div>
-</div>
-
-<div id="inputModal">
-    <div class="modal-content">
-        <h3 style="margin-top:0">Ghi tay đi cưng</h3>
-        <input type="text" id="manualInput" placeholder="Nhập nhanh...">
-        <button onclick="addManual()">LƯU LẠI</button>
-        <button style="background:transparent; color:var(--accent-pink);" onclick="closeModal()">HUỶ</button>
-    </div>
+<div class="btn-wrap">
+    <div class="btn-icon" onclick="addManual()"><span class="material-icons-round" style="font-size: 35px;">add</span></div>
+    <div class="btn-icon" id="mic"><span class="material-icons-round" style="font-size: 40px;">mic</span></div>
 </div>
 
 <script>
     const API_KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
-    let notes = JSON.parse(localStorage.getItem('notezy_v19')) || [];
+    let notes = JSON.parse(localStorage.getItem('notezy_v20')) || [];
     let currentTab = 'work';
     let rec, isListening = false;
 
@@ -157,7 +132,11 @@
 
     async function processAI(txt) {
         if(document.getElementById('landing').classList.contains('active')) switchPage('workspace');
-        const p = `Bạn là trợ lý nữ miền Nam nanh nọc. Phân loại câu "${txt}" vào "work" hoặc "personal". Trả về JSON: {"type": "work/personal", "reply": "câu khía hài hước gọi đối phương là cưng", "text": "nội dung"}`;
+        
+        // Nhận diện từ khóa hoàn thành
+        const isDone = txt.toLowerCase().includes("xong") || txt.toLowerCase().includes("đã") || txt.toLowerCase().includes("rồi");
+
+        const p = `Bạn là trợ lý nanh nọc. Phân loại "${txt}" vào "work" hoặc "personal". Trả về JSON: {"type": "work/personal", "reply": "câu khịa gọi cưng", "text": "nội dung"}`;
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -165,21 +144,24 @@
             });
             const d = await res.json();
             const resAI = JSON.parse(d.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, ""));
-            notes.unshift({ id: Date.now(), text: resAI.text, type: resAI.type, done: false });
+            
+            notes.unshift({ id: Date.now(), text: resAI.text, type: resAI.type, done: isDone });
             save();
-            responsiveVoice.speak(resAI.reply, "Vietnamese Female");
+            if(isDone) {
+                responsiveVoice.speak("Ghi rồi, mà cưng làm xong luôn rồi hả? Ghê ta!", "Vietnamese Female");
+            } else {
+                responsiveVoice.speak(resAI.reply, "Vietnamese Female");
+            }
             setTab(resAI.type);
-        } catch(e) { notes.unshift({ id: Date.now(), text: txt, type: currentTab, done: false }); save(); }
+        } catch(e) { notes.unshift({ id: Date.now(), text: txt, type: currentTab, done: isDone }); save(); }
     }
 
     function addManual() {
-        const val = document.getElementById('manualInput').value;
+        const val = prompt("Ghi gì đi cưng:");
         if(val) {
             notes.unshift({ id: Date.now(), text: val, type: currentTab, done: false });
             save();
-            responsiveVoice.speak("Ghi tay rồi nhen cưng!", "Vietnamese Female");
-            document.getElementById('manualInput').value = '';
-            closeModal();
+            responsiveVoice.speak("Lưu rồi nhen cưng!", "Vietnamese Female");
         }
     }
 
@@ -190,14 +172,14 @@
         save();
     }
 
-    function save() { localStorage.setItem('notezy_v19', JSON.stringify(notes)); render(); }
+    function save() { localStorage.setItem('notezy_v20', JSON.stringify(notes)); render(); }
     function render() {
         const l = document.getElementById('list'); l.innerHTML = '';
         notes.filter(n => n.type === currentTab).forEach(n => {
             l.innerHTML += `<div class="card ${n.done?'done':''}">
                 <div class="check-box ${n.done?'checked':''}" onclick="toggleDone(${n.id})"></div>
                 <span style="flex:1; font-weight:600;">${n.text}</span>
-                <span class="material-icons-round" style="opacity:0.3" onclick="del(${n.id})">delete</span>
+                <span class="material-icons-round" style="opacity:0.2; cursor:pointer;" onclick="del(${n.id})">delete</span>
             </div>`;
         });
     }
@@ -205,10 +187,8 @@
     function del(id) { notes = notes.filter(n => n.id !== id); save(); }
     function setTab(t) { currentTab = t; document.getElementById('t-w').className = t==='work'?'tab-btn active-w':'tab-btn'; document.getElementById('t-p').className = t==='personal'?'tab-btn active-p':'tab-btn'; render(); }
     function switchPage(p) { document.getElementById('landing').className='screen hidden'; document.getElementById('workspace').className='screen active'; render(); }
-    function openModal() { document.getElementById('inputModal').style.display='flex'; }
-    function closeModal() { document.getElementById('inputModal').style.display='none'; }
 
-    window.onclick = () => { if(!isListening) { initSpeech(); responsiveVoice.speak("Sổ tay của cưng sẵn sàng!", "Vietnamese Female"); } };
+    window.onclick = () => { if(!isListening) { initSpeech(); responsiveVoice.speak("Notezy hóng lệnh nè cưng!", "Vietnamese Female"); } };
     window.onload = render;
 </script>
 </body>

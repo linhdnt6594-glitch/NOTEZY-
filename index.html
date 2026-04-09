@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NOTEZY V7 Ultra Professional</title>
+    <title>NOTEZY V8 SUPER IMMORTAL</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,413 +15,193 @@
 
     <style>
         :root {
-            --work-color: #3B82F6; /* Xanh Công việc */
-            --personal-color: #EC4899; /* Hồng Cá nhân */
-            --glass-bg: rgba(255, 255, 255, 0.2);
-            --glass-border: rgba(255, 255, 255, 0.3);
+            --work: #3B82F6; --pers: #EC4899;
+            --bg: linear-gradient(-45deg, #FFDEE9, #B5FFFC, #D4C4FB, #FFDEE9);
         }
 
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             font-family: 'Inter', sans-serif; overflow: hidden;
-            background: linear-gradient(-45deg, #FFDEE9, #B5FFFC, #D4C4FB, #FFDEE9);
-            background-size: 400% 400%;
-            animation: gradientBG 10s ease infinite;
+            background: var(--bg); background-size: 400% 400%;
+            animation: gradient 10s ease infinite;
         }
 
-        @keyframes gradientBG { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
+        @keyframes gradient { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
 
-        /* Màn hình chuyển cảnh mượt */
         .screen {
             position: absolute; width: 100%; height: 100%;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
             display: flex; flex-direction: column; padding: 25px; box-sizing: border-box;
         }
-        .hidden { transform: translateX(100%); opacity: 0; pointer-events: none; }
-        .active { transform: translateX(0); opacity: 1; z-index: 10; }
+        .hidden { transform: translateY(100vh); opacity: 0; }
+        .active { transform: translateY(0); opacity: 1; z-index: 10; }
 
-        /* Trang 1: Landing Page */
-        #landing { justify-content: space-between; align-items: center; padding: 60px 25px; }
-
-        .logo-container {
-            flex: 1; display: flex; justify-content: center; align-items: center; position: relative;
+        /* Trang 1: Siêu Hologram */
+        #landing { justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px); }
+        
+        .logo-3d {
+            font-size: 200px; cursor: pointer;
+            animation: float 4s ease-in-out infinite, glow 2s ease-in-out infinite;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
+            user-select: none;
         }
 
-        .floating-note {
-            font-size: 180px; text-align: center;
-            animation: float 4s ease-in-out infinite, hologram-glow 2s ease-in-out infinite;
-            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.1));
-            cursor: pointer; position: relative;
+        @keyframes float { 0%, 100% {transform: translateY(0) scale(1);} 50% {transform: translateY(-30px) scale(1.05);} }
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(236, 72, 153, 0.3)); }
+            50% { filter: drop-shadow(0 0 40px rgba(181, 255, 252, 0.6)); }
         }
 
-        /* Hiệu ứng trôi lững lờ */
-        @keyframes float { 0%, 100% {transform: translateY(0) rotate(0deg);} 50% {transform: translateY(-25px) rotate(5deg);} }
-
-        /* Hiệu ứng Hologram phát sáng */
-        @keyframes hologram-glow {
-            0%, 100% { text-shadow: 0 0 20px #FFDEE9, 0 0 30px #B5FFFC, 0 0 40px #D4C4FB; opacity: 0.9; }
-            50% { text-shadow: 0 0 30px #FFDEE9, 0 0 40px #B5FFFC, 0 0 50px #D4C4FB; opacity: 1; }
+        .status-pill {
+            background: rgba(255, 255, 255, 0.4); padding: 10px 20px; border-radius: 30px;
+            font-weight: 800; font-size: 14px; margin-top: 40px;
+            border: 1px solid rgba(255,255,255,0.5); display: flex; align-items: center; gap: 8px;
         }
+        .dot { width: 10px; height: 10px; background: #ff4757; border-radius: 50%; animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% {opacity: 1;} 50% {opacity: 0.3;} }
 
-        .title-v7 {
-            font-size: 2rem; font-weight: 800; letter-spacing: -1.5px;
-            margin-bottom: 30px; text-align: center;
-            background: linear-gradient(90deg, #FFDEE9, #B5FFFC, #D4C4FB);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        /* Trang 2: Workspace */
+        .tab-bar { display: flex; gap: 10px; margin: 20px 0; }
+        .tab { 
+            flex: 1; padding: 15px; border-radius: 20px; text-align: center; font-weight: 800;
+            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); transition: 0.3s;
         }
+        .active-work { background: var(--work) !important; color: white; }
+        .active-pers { background: var(--pers) !important; color: white; }
 
-        /* Mic Button trang 1 */
-        .mic-btn-main {
-            width: 100px; height: 100px; border-radius: 50%;
-            background: white; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1); cursor: pointer;
-            border: 4px solid transparent; transition: 0.3s;
-        }
-        .recording { border-color: #ff4757; animation: pulse 1s infinite; }
-        @keyframes pulse { 0% {box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4);} 70% {box-shadow: 0 0 0 30px rgba(255, 71, 87, 0);} 100% {box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);} }
-
-        /* Trang 2: Workspace Page */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .header h2 { margin: 0; font-weight: 800; letter-spacing: -1px; }
-
-        /* Tabs phân loại */
-        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab {
-            flex: 1; padding: 12px; border-radius: 15px; text-align: center;
-            background: var(--glass-bg); backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border); font-weight: 800; cursor: pointer; transition: 0.3s;
-        }
-        .tab.active-work { background: var(--work-color); color: white; }
-        .tab.active-personal { background: var(--personal-color); color: white; }
-
-        /* Danh sách Note */
         .note-list { flex: 1; overflow-y: auto; padding-bottom: 100px; }
-        .note-list::-webkit-scrollbar { display: none; } /* Ẩn scrollbar */
-
-        .note-card {
-            background: var(--glass-bg); backdrop-filter: blur(15px);
-            border-radius: 20px; padding: 18px; margin-bottom: 12px;
-            border: 1px solid var(--glass-border); display: flex; align-items: center;
-            animation: slideIn 0.3s ease-out; transition: transform 0.2s ease;
+        .card { 
+            background: rgba(255,255,255,0.25); backdrop-filter: blur(10px);
+            padding: 20px; border-radius: 25px; margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.4); display: flex; align-items: center;
+            animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .note-card:active { transform: scale(0.98); } /* Hiệu ứng nhấn */
-        @keyframes slideIn { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
+        @keyframes pop { from {transform: scale(0.8); opacity: 0;} to {transform: scale(1); opacity: 1;} }
 
-        /* Tag phân loại màu sắc */
-        .tag { font-size: 10px; padding: 4px 10px; border-radius: 10px; color: white; margin-right: 12px; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; }
-        .tag-work { background: var(--work-color); }
-        .tag-personal { background: var(--personal-color); }
-
-        /* Khu vực nhập liệu */
-        .input-area { position: fixed; bottom: 25px; left: 25px; right: 25px; display: flex; gap: 12px; }
-        input { flex: 1; padding: 18px; border-radius: 20px; border: none; background: white; box-shadow: 0 8px 20px rgba(0,0,0,0.05); font-weight: 600; outline: none; }
-        .btn-action { width: 56px; height: 56px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
-
-        /* Vòng xoay tải */
-        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; color: white; flex-direction: column; z-index: 1000; display: none; }
-        .loading-spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--work-color); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
+        /* Mic luôn sẵn sàng */
+        .mic-fixed {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: 80px; height: 80px; border-radius: 50%; background: white;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 100;
+        }
+        .mic-active { background: #ff4757; color: white; animation: ripple 1.5s infinite; }
+        @keyframes ripple { 0% {box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4);} 70% {box-shadow: 0 0 0 20px rgba(255, 71, 87, 0);} 100% {box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);} }
     </style>
 </head>
 <body>
 
-<div id="loading" class="loading-overlay">
-    <div class="loading-spinner"></div>
-    <div style="font-weight: 600;">Đang rình coi note gì...</div>
-</div>
-
 <div id="landing" class="screen active">
-    <h1 class="title-v7">NOTEZY</h1>
-    <div class="logo-container">
-        <div class="floating-note" onclick="sayGreeting()">📓</div>
-    </div>
-    <div class="mic-btn-main" id="mic-1" onclick="handleMicClick()">
-        <span class="material-icons-round" style="font-size: 56px;">mic</span>
-    </div>
-    <p style="font-weight: 600; opacity: 0.6;" onclick="switchPage('workspace')">Chạm để xem danh sách note</p>
+    <div class="logo-3d">📓</div>
+    <div class="status-pill"><div class="dot"></div> ĐANG HÓNG CHUYỆN...</div>
+    <p style="margin-top:20px; font-weight:600; color: #64748B;">Cứ nói đi, tui nghe hết!</p>
 </div>
 
 <div id="workspace" class="screen hidden">
-    <div class="header">
-        <h2>Sổ Tay V7 Pro</h2>
-        <span class="material-icons-round" style="cursor: pointer;" onclick="switchPage('landing')">home</span>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h1 style="font-weight:900; letter-spacing:-1px;">SỔ TAY PRO</h1>
+        <span class="material-icons-round" onclick="location.reload()">refresh</span>
+    </div>
+    
+    <div class="tab-bar">
+        <div id="t-work" class="tab active-work" onclick="setTab('work')">CÔNG VIỆC</div>
+        <div id="t-pers" class="tab" onclick="setTab('personal')">CÁ NHÂN</div>
     </div>
 
-    <div class="tab-container">
-        <div class="tab active-work" id="tab-work" onclick="setTab('work')">CÔNG VIỆC</div>
-        <div class="tab" id="tab-personal" onclick="setTab('personal')">CÁ NHÂN</div>
-    </div>
+    <div class="note-list" id="list"></div>
+</div>
 
-    <div class="note-list" id="list">
-        </div>
-
-    <div class="input-area">
-        <input type="text" id="text-in" placeholder="Nhập nhanh hoặc bấm Mic..." onkeypress="if(event.key==='Enter') addText()">
-        <div class="btn-action" onclick="addText()"><span class="material-icons-round">send</span></div>
-        <div class="btn-action" id="mic-2" onclick="handleMicClick()"><span class="material-icons-round">mic</span></div>
-    </div>
+<div class="mic-fixed" id="master-mic">
+    <span class="material-icons-round" style="font-size: 35px;">mic</span>
 </div>
 
 <script>
-    // 💥 CHỈNH KEY AI CỦA CƯNG Ở ĐÂY 💥
-    const API_KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng"; 
-
-    // Kho 100 câu chào nanh nọc, lầy lội (Dạng viết tắt để tiết kiệm dung lượng)
-    const g= [
-        "Hi cưng, tui chờ nãy giờ, note gì nói lẹ coi!",
-        "Vô đây note hay vô ngắm tui vậy cưng? Hài!",
-        "Nói đi cưng, tui rình nghe nãy giờ đó nha.",
-        "Mặt mày lấm lét, định note chuyện xấu gì hả?",
-        "Ghé thăm tui hả cưng? Note gì thì nói đại đi!",
-        "Tui đẹp hông cưng? Đẹp thì note cho tui đi!",
-        "Chờ cưng mòn mỏi, note giùm cái đi cưng!",
-        "Cưng ơi, note lẹ tui còn đi ăn chè nữa.",
-        "Lại note chuyện bao đồng hả cưng? Chán nha!",
-        "Note gì note hoài, tui mệt rồi nghen cưng!",
-        "Nhìn cưng sành điệu đó, note chuyện gì sang chảnh coi!",
-        "Note lẹ cưng ơi, tui còn đi quánh ghen nữa.",
-        "Cưng ơi, note chuyện gì vui vui coi, buồn ngủ quá.",
-        "Note lẹ tui còn đi shopping, đừng làm mất thời gian!",
-        "Nhìn cưng ngáo ngáo, định note chuyện gì ngớ ngẩn hả?",
-        "Note chuyện gì chấn động coi cưng, chán ba cái chuyện vặt!",
-        "Note lẹ cưng ơi, tui còn đi nhậu nữa, đừng lề mề!",
-        "Nhìn cưng cũng bảnh, note chuyện gì oai phong coi!",
-        "Note lẹ cưng ơi, tui còn đi hát karaoke, đừng có lảm nhảm!",
-        "Nhìn cưng cũng duyên, note chuyện gì ngọt ngào coi!",
-        "Note lẹ cưng ơi, tui còn đi coi bói, đừng làm mất hứng!",
-        "Nhìn cưng cũng hiền, note chuyện gì lương thiện coi!",
-        "Note lẹ cưng ơi, tui còn đi chùa, đừng có khẩu nghiệp!",
-        "Nhìn cưng cũng đảm, note chuyện gì khéo léo coi!",
-        "Note lẹ cưng ơi, tui còn đi chợ, đừng có kỳ kèo!",
-        "Nhìn cưng cũng sang, note chuyện gì quý phái coi!",
-        "Note lẹ cưng ơi, tui còn đi spa, đừng làm mất nhan sắc!",
-        "Nhìn cưng cũng sến, note chuyện gì lãng mạn coi!",
-        "Note lẹ cưng ơi, tui còn đi coi phim, đừng làm mất cốt truyện!",
-        "Nhìn cưng cũng quái, note chuyện gì độc lạ coi!",
-        "Note lẹ cưng ơi, tui còn đi bơi, đừng làm mất dáng!",
-        "Nhìn cưng cũng hài, note chuyện gì tấu hài coi!",
-        "Note lẹ cưng ơi, tui còn đi tập gym, đừng làm mất cơ bắp!",
-        "Nhìn cưng cũng quậy, note chuyện gì phá phách coi!",
-        "Note lẹ cưng ơi, tui còn đi quẩy, đừng làm mất nhiệt!",
-        "Nhìn cưng cũng ảo, note chuyện gì 'deep' deep coi!",
-        "Note lẹ cưng ơi, tui còn đi 'sống ảo', đừng làm mất 'lai'!",
-        "Nhìn cưng cũng lầy, note chuyện gì lầy lội coi!",
-        "Note lẹ cưng ơi, tui còn đi ngủ, đừng làm mất giấc!",
-        "Nhìn cưng cũng mơ, note chuyện gì mộng mơ coi!",
-        "Note lẹ cưng ơi, tui còn đi chơi, đừng làm mất vui!",
-        "Nhìn cưng cũng si, note chuyện gì si tình coi!",
-        "Note lẹ cưng ơi, tui còn đi 'cua' trai, đừng làm mất mối!",
-        "Nhìn cưng cũng 'chảnh', note chuyện gì cao sang coi!",
-        "Note lẹ cưng ơi, tui còn đi 'tám', đừng làm mất chuyện!",
-        "Nhìn cưng cũng 'khùng', note chuyện gì điên điên coi!",
-        "Note lẹ cưng ơi, tui còn đi 'điên', đừng làm mất hứng!",
-        "Nhìn cưng cũng 'bựa', note chuyện gì bựa bựa coi!",
-        "Note lẹ cưng ơi, tui còn đi 'bựa', đừng làm mất vui!",
-        "Nhìn cưng cũng 'ngông', note chuyện gì ngông cuồng coi!",
-        "Note lẹ cưng ơi, tui còn đi 'ngông', đừng làm mất chất!",
-        "Nhìn cưng cũng 'quái', note chuyện gì quái dị coi!",
-        "Note lẹ cưng ơi, tui còn đi 'quái', đừng làm mất độc!",
-        "Nhìn cưng cũng 'lạ', note chuyện gì lạ lùng coi!",
-        "Note lẹ cưng ơi, tui còn đi 'lạ', đừng làm mất chất!",
-        "Nhìn cưng cũng 'độc', note chuyện gì độc đáo coi!",
-        "Note lẹ cưng ơi, tui còn đi 'độc', đừng làm mất oai!",
-        "Nhìn cưng cũng 'chất', note chuyện gì chất lừ coi!",
-        "Note lẹ cưng ơi, tui còn đi 'chất', đừng làm mất dáng!",
-        "Nhìn cưng cũng 'sang', note chuyện gì sang trọng coi!",
-        "Note lẹ cưng ơi, tui còn đi 'sang', đừng làm mất oai!",
-        "Nhìn cưng cũng 'quý', note chuyện gì quý tộc coi!",
-        "Note lẹ cưng ơi, tui còn đi 'quý', đừng làm mất chất!",
-        "Nhìn cưng cũng 'phái', note chuyện gì phái mạnh coi!",
-        "Note lẹ cưng ơi, tui còn đi 'phái', đừng làm mất oai!",
-        "Nhìn cưng cũng 'bảnh', note chuyện gì bảnh bao coi!",
-        "Note lẹ cưng ơi, tui còn đi 'bảnh', đừng làm mất dáng!",
-        "Nhìn cưng cũng 'xinh', note chuyện gì xinh đẹp coi!",
-        "Note lẹ cưng ơi, tui còn đi 'xinh', đừng làm mất duyên!",
-        "Nhìn cưng cũng 'đẹp', note chuyện gì đẹp đẽ coi!",
-        "Note lẹ cưng ơi, tui còn đi 'đẹp', đừng làm mất chất!",
-        "Nhìn cưng cũng 'duyên', note chuyện gì duyên dáng coi!",
-        "Note lẹ cưng ơi, tui còn đi 'duyên', đừng làm mất xinh!",
-        "Nhìn cưng cũng 'hiền', note chuyện gì hiền hậu coi!",
-        "Note lẹ cưng ơi, tui còn đi 'hiền', đừng làm mất đức!",
-        "Nhìn cưng cũng 'ngoan', note chuyện gì ngoan ngoãn coi!",
-        "Note lẹ cưng ơi, tui còn đi 'ngoan', đừng làm mất nết!",
-        "Nhìn cưng cũng 'giỏi', note chuyện gì giỏi giang coi!",
-        "Note lẹ cưng ơi, tui còn đi 'giỏi', đừng làm mất tài!",
-        "Nhìn cưng cũng 'tài', note chuyện gì tài năng coi!",
-        "Note lẹ cưng ơi, tui còn đi 'tài', đừng làm mất giỏi!",
-        "Nhìn cưng cũng 'khéo', note chuyện gì khéo léo coi!",
-        "Note lẹ cưng ơi, tui còn đi 'khéo', đừng làm mất duyên!",
-        "Nhìn cưng cũng 'đảm', note chuyện gì đảm đang coi!",
-        "Note lẹ cưng ơi, tui còn đi 'đảm', đừng làm mất đức!",
-        "Nhìn cưng cũng 'tốt', note chuyện gì tốt bụng coi!",
-        "Note lẹ cưng ơi, tui còn đi 'tốt', đừng làm mất lòng!",
-        "Nhìn cưng cũng 'vui', note chuyện gì vui vẻ coi!",
-        "Note lẹ cưng ơi, tui còn đi 'vui', đừng làm mất cười!",
-        "Nhìn cưng cũng 'hài', note chuyện gì hài hước coi!",
-        "Note lẹ cưng ơi, tui còn đi 'hài', đừng làm mất duyên!",
-        "Nhìn cưng cũng 'lầy', note chuyện gì lầy lội coi!",
-        "Note lẹ cưng ơi, tui còn đi 'lầy', đừng làm mất vui!",
-        "Nhìn cưng cũng 'ảo', note chuyện gì 'deep' deep coi!",
-        "Note lẹ cưng ơi, tui còn đi 'ảo', đừng làm mất 'lai'!",
-        "Nhìn cưng cũng 'sống ảo', note chuyện gì sống ảo coi!",
-        "Note lẹ cưng ơi, tui còn đi 'sống ảo', đừng làm mất 'lai'!"
-    ];
-
+    const KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
     let currentTab = 'work';
-    let notes = JSON.parse(localStorage.getItem('notezy_v7')) || [];
-    let recognition;
-    let isRecording = false;
+    let notes = JSON.parse(localStorage.getItem('notezy_v8')) || [];
+    let rec;
+    let isActive = false;
 
-    // 1. Chào hỏi chanh chua khi mở App
-    function sayGreeting() {
-        if(notes.length === 0) {
-            responsiveVoice.speak("Chào đại gia Khải, muốn note gì nói tui nghe", "Vietnamese Female");
-        } else {
-            const randomGreet = g[Math.floor(Math.random() * g.length)];
-            responsiveVoice.speak(randomGreet, "Vietnamese Female");
-        }
-    }
-
-    // 2. Kích hoạt Speech API
-    function initSpeech() {
+    // 1. Tự khởi động Mic ngay khi mở
+    function startListening() {
         const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if(!Speech) { alert("Trình duyệt không hỗ trợ Mic!"); return; }
-        
-        recognition = new Speech();
-        recognition.lang = 'vi-VN';
-        recognition.continuous = false;
-        recognition.interimResults = false;
+        rec = new Speech();
+        rec.lang = 'vi-VN';
+        rec.continuous = true; // Luôn luôn nghe
+        rec.interimResults = false;
 
-        recognition.onstart = () => { updateMicUI(true); };
-        recognition.onend = () => { updateMicUI(false); };
-        recognition.onresult = (e) => {
-            processAI(e.results[0][0].transcript);
+        rec.onstart = () => { 
+            isActive = true; 
+            document.getElementById('master-mic').classList.add('mic-active');
         };
+        rec.onresult = (e) => {
+            const txt = e.results[e.results.length - 1][0].transcript;
+            processAI(txt);
+        };
+        rec.onend = () => { rec.start(); }; // Tự động bật lại nếu bị ngắt
+        rec.start();
     }
 
-    // 3. Xử lý khi bấm Mic (Trang 1 và Trang 2)
-    function handleMicClick() {
-        if(!isRecording) {
-            // Nếu đang ở trang 1, nhảy sang trang 2 mượt mà
-            if(document.getElementById('landing').classList.contains('active')) {
-                switchPage('workspace');
-            }
-            recognition.start();
-        } else {
-            recognition.stop();
+    async function processAI(txt) {
+        // Tự chuyển sang trang 2 nếu đang ở trang 1
+        document.getElementById('landing').className = 'screen hidden';
+        document.getElementById('workspace').className = 'screen active';
+
+        const prompt = `Bạn là trợ lý nữ miền Nam nanh nọc. Phân loại câu "${txt}" vào "work" hoặc "personal". Trả về JSON: {"type": "work/personal", "reply": "câu khịa", "item": "nội dung"}`;
+        
+        try {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${KEY}`, {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            });
+            const d = await res.json();
+            const clean = d.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, "");
+            const resAI = JSON.parse(clean);
+
+            notes.push({ id: Date.now(), text: resAI.item, type: resAI.type });
+            localStorage.setItem('notezy_v8', JSON.stringify(notes));
+            responsiveVoice.speak(resAI.reply, "Vietnamese Female");
+            setTab(resAI.type);
+        } catch(e) {
+            notes.push({ id: Date.now(), text: txt, type: currentTab });
+            render();
         }
     }
 
-    // Cập nhật giao diện Mic
-    function updateMicUI(on) {
-        isRecording = on;
-        const m1 = document.getElementById('mic-1');
-        const m2 = document.getElementById('mic-2');
-        if(on) {
-            m1.classList.add('recording'); m2.classList.add('recording');
-        } else {
-            m1.classList.remove('recording'); m2.classList.remove('recording');
-        }
-    }
-
-    // 4. Chuyển đổi trang mượt
-    function switchPage(p) {
-        const l = document.getElementById('landing');
-        const w = document.getElementById('workspace');
-        if(p === 'workspace') {
-            l.classList.replace('active', 'hidden');
-            w.classList.replace('hidden', 'active');
-        } else {
-            w.classList.replace('active', 'hidden');
-            l.classList.replace('hidden', 'active');
-        }
-    }
-
-    // 5. Quản lý Tab (Công việc / Cá nhân)
     function setTab(t) {
         currentTab = t;
-        document.getElementById('tab-work').className = t === 'work' ? 'tab active-work' : 'tab';
-        document.getElementById('tab-personal').className = t === 'personal' ? 'tab active-personal' : 'tab';
+        document.getElementById('t-work').className = t === 'work' ? 'tab active-work' : 'tab';
+        document.getElementById('t-pers').className = t === 'personal' ? 'tab active-pers' : 'tab';
         render();
     }
 
-    // 6. Xử lý tay
-    function addText() {
-        const input = document.getElementById('text-in');
-        if(input.value.trim()) {
-            processAI(input.value);
-            input.value = '';
-        }
-    }
-
-    // 💥 CHỊ TRỢ LÝ NANH NỌC V6 PRO 💥 (Phân loại tự động)
-    async function processAI(txt) {
-        document.getElementById('loading').style.display = 'flex';
-        
-        // System Prompt cực mạnh
-        const sp = `Bạn là trợ lý nữ miền Nam nanh nọc, gọi 'cưng' xưng 'tui'. Trả về DUY NHẤT JSON: {"type": "work/personal", "reply": "câu khịa ngắn gọn", "item": "nội dung ngắn gọn"}`;
-        
-        try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    systemInstruction: { parts: [{ text: sp }] },
-                    contents: [{ parts: [{ text: `Câu nói: "${txt}"` }] }]
-                })
-            });
-            const d = await res.json();
-            const raw = d.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, "");
-            const resAI = JSON.parse(raw);
-
-            // Lưu note
-            notes.push({ id: Date.now(), text: resAI.item || txt, type: resAI.type || currentTab, done: false });
-            localStorage.setItem('notezy_v7', JSON.stringify(notes));
-
-            // TTS
-            responsiveVoice.speak(resAI.reply, "Vietnamese Female");
-            
-            // Tự nhảy tab
-            setTab(resAI.type);
-
-        } catch(e) {
-            console.error(e);
-            // Fallback khi lỗi
-            notes.push({ id: Date.now(), text: txt, type: currentTab, done: false });
-            localStorage.setItem('notezy_v7', JSON.stringify(notes));
-            responsiveVoice.speak("Ok tui ghi đại vô sổ rồi đó cưng!", "Vietnamese Female");
-            render();
-        }
-        document.getElementById('loading').style.display = 'none';
-    }
-
-    // 7. Render danh sách
     function render() {
         const l = document.getElementById('list');
         l.innerHTML = '';
         notes.filter(n => n.type === currentTab).reverse().forEach(n => {
-            const div = document.createElement('div');
-            div.className = 'note-card';
-            div.innerHTML = `
-                <span class="tag ${n.type==='work'?'tag-work':'tag-personal'}">${n.type}</span>
-                <span style="flex:1; font-weight:600;">${n.text}</span>
-                <span class="material-icons-round" style="opacity:0.3; cursor:pointer;" onclick="delNote(${n.id})">delete</span>
-            `;
-            l.appendChild(div);
+            l.innerHTML += `<div class="card">
+                <div style="width:10px; height:10px; border-radius:50%; background:${n.type==='work'?'#3B82F6':'#EC4899'}; margin-right:15px;"></div>
+                <span style="flex:1; font-weight:700;">${n.text}</span>
+                <span class="material-icons-round" onclick="del(${n.id})" style="opacity:0.2">delete</span>
+            </div>`;
         });
     }
 
-    // 8. Xóa note
-    function delNote(id) {
+    function del(id) {
         notes = notes.filter(n => n.id !== id);
-        localStorage.setItem('notezy_v7', JSON.stringify(notes));
+        localStorage.setItem('notezy_v8', JSON.stringify(notes));
         render();
     }
 
-    // BÙM
-    window.onload = () => { initSpeech(); sayGreeting(); render(); };
-</script>
+    // Kích hoạt khi chạm lần đầu (Bắt buộc do bảo mật trình duyệt)
+    window.onclick = () => {
+        if(!isActive) {
+            startListening();
+            responsiveVoice.speak("Sẵn sàng nghe lệnh Chủ tịch!", "Vietnamese Female");
+        }
+    };
 
+    window.onload = render;
+</script>
 </body>
 </html>

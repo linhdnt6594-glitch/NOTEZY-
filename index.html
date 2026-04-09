@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NOTEZY V16 - ROYAL IMMORTAL</title>
+    <title>NOTEZY V17 - SUPREME SLOGAN</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -63,6 +63,7 @@
             backdrop-filter: blur(15px); box-shadow: 0 25px 50px rgba(0,0,0,0.08);
             cursor: pointer;
         }
+        /* Hình ảnh cuốn sổ loang màu y trang hình chủ tịch gửi */
         .hologram-book::after { content: '📓'; font-size: 160px; filter: saturate(0.5) opacity(0.8); }
 
         @keyframes float { 0%, 100% {transform: translateY(0) rotate(0deg);} 50% {transform: translateY(-30px) rotate(3deg);} }
@@ -77,7 +78,7 @@
         @keyframes blink { 0%, 100% {opacity: 1;} 50% {opacity: 0.3;} }
 
         /* Trang 2: Workspace - Phân loại thông minh */
-        .workspace-title { font-size: 1.8rem; font-weight: 900; margin-bottom: 25px; letter-spacing: -1.5px; color: var(--text-main); }
+        .workspace-title { font-size: 1.6rem; font-weight: 900; margin-bottom: 25px; letter-spacing: -1px; color: var(--text-main); }
         
         .tab-bar { display: flex; gap: 12px; margin-bottom: 20px; }
         .tab-btn {
@@ -91,13 +92,13 @@
         .list-wrap { flex: 1; overflow-y: auto; padding-bottom: 120px; }
         .list-wrap::-webkit-scrollbar { display: none; }
 
-        .card {
+        .note-card {
             background: var(--card-white); padding: 22px; border-radius: 25px; margin-bottom: 15px;
             display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.8);
             animation: slideUp 0.5s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.02);
             transition: 0.3s ease;
         }
-        .card.done span { text-decoration: line-through; opacity: 0.4; color: var(--text-sub) !important; }
+        .note-card.done span { text-decoration: line-through; opacity: 0.4; color: var(--text-sub) !important; }
         @keyframes slideUp { from {opacity:0; transform: translateY(20px);} to {opacity:1;} }
 
         /* Ô tíchCheckbox chuẩn Royal */
@@ -116,7 +117,7 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s;
         }
         .mic-recording { background: #ff4757; color: white; animation: ripple 1.5s infinite; }
-        @keyframes ripple { 0% {box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.5);} 70% {box-shadow: 0 0 0 25px rgba(255, 71, 87, 0);} 100% {box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);} }
+        @keyframes ripple { 0% {box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4);} 70% {box-shadow: 0 0 0 25px rgba(255, 71, 87, 0);} 100% {box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);} }
         
         /* Modal thêm Note tay */
         #inputModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(10px); }
@@ -139,7 +140,7 @@
 
 <div id="workspace" class="screen hidden">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-        <h1 class="workspace-title">NOTE CỦA CHỦ TỊCH</h1>
+        <h1 class="workspace-title">Não lag? Mở Notezy 😎</h1>
         <span class="material-icons-round" style="cursor:pointer; color: var(--accent-mic); font-size: 35px;" onclick="location.reload()">refresh</span>
     </div>
     
@@ -248,7 +249,7 @@
     function openModal() { document.getElementById('inputModal').style.display='flex'; document.getElementById('manualInput').focus(); }
     function closeModal() { document.getElementById('inputModal').style.display='none'; }
 
-    window.onclick = () => { if(!isListening) { initSpeech(); responsiveVoice.speak("Sổ tay Royal Immorttal hóng lệnh!", "Vietnamese Female"); } };
+    window.onclick = () => { if(!isListening) { startRec(); responsiveVoice.speak("Sổ tay Supreme hóng lệnh!", "Vietnamese Female"); } };
     window.onload = render;
 </script>
 </body>

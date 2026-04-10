@@ -220,6 +220,24 @@
             background: rgba(255, 255, 255, 0.95);
             border-radius: 16px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.03); /* Thay thế shadow của glass để vẫn đẹp mà nhẹ */
+            transform-origin: center center;
+        }
+
+        /* Khi nhấc note lên theo ngón tay */
+        .sortable-drag-clone {
+            opacity: 0.95 !important;
+            transform: scale(1.03) !important;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
+            z-index: 9999 !important;
+            background: #FFFFFF !important;
+            border: 1px solid var(--brand-secondary) !important;
+        }
+        /* Cái bóng để lại chỗ trống */
+        .sortable-ghost-placeholder {
+            opacity: 0.3 !important;
+            background: #F1F5F9 !important;
+            border: 2px dashed #CBD5E1 !important;
+            box-shadow: none !important;
         }
         
         /* Hiệu ứng Hover dạng dải băng mỏng */
@@ -522,6 +540,9 @@
                 animation: 250,
                 delay: 200,
                 delayOnTouchOnly: true,
+                forceFallback: true, /* Bắt buộc chạy thư viện kéo để bám dính ngón tay trên Mobile */
+                fallbackClass: "sortable-drag-clone",
+                ghostClass: "sortable-ghost-placeholder",
                 onEnd: function(evt) {
                     const realOldIndex = notes.length - 1 - evt.oldIndex;
                     const realNewIndex = notes.length - 1 - evt.newIndex;

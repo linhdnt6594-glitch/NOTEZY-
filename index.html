@@ -216,20 +216,19 @@
         .note-list {
             flex: 1; overflow-y: auto; overflow-x: hidden;
             padding-bottom: 120px;
-            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-            align-content: start;
+            display: flex; flex-direction: column; gap: 8px;
         }
         .note-list::-webkit-scrollbar { width: 6px; }
         .note-list::-webkit-scrollbar-track { background: transparent; }
         .note-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
 
         .note-card {
-            padding: 14px;
-            display: flex; flex-direction: column; align-items: flex-start;
+            padding: 8px 16px;
+            display: flex; align-items: center;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative; overflow: hidden;
             background: rgba(255, 255, 255, 0.8);
-            border-radius: 20px;
+            border-radius: 16px;
         }
         
         /* Hiệu ứng Hover dạng dải băng mỏng */
@@ -244,8 +243,9 @@
 
         .checkbox {
             width: 22px; height: 22px;
-            border-radius: 8px;
+            border-radius: 6px;
             border: 2px solid #CBD5E1;
+            margin-right: 14px;
             cursor: pointer;
             display: flex; justify-content: center; align-items: center;
             transition: all 0.2s;
@@ -265,12 +265,13 @@
             text-decoration: line-through; color: var(--text-muted);
         }
 
-        .note-body { flex: 1; width: 100%; } 
+        .note-body { flex: 1; min-width: 0; } 
         .note-body .content { 
             font-size: 1.05rem; font-weight: 600; line-height: 1.4; margin: 0; color: var(--text-main);
             word-wrap: break-word;
         }
-        .note-body .meta { font-size: 0.75rem; margin-top: 6px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap;}
+        .note-body .meta { font-size: 0.75rem; margin-top: 4px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap;}
+        .note-body .meta:empty { display: none; }
         
         .meta-tag { 
             background: #F1F5F9; color: #475569; 
@@ -511,14 +512,12 @@
                 }
 
                 div.innerHTML = `
-                    <div style="display:flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 10px;">
-                        <div class="checkbox" onclick="toggleDone(${i})"></div>
-                        <div class="delete-btn material-icons-round" onclick="deleteNote(${i})" style="margin:0; padding:4px;">delete_outline</div>
-                    </div>
+                    <div class="checkbox" onclick="toggleDone(${i})"></div>
                     <div class="note-body">
                         <p class="content">${note.item}</p>
                         <div class="meta">${metaTags}</div>
                     </div>
+                    <div class="delete-btn material-icons-round" onclick="deleteNote(${i})" style="padding:4px; margin-left: 8px;">delete_outline</div>
                 `;
                 container.appendChild(div);
             });

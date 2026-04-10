@@ -216,18 +216,20 @@
         .note-list {
             flex: 1; overflow-y: auto; overflow-x: hidden;
             padding-bottom: 120px;
-            display: flex; flex-direction: column; gap: 10px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+            align-content: start;
         }
         .note-list::-webkit-scrollbar { width: 6px; }
         .note-list::-webkit-scrollbar-track { background: transparent; }
         .note-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
 
         .note-card {
-            padding: 12px 16px;
-            display: flex; align-items: center;
+            padding: 14px;
+            display: flex; flex-direction: column; align-items: flex-start;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative; overflow: hidden;
             background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
         }
         
         /* Hiệu ứng Hover dạng dải băng mỏng */
@@ -244,7 +246,6 @@
             width: 22px; height: 22px;
             border-radius: 8px;
             border: 2px solid #CBD5E1;
-            margin-right: 16px;
             cursor: pointer;
             display: flex; justify-content: center; align-items: center;
             transition: all 0.2s;
@@ -264,7 +265,7 @@
             text-decoration: line-through; color: var(--text-muted);
         }
 
-        .note-body { flex: 1; min-width: 0; } 
+        .note-body { flex: 1; width: 100%; } 
         .note-body .content { 
             font-size: 1.05rem; font-weight: 600; line-height: 1.4; margin: 0; color: var(--text-main);
             word-wrap: break-word;
@@ -510,12 +511,14 @@
                 }
 
                 div.innerHTML = `
-                    <div class="checkbox" onclick="toggleDone(${i})"></div>
+                    <div style="display:flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 10px;">
+                        <div class="checkbox" onclick="toggleDone(${i})"></div>
+                        <div class="delete-btn material-icons-round" onclick="deleteNote(${i})" style="margin:0; padding:4px;">delete_outline</div>
+                    </div>
                     <div class="note-body">
                         <p class="content">${note.item}</p>
                         <div class="meta">${metaTags}</div>
                     </div>
-                    <div class="delete-btn material-icons-round" onclick="deleteNote(${i})">delete_outline</div>
                 `;
                 container.appendChild(div);
             });

@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HoloNotes V7 Aurora Infinity</title>
-    <!-- Thêm font Outfit cho tiêu đề cực chất, Inter cho nội dung -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@800;900&display=swap" rel="stylesheet">
+    <title>Notezy - Não lag có Notezy lo</title>
+    <!-- Thêm font Outfit cho tiêu đề, Inter cho nội dung -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
     <style>
         :root {
-            /* Neon Aurora Palette */
-            --aurora-1: #0F2027;
-            --aurora-2: #203A43;
-            --aurora-3: #2C5364;
-            --neon-pink: #FF007F;
-            --neon-cyan: #00F0FF;
-            --neon-purple: #8A2BE2;
+            /* Neon Light/Pastel Palette */
+            --bg-color-1: #FFF5F7;  /* Soft Pink */
+            --bg-color-2: #E6F8FE;  /* Soft Blue */
+            --bg-color-3: #F3E8FE;  /* Soft Purple */
             
-            /* Dark Glass */
-            --glass-bg: rgba(20, 25, 30, 0.45);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --text-main: #F8FAFC;
-            --text-muted: #94A3B8;
+            --brand-primary: #FF3366; /* Vibrant Pink */
+            --brand-secondary: #00C3FF; /* Bright Blue */
+            
+            /* Light Glass */
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.9);
+            --text-main: #1E293B;
+            --text-muted: #64748B;
         }
 
         body, html {
@@ -31,60 +31,47 @@
             height: 100%; width: 100%;
             overflow: hidden;
             color: var(--text-main);
-            background-color: #050505;
+            background-color: #F8FAFC;
         }
 
-        /* 🌌 V7 Gradient Background Aurora */
+        /* 🌞 Sáng sủa Background Animation */
         body::before {
             content: "";
             position: absolute;
             top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.15), transparent 40%),
-                        radial-gradient(circle at 20% 80%, rgba(0, 240, 255, 0.1), transparent 40%),
-                        radial-gradient(circle at 80% 20%, rgba(255, 0, 127, 0.1), transparent 40%);
-            animation: auroraPan 25s infinite alternate ease-in-out;
+            background: radial-gradient(circle at 50% 50%, var(--bg-color-1) 0%, transparent 40%),
+                        radial-gradient(circle at 20% 80%, var(--bg-color-2) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 20%, var(--bg-color-3) 0%, transparent 40%);
+            animation: lightPan 20s infinite alternate ease-in-out;
             z-index: -2;
         }
 
-        @keyframes auroraPan {
+        @keyframes lightPan {
             0% { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(10%, 10%) rotate(15deg); }
+            100% { transform: translate(5%, 5%) rotate(10deg); }
         }
 
-        /* Lưới Cyberpunk chìm */
-        body::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 40px 40px;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        /* Siêu Glassmorphism 2.0 */
+        /* Siêu Glassmorphism Sáng */
         .glass {
             background: var(--glass-bg);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             border-radius: 28px;
             border: 1px solid var(--glass-border);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), inset 0 2px 0 rgba(255,255,255,0.8);
         }
 
         /* Hệ thống chuyển trang mượt */
         .screen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
             display: flex; flex-direction: column;
             box-sizing: border-box;
         }
         .hidden {
             opacity: 0; pointer-events: none; z-index: -1;
-            transform: scale(0.96) translateY(20px);
+            transform: scale(0.98) translateY(10px);
         }
         .active {
             opacity: 1; pointer-events: auto; z-index: 10;
@@ -97,94 +84,108 @@
             text-align: center;
         }
 
+        .slogan {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--brand-primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            background: rgba(255, 51, 102, 0.1);
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
         .title-3d {
             font-family: 'Outfit', sans-serif;
             font-size: 3.5rem;
             font-weight: 900;
-            background: linear-gradient(to right, var(--text-main), #D4A5FF, var(--neon-cyan));
+            background: linear-gradient(135deg, var(--text-main), var(--brand-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 60px;
+            margin-bottom: 50px;
+            margin-top: 0;
             letter-spacing: -2px;
-            filter: drop-shadow(0 4px 15px rgba(0,240,255,0.2));
             padding: 0 20px;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.05));
         }
 
-        /* Nút Mic Hạch Tâm (Arc Reactor) */
+        /* Nút Mic Hạch Tâm Sáng (Light Arc Reactor) */
         .mic-btn-huge {
-            width: 140px; height: 140px;
+            width: 150px; height: 150px;
             border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
             cursor: pointer;
             position: relative;
-            background: rgba(10, 15, 20, 0.8);
-            border: 2px solid rgba(255,255,255,0.05);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(255,255,255,1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 2;
+            box-shadow: 0 15px 35px rgba(0, 195, 255, 0.2);
         }
         .mic-btn-huge:hover {
-            transform: scale(1.08);
-            box-shadow: 0 0 40px rgba(0, 240, 255, 0.3);
-            border-color: rgba(0,240,255,0.4);
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 195, 255, 0.3);
+            border-color: var(--brand-secondary);
         }
         .mic-btn-huge .material-icons-round {
-            font-size: 60px; color: var(--text-main);
+            font-size: 64px; color: var(--text-main);
             transition: color 0.3s;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
         
         .mic-btn-huge::before {
             content: '';
             position: absolute;
-            top: -12px; left: -12px; right: -12px; bottom: -12px;
+            top: -15px; left: -15px; right: -15px; bottom: -15px;
             border-radius: 50%;
-            border: 2px dashed rgba(255,255,255,0.15);
-            animation: spin-slow 20s linear infinite;
+            border: 2px dashed rgba(0, 195, 255, 0.3);
+            animation: spin-slow 25s linear infinite;
         }
 
         @keyframes spin-slow { 100% { transform: rotate(360deg); } }
 
-        /* Trạng thái thu âm (Visualizer V2) */
+        /* Trạng thái thu âm (Light Visualizer) */
         .mic-recording {
-            border-color: var(--neon-pink) !important;
-            box-shadow: 0 0 50px rgba(255, 0, 127, 0.6), inset 0 0 20px rgba(255,0,127,0.3) !important;
+            border-color: var(--brand-primary) !important;
+            box-shadow: 0 0 40px rgba(255, 51, 102, 0.4), inset 0 0 15px rgba(255,51,102,0.2) !important;
         }
-        .mic-recording::before { border-color: rgba(255,0,127,0.4); animation-duration: 5s; }
+        .mic-recording::before { border-color: rgba(255,51,102,0.5) !important; }
         .mic-recording .material-icons-round { 
-            color: var(--neon-pink) !important;
+            color: var(--brand-primary) !important;
             animation: pulse-icon 0.8s alternate infinite;
         }
         .mic-recording::after {
             content: '';
             position: absolute;
-            top: -25px; left: -25px; right: -25px; bottom: -25px;
+            top: -30px; left: -30px; right: -30px; bottom: -30px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,0,127,0.3) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255,51,102,0.2) 0%, transparent 60%);
             z-index: -1;
             animation: throb 1s ease-in-out infinite alternate;
         }
 
-        @keyframes pulse-icon { 100% { transform: scale(1.15); } }
-        @keyframes throb { 0% { transform: scale(0.9); opacity: 0.5; } 100% { transform: scale(1.3); opacity: 1; } }
+        @keyframes pulse-icon { 100% { transform: scale(1.1); } }
+        @keyframes throb { 0% { transform: scale(0.9); opacity: 0.5; } 100% { transform: scale(1.2); opacity: 1; } }
 
         .hint-text {
-            margin-top: 50px; font-weight: 500; color: var(--text-muted);
-            cursor: pointer; transition: color 0.3s, transform 0.3s;
-            text-transform: uppercase; font-size: 0.85rem; letter-spacing: 3px;
-            opacity: 0.7;
+            margin-top: 60px; font-weight: 600; color: var(--text-muted);
+            cursor: pointer; transition: all 0.3s;
+            font-size: 0.95rem;
+            padding: 10px 20px; border-radius: 20px; background: rgba(255,255,255,0.5);
         }
-        .hint-text:hover { color: var(--neon-cyan); opacity: 1; transform: translateY(-2px); }
+        .hint-text:hover { color: var(--text-main); background: white; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05);}
 
         /* --- WORKSPACE TRANG 2 --- */
         #workspace-page {
             padding: 30px 24px;
             max-width: 800px;
-            margin: 0 auto; /* Căn giữa form trên màn to */
+            margin: 0 auto;
         }
 
         header {
-            margin-bottom: 30px;
-            display: flex; justify-content: space-between; align-items: flex-end;
+            margin-bottom: 25px;
+            display: flex; justify-content: space-between; align-items: flex-start;
         }
         header h1 { 
             font-family: 'Outfit', sans-serif;
@@ -193,16 +194,22 @@
             letter-spacing: -1px;
         }
         header h1 span {
-            color: var(--neon-cyan); font-size: 0.5em; vertical-align: super;
-            text-shadow: 0 0 10px rgba(0,240,255,0.5); font-weight: 900;
+            color: var(--brand-primary); font-size: 0.4em; vertical-align: super;
+            background: rgba(255,51,102,0.1); padding: 4px 8px; border-radius: 10px;
+            font-weight: 900;
         }
-        header p { margin: 6px 0 0; color: var(--text-muted); font-size: 0.95rem; font-weight: 500; font-family: monospace;}
+        .header-slogan {
+            font-size: 0.85rem; font-weight: 700; color: var(--brand-primary); 
+            margin: 5px 0 0 0; text-transform: uppercase; letter-spacing: 1px;
+        }
+        header p { margin: 6px 0 0; color: var(--text-muted); font-size: 0.95rem; font-weight: 500;}
 
         .avatar-box {
-            width: 44px; height: 44px; border-radius: 14px; 
-            background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan)); 
+            width: 46px; height: 46px; border-radius: 16px; 
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary)); 
             display:flex; align-items:center; justify-content:center; 
-            box-shadow: 0 5px 15px rgba(0,240,255,0.3);
+            box-shadow: 0 8px 15px rgba(255,51,102,0.3);
+            color: white;
         }
 
         /* Note Cards */
@@ -211,130 +218,138 @@
             padding-bottom: 120px;
             display: flex; flex-direction: column; gap: 14px;
         }
-        .note-list::-webkit-scrollbar { width: 4px; }
+        .note-list::-webkit-scrollbar { width: 6px; }
         .note-list::-webkit-scrollbar-track { background: transparent; }
-        .note-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .note-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
 
         .note-card {
-            padding: 22px;
+            padding: 20px 22px;
             display: flex; align-items: center;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative; overflow: hidden;
+            background: rgba(255, 255, 255, 0.8);
         }
         
-        /* Hiệu ứng Hover dạng Neon mỏng */
+        /* Hiệu ứng Hover dạng dải băng mỏng */
         .note-card::before {
             content: "";
-            position: absolute; left: 0; top: 0; width: 3px; height: 100%;
-            background: var(--neon-purple);
+            position: absolute; left: 0; top: 0; width: 4px; height: 100%;
+            background: var(--brand-secondary);
             opacity: 0; transition: opacity 0.3s;
         }
-        .note-card:hover { transform: translateX(6px); background: rgba(30, 35, 45, 0.5); }
-        .note-card:hover::before { opacity: 1; box-shadow: 0 0 12px var(--neon-purple); }
+        .note-card:hover { transform: translateX(5px); background: #FFFFFF; box-shadow: 0 10px 25px rgba(0,0,0,0.06); }
+        .note-card:hover::before { opacity: 1; }
 
         .checkbox {
-            width: 24px; height: 24px;
-            border-radius: 8px; /* Vuông vức tương lai hơn */
-            border: 2px solid rgba(255,255,255,0.3);
+            width: 26px; height: 26px;
+            border-radius: 8px;
+            border: 2px solid #CBD5E1;
             margin-right: 18px;
             cursor: pointer;
             display: flex; justify-content: center; align-items: center;
-            transition: all 0.3s;
+            transition: all 0.2s;
             flex-shrink: 0;
+            background: white;
         }
-        .checkbox:hover { border-color: var(--neon-cyan); box-shadow: 0 0 10px rgba(0,240,255,0.3); }
+        .checkbox:hover { border-color: var(--brand-secondary); box-shadow: 0 0 10px rgba(0,195,255,0.2); }
 
-        .note-card.done { opacity: 0.4; background: rgba(10,10,15,0.4); }
+        .note-card.done { opacity: 0.6; background: rgba(241, 245, 249, 0.7); }
         .note-card.done .checkbox {
-            background: var(--neon-cyan); border-color: var(--neon-cyan);
-            box-shadow: 0 0 15px rgba(0,240,255,0.5);
+            background: var(--brand-secondary); border-color: var(--brand-secondary);
         }
         .note-card.done .checkbox::after {
-            content: '✓'; color: #000; font-weight: 900; font-size: 14px;
+            content: '✓'; color: #FFF; font-weight: 900; font-size: 16px;
         }
         .note-card.done .content {
             text-decoration: line-through; color: var(--text-muted);
         }
 
-        .note-body { flex: 1; min-width: 0; } /* min-width 0 to prevent overflow */
+        .note-body { flex: 1; min-width: 0; } 
         .note-body .content { 
-            font-size: 1.1rem; font-weight: 500; line-height: 1.5; margin: 0; letter-spacing: 0.3px;
+            font-size: 1.15rem; font-weight: 600; line-height: 1.5; margin: 0; color: var(--text-main);
             word-wrap: break-word;
         }
         .note-body .meta { font-size: 0.8rem; margin-top: 8px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap;}
         
         .meta-tag { 
-            background: rgba(138, 43, 226, 0.1); color: #D4A5FF; 
-            padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(138,43,226,0.2);
+            background: #F1F5F9; color: #475569; 
+            padding: 4px 10px; border-radius: 8px;
             font-weight: 600; font-size: 0.75rem; white-space: nowrap;
         }
         .price-tag {
-            background: rgba(255, 0, 127, 0.1); color: var(--neon-pink);
-            padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(255,0,127,0.2);
+            background: rgba(255, 51, 102, 0.1); color: var(--brand-primary);
+            padding: 4px 10px; border-radius: 8px;
             font-weight: 700; font-size: 0.75rem; white-space: nowrap;
         }
 
         .delete-btn { 
-            cursor: pointer; color: rgba(255,255,255,0.2);
+            cursor: pointer; color: #CBD5E1;
             transition: all 0.3s; padding: 10px; margin-left: 10px;
         }
-        .note-card:hover .delete-btn { color: rgba(255,255,255,0.6); }
-        .delete-btn:hover { color: var(--neon-pink) !important; transform: scale(1.1); }
+        .note-card:hover .delete-btn { color: #94A3B8; }
+        .delete-btn:hover { color: var(--brand-primary) !important; background: rgba(255,51,102,0.1); border-radius: 50%;}
 
         /* --- INPUT CĂN CỨ DƯỚI --- */
         .input-area {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: calc(100% - 48px); max-width: 752px; /* 800 - 24*2 padding */
+            width: calc(100% - 48px); max-width: 752px;
             display: flex; align-items: stretch; gap: 14px;
             z-index: 100;
         }
 
         .input-wrapper {
             flex: 1; position: relative;
-            background: rgba(10, 15, 20, 0.7);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,1);
             backdrop-filter: blur(20px);
             display: flex; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: border-color 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
-        .input-wrapper:focus-within { border-color: var(--neon-cyan); box-shadow: 0 10px 25px rgba(0,240,255,0.15); }
+        .input-wrapper:focus-within { 
+            border-color: var(--brand-secondary); 
+            box-shadow: 0 10px 25px rgba(0,195,255,0.15); 
+        }
 
         .input-glass {
             width: 100%; padding: 0 20px;
             border: none; outline: none; background: transparent;
             font-size: 1.05rem; color: var(--text-main); font-weight: 500; font-family: 'Inter';
         }
-        .input-glass::placeholder { color: rgba(255,255,255,0.3); }
+        .input-glass::placeholder { color: #94A3B8; }
 
         .send-btn, .micro-btn-small {
             width: 60px; height: 60px;
             border-radius: 20px;
             display: flex; justify-content: center; align-items: center;
             cursor: pointer;
-            background: rgba(10, 15, 20, 0.7);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255,255,255,1);
             backdrop-filter: blur(20px);
             transition: all 0.3s;
             flex-shrink: 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-        .send-btn:hover { background: rgba(255,255,255,0.1); }
+        .send-btn:hover { background: #F8FAFC; }
         .send-btn .material-icons-round { color: var(--text-muted); transition: color 0.3s; }
-        .input-wrapper:focus-within .send-btn .material-icons-round { color: var(--neon-cyan); }
+        .input-wrapper:focus-within .send-btn .material-icons-round { color: var(--brand-secondary); }
         
-        .micro-btn-small:hover { border-color: var(--neon-pink); box-shadow: 0 0 15px rgba(255,0,127,0.2); }
-        .micro-btn-small .material-icons-round { color: var(--neon-pink); }
+        .micro-btn-small:hover { 
+            border-color: var(--brand-primary); 
+            box-shadow: 0 10px 20px rgba(255,51,102,0.15); 
+            background: white;
+        }
+        .micro-btn-small .material-icons-round { color: var(--brand-primary); }
 
         /* Loader Neon Effect */
         .loading-toast {
             position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
             padding: 12px 30px; font-weight: 600; font-size: 0.95rem;
-            background: rgba(10, 15, 20, 0.9);
-            border: 1px solid var(--neon-purple);
-            backdrop-filter: blur(15px);
-            color: white; border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(138,43,226,0.3);
+            background: white;
+            border: 1px solid rgba(0,0,0,0.05);
+            color: var(--text-main); border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             z-index: 1000;
             transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex; align-items: center; gap: 12px;
@@ -343,7 +358,7 @@
         
         .spinner {
             width: 18px; height: 18px;
-            border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--neon-cyan);
+            border: 3px solid #E2E8F0; border-top-color: var(--brand-secondary);
             border-radius: 50%; animation: spin 1s linear infinite;
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -360,24 +375,26 @@
 
     <!-- TRANG 1: LANDING PAGE -->
     <div id="landing-page" class="screen active">
+        <div class="slogan">Não lag có Notezy lo</div>
         <h1 class="title-3d" id="greeting-text">Hế lô cưng!<br>Lại chốt đơn gì đây?</h1>
         
         <div class="mic-btn-huge glass" id="main-mic-btn" onclick="startGlobalVoiceInput()">
             <span class="material-icons-round">mic</span>
         </div>
         
-        <p class="hint-text" onclick="goToWorkspace()">—— Nhấn để vô sổ ——</p>
+        <p class="hint-text" onclick="goToWorkspace()">Mở Sổ Ghi Chú</p>
     </div>
 
     <!-- TRANG 2: WORKSPACE PAGE -->
     <div id="workspace-page" class="screen hidden">
         <header>
             <div>
-                <h1>HoloNotes <span>VIP</span></h1>
+                <div class="header-slogan">Não lag có Notezy lo</div>
+                <h1>Notezy <span>VIP</span></h1>
                 <p id="current-date">Hôm nay</p>
             </div>
             <div class="avatar-box">
-                <span class="material-icons-round" style="color:#000; font-size: 24px;">face_3</span>
+                <span class="material-icons-round" style="font-size: 26px;">girl</span>
             </div>
         </header>
 
@@ -386,12 +403,12 @@
         </div>
 
         <div class="input-area">
-            <div class="input-wrapper">
-                <input type="text" class="input-glass" id="text-input" placeholder="Viết chỉ thị cho Nanh Nọc..." onkeypress="handleKey(event)" autocomplete="off">
-                <div class="send-btn" style="border:none; border-radius: 0; background:transparent;" onclick="submitTextInput()">
+            <form class="input-wrapper" onsubmit="event.preventDefault(); submitTextInput();">
+                <input type="text" class="input-glass" id="text-input" placeholder="Viết chỉ thị cho Nanh Nọc..." autocomplete="off">
+                <button type="submit" class="send-btn" style="border:none; border-radius: 0; background:transparent; box-shadow:none; outline:none; cursor:pointer;">
                     <span class="material-icons-round">send</span>
-                </div>
-            </div>
+                </button>
+            </form>
             
             <div class="micro-btn-small" id="workspace-mic-btn" onclick="startGlobalVoiceInput()">
                 <span class="material-icons-round">mic</span>
@@ -401,17 +418,22 @@
 
     <!-- LÕI JAVA SCRIPT -->
     <script>
-        // CẤU HÌNH AI PRO
         const AI_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
-        const SYSTEM_PROMPT = `Bạn là trợ lý ảo nữ miền Nam nanh nọc, sang chảnh, lầy lội, gọi 'cưng' xưng 'tui'. Trả về duy nhất JSON: {"reply": "câu khịa", "item": "việc/món đồ rút gọn thành title", "price": số_tiền_hoặc_0, "reminderTime": "thời_gian_iso8601_nếu_có"}`;
+        const SYSTEM_PROMPT = `Bạn là trợ lý ảo nữ miền Nam nanh nọc, lầy lội, gọi 'cưng' xưng 'tui'. Trả về duy nhất JSON (không bọc trong \`\`\`json): {"reply": "câu khịa", "item": "việc/món đồ siêu ngắn gọn", "price": số_tiền_hoặc_0, "reminderTime": "thời_gian_iso8601_nếu_có"}`;
 
         let notes = [];
         let isListening = false;
         let recognition = null;
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let audioCtx;
 
-        // Âm thanh UI VIP
+        function initAudio() {
+            if(!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
         function playHoloSound(type="success") {
+            initAudio();
             if(audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
@@ -420,46 +442,44 @@
             gainNode.connect(audioCtx.destination);
 
             if(type === "success") {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
-                osc.frequency.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-            } else if (type === "delete") {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.3);
-                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-            } else if (type === "micOn") {
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-                osc.frequency.linearRampToValueAtTime(900, audioCtx.currentTime + 0.1);
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+                osc.frequency.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            } else if (type === "delete") {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.2);
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+            } else if (type === "micOn") {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
                 gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
             }
             
             osc.start();
-            osc.stop(audioCtx.currentTime + 0.5);
+            osc.stop(audioCtx.currentTime + 0.4);
         }
 
-        // 1. Storage Manager (Lưu Song Song)
         const StorageManager = {
             saveLocal: function(dataArray) {
-                localStorage.setItem('holonotes_v7', JSON.stringify(dataArray));
+                localStorage.setItem('holonotes_v8', JSON.stringify(dataArray));
             },
             loadLocal: function() {
-                let data = localStorage.getItem('holonotes_v7');
+                let data = localStorage.getItem('holonotes_v8');
                 if(!data) {
-                    data = localStorage.getItem('holonotes_v6'); // Migrate from v6
-                    if(data) localStorage.setItem('holonotes_v7', data);
+                    data = localStorage.getItem('holonotes_v7') || localStorage.getItem('holonotes_v6'); 
+                    if(data) localStorage.setItem('holonotes_v8', data);
                 }
                 return JSON.parse(data) || [];
             }
         }
 
-        // 2. Init
         function initApp() {
             notes = StorageManager.loadLocal();
             
@@ -469,9 +489,10 @@
             
             renderNotes();
             initSpeechAPI();
+            
+            document.addEventListener('click', initAudio, {once:true});
         }
 
-        // 3. Render
         function renderNotes() {
             const container = document.getElementById('note-container');
             container.innerHTML = '';
@@ -481,11 +502,11 @@
                 div.className = `glass note-card ${note.is_done ? 'done' : ''}`;
                 div.id = `note-card-${i}`;
                 
-                let metaTags = `<span class="meta-tag">⚡ Việc cần làm</span>`;
+                let metaTags = ``;
                 if(note.price > 0) metaTags += `<span class="price-tag">💸 ${note.price.toLocaleString('vi-VN')}đ</span>`;
                 if(note.reminderTime) {
                     const d = new Date(note.reminderTime);
-                    metaTags += `<span class="meta-tag" style="background: rgba(0,240,255,0.1); border-color: rgba(0,240,255,0.2); color: var(--neon-cyan);">⏰ ${d.getHours()}:${d.getMinutes().toString().padStart(2,'0')} ${d.getDate()}/${d.getMonth()+1}</span>`;
+                    metaTags += `<span class="meta-tag" style="background:#E0F2FE; color:#0369A1;">⏰ ${d.getHours()}:${d.getMinutes().toString().padStart(2,'0')} ${d.getDate()}/${d.getMonth()+1}</span>`;
                 }
 
                 div.innerHTML = `
@@ -494,7 +515,7 @@
                         <p class="content">${note.item}</p>
                         <div class="meta">${metaTags}</div>
                     </div>
-                    <div class="delete-btn material-icons-round" onclick="deleteNote(${i})">close</div>
+                    <div class="delete-btn material-icons-round" onclick="deleteNote(${i})">delete_outline</div>
                 `;
                 container.appendChild(div);
             });
@@ -530,16 +551,15 @@
             document.getElementById('workspace-page').classList.replace('hidden', 'active');
         }
 
-        function toggleLoader(show, text="Nanh Nọc đang nghĩ...") {
+        function toggleLoader(show, text="Nanh Nọc đang suy nghĩ...") {
             const el = document.getElementById('loading');
             document.getElementById('loading-text').innerText = text;
             show ? el.classList.add('show') : el.classList.remove('show');
         }
 
-        // 4. Voice Core
         function initSpeechAPI() {
             const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if(!SpeechRec) { console.warn("Trình duyệt không hỗ trợ Web Speech API."); return; }
+            if(!SpeechRec) return;
             recognition = new SpeechRec();
             recognition.lang = 'vi-VN';
             recognition.continuous = false;
@@ -554,7 +574,7 @@
         }
 
         function startGlobalVoiceInput() {
-            if(!recognition) { alert("Trình duyệt không hỗ trợ mic (Thử dùng Chrome/Edge)!"); return;}
+            if(!recognition) { alert("Trình duyệt không hỗ trợ mic!"); return;}
             if(isListening) { recognition.stop(); }
             else { recognition.start(); }
         }
@@ -565,14 +585,13 @@
             const b2 = document.getElementById('workspace-mic-btn');
             if(state) {
                 b1.classList.add('mic-recording'); b2.classList.add('mic-recording');
-                document.getElementById('greeting-text').innerHTML = "Đang rình nghe cưng nói... <br><span style='color:var(--neon-pink); font-size:0.6em;'>🎙️ Lẹ lên</span>";
+                document.getElementById('greeting-text').innerHTML = "Đang rình nghe nè... <br><span style='color:var(--brand-primary); font-size:0.6em;'>🎙️ Khai mau</span>";
             } else {
                 b1.classList.remove('mic-recording'); b2.classList.remove('mic-recording');
                 document.getElementById('greeting-text').innerHTML = "Hế lô cưng!<br>Lại chốt đơn gì đây?";
             }
         }
 
-        function handleKey(e) { if(e.key === 'Enter') submitTextInput(); }
         function submitTextInput() {
             const val = document.getElementById('text-input').value.trim();
             if(val) {
@@ -581,29 +600,50 @@
             }
         }
 
-        // 5. AI Logic
-        async function processUserInput(inputStr) {
-            goToWorkspace(); 
-            const lowerStr = inputStr.toLowerCase();
+        // Logic check Hoàn Thành Thông Minh
+        function smartCheckDone(spokenText) {
+            let sTr = spokenText.toLowerCase();
+            const doneKeywords = ["xong", "rồi", "đã làm", "hoàn thành", "ok"];
             
-            // Xử lý Check công việc cục bộ nhanh
-            if(lowerStr.includes("xong") || lowerStr.includes("rồi") || lowerStr.includes("đã làm")) {
-                const target = lowerStr.replace("đã làm", "").replace("xong", "").replace("rồi", "").replace("đã", "").trim();
-                let found = false;
-                for(let i=0; i<notes.length; i++) {
-                    if(!notes[i].is_done && target && notes[i].item.toLowerCase().includes(target)) {
-                        notes[i].is_done = true; found = true;
-                        StorageManager.saveLocal(notes); renderNotes();
+            // Check coi trong câu có từ chỉ sự hoàn thành không?
+            let hasDoneWord = doneKeywords.some(kw => sTr.includes(kw));
+            if(!hasDoneWord) return false;
+
+            // Xoá bớt các từ để lấy ra tên công việc cốt lõi mà người dùng nhắc tới
+            let coreTaskStr = sTr;
+            doneKeywords.forEach(kw => { coreTaskStr = coreTaskStr.replace(kw, ""); });
+            coreTaskStr = coreTaskStr.replace("đã", "").trim();
+
+            if(!coreTaskStr || coreTaskStr.length < 2) return false; // Tránh lỗi
+
+            // Quét qua sổ để tìm
+            for(let i=0; i<notes.length; i++) {
+                if(!notes[i].is_done) {
+                    let noteLabel = notes[i].item.toLowerCase();
+                    // So khớp 2 chiều: câu nói chứa tên note HOẶC tên note bám dính câu nói
+                    if(sTr.includes(noteLabel) || noteLabel.includes(coreTaskStr)) {
+                        notes[i].is_done = true;
+                        StorageManager.saveLocal(notes);
+                        renderNotes();
                         playHoloSound("success");
-                        responsiveVoice.speak("Xong! Tui gạch tên nó cho cưng rồi đó!", "Vietnamese Female");
-                        break;
+                        responsiveVoice.speak("Tuyệt vời! Gạch cái '" + notes[i].item + "' cho cưng rồi nghen!", "Vietnamese Female");
+                        return true;
                     }
                 }
-                if(found) return;
+            }
+            return false;
+        }
+
+        async function processUserInput(inputStr) {
+            goToWorkspace(); 
+            
+            // Bước 1: Check xem nó có phải là câu chốt đơn Hoàn Thành hay không?
+            if (smartCheckDone(inputStr)) {
+                return; // Nếu đã tích xanh thì xì tốp ở đây luôn, không gọi Gemini đỡ mất tiền
             }
 
             // Gọi API
-            toggleLoader(true, "Đang bay qua server chửi mướn...");
+            toggleLoader(true, "Não đang nhảy số...");
             try {
                 const res = await fetch(AI_URL, {
                     method: 'POST',
@@ -642,7 +682,7 @@
                 notes.push({ id: Date.now(), item: inputStr, price: 0, is_done: false, createdAt: new Date().toISOString() });
                 StorageManager.saveLocal(notes);
                 renderNotes();
-                responsiveVoice.speak("Nay mạng lag quá nha cưng, tui lưu đại cái note vô sổ thôi đó!", "Vietnamese Female");
+                responsiveVoice.speak("Mạng yếu nhớt, tui ghi đại vô sổ rồi tự coi đi!", "Vietnamese Female");
                 playHoloSound("success");
             }
             toggleLoader(false);

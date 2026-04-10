@@ -32,24 +32,7 @@
             height: 100%; width: 100%;
             overflow: hidden;
             color: var(--text-main);
-            background-color: #F8FAFC;
-        }
-
-        /* 🌞 Sáng sủa Background Animation */
-        body::before {
-            content: "";
-            position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle at 50% 50%, var(--bg-color-1) 0%, transparent 40%),
-                        radial-gradient(circle at 20% 80%, var(--bg-color-2) 0%, transparent 40%),
-                        radial-gradient(circle at 80% 20%, var(--bg-color-3) 0%, transparent 40%);
-            z-index: -2;
-            /* Đã tắt hiệu ứng animation: lightPan để máy mạnh hơn, lướt mượt hơn */
-        }
-
-        @keyframes lightPan {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(5%, 5%) rotate(10deg); }
+            background: linear-gradient(135deg, #FFF5F7 0%, #E6F8FE 50%, #F3E8FE 100%);
         }
 
         /* Siêu Glassmorphism Sáng */
@@ -326,7 +309,8 @@
         .input-glass {
             width: 100%; padding: 0 20px;
             border: none; outline: none; background: transparent;
-            font-size: 1.05rem; color: var(--text-main); font-weight: 500; font-family: 'Inter';
+            font-size: 16px !important; /* KHÔNG SỬA: Phép thuật chống tự động Zoom màn hình trên iOS Safari */
+            color: var(--text-main); font-weight: 500; font-family: 'Inter';
         }
         .input-glass::placeholder { color: #94A3B8; }
 
@@ -501,6 +485,18 @@
             initSpeechAPI();
             
             document.addEventListener('click', initAudio, {once:true});
+
+            // Ép Safari tải lại toạ độ khi thu bàn phím
+            const inputField = document.getElementById('text-input');
+            if(inputField) {
+                inputField.addEventListener('blur', () => {
+                    setTimeout(() => {
+                        window.scrollTo(0, 0);
+                        document.body.scrollTop = 0;
+                        document.documentElement.scrollTop = 0;
+                    }, 50);
+                });
+            }
         }
 
         let sortableInstance = null;
@@ -632,16 +628,15 @@
                 document.getElementById('text-input').value = '';
                 document.getElementById('text-input').blur();
                 
-                // Fix lỗi kẹt nửa trang trên iOS sau khi thu bàn phím
-                setTimeout(() => window.scrollTo(0, 0), 50);
-
                 processUserInput(val);
 
-                // Cuộn danh sách ghi chú lên trên cùng (vì note mới thêm lên đầu)
+                // Cuộn danh sách ghi chú lên trên cùng bằng scrollTop cho máy yếu
                 setTimeout(() => {
                     const listContainer = document.getElementById('note-container');
-                    if(listContainer) listContainer.scrollTo({top: 0, behavior: 'smooth'});
-                }, 300);
+                    if(listContainer) {
+                        listContainer.scrollTop = 0;
+                    }
+                }, 100);
             }
         }
 

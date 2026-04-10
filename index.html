@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Notezy V7 - Classic</title>
+    <title>Notezy V6 - Pure Classic</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="icon.png">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
@@ -15,10 +14,10 @@
 
     <style>
         :root {
-            --bg: #F1F5F9;
+            --bg: #FFFFFF;
             --theme: #B794F4;
-            --text: #2D3748;
-            --card: #ffffff;
+            --text: #1A202C;
+            --gray: #F7FAFC;
         }
 
         body, html { 
@@ -29,86 +28,90 @@
 
         .screen { 
             position: absolute; width: 100%; height: 100%; 
-            transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
+            transition: 0.5s ease; 
             display: flex; flex-direction: column; padding: 30px 25px; 
             box-sizing: border-box; 
         }
-        .hidden { transform: translateY(100vh); opacity: 0; pointer-events: none; }
-        .active { transform: translateY(0); opacity: 1; z-index: 10; }
+        .hidden { transform: translateX(100%); opacity: 0; }
+        .active { transform: translateX(0); opacity: 1; z-index: 10; }
 
-        /* Logo Sổ 3D Classic */
-        .hologram-book { 
-            width: 220px; height: 300px; background: rgba(255,255,255,0.8); 
-            border-radius: 40px; border: 2px solid white; 
-            display: flex; justify-content: center; align-items: center; 
-            animation: float 4s infinite; backdrop-filter: blur(10px); 
-            cursor: pointer; margin: auto; box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+        /* Trang 1: Landing V6 */
+        #landing { justify-content: center; align-items: center; text-align: center; }
+        .simple-book { 
+            font-size: 120px; margin-bottom: 20px; 
+            animation: bounce 3s infinite ease-in-out;
+            cursor: pointer;
         }
-        .hologram-book::before { content: '📓'; font-size: 150px; }
-        @keyframes float { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-25px);} }
+        @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-20px);} }
 
-        /* Tab Bar V7 */
+        /* Trang 2: Workspace V6 */
+        .header-v6 { margin-bottom: 25px; border-bottom: 2px solid var(--gray); padding-bottom: 15px; }
+        .slogan { font-weight: 900; font-size: 1.5rem; letter-spacing: -1px; margin: 0; }
+
         .tab-bar { display: flex; gap: 10px; margin-bottom: 20px; }
         .tab-btn { 
-            flex: 1; padding: 15px; border-radius: 15px; text-align: center; 
-            font-weight: 900; background: rgba(0,0,0,0.03); border: 2px solid transparent; 
-            cursor: pointer; transition: 0.3s;
+            flex: 1; padding: 12px; border-radius: 12px; text-align: center; 
+            font-weight: 800; background: var(--gray); border: none; 
+            cursor: pointer; color: #718096;
         }
-        .active-tab { border-color: var(--theme); color: var(--theme); background: white; }
+        .active-tab { background: var(--theme); color: white; }
 
-        /* List Note */
-        .list { flex: 1; overflow-y: auto; padding-bottom: 120px; }
+        /* List Note V6 */
+        .list { flex: 1; overflow-y: auto; padding-bottom: 100px; }
         .card { 
-            background: var(--card); padding: 20px; border-radius: 20px; 
-            margin-bottom: 12px; display: flex; align-items: center; 
-            border: 1px solid rgba(0,0,0,0.02); animation: pop 0.4s; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            background: var(--gray); padding: 20px; border-radius: 18px; 
+            margin-bottom: 10px; display: flex; align-items: center; 
+            border: 1px solid transparent; transition: 0.3s;
         }
+        .card.done { background: #EDF2F7; }
         .card.done span { text-decoration: line-through; opacity: 0.4; }
-        @keyframes pop { from {transform: scale(0.9); opacity: 0;} }
         
         .check-box { 
-            width: 24px; height: 24px; border-radius: 7px; border: 2px solid #cbd5e0; 
-            margin-right: 15px; cursor: pointer; display: flex; 
-            align-items: center; justify-content: center; flex-shrink: 0;
+            width: 22px; height: 22px; border-radius: 6px; border: 2px solid #CBD5E0; 
+            margin-right: 15px; cursor: pointer; flex-shrink: 0; 
+            display: flex; align-items: center; justify-content: center; background: white;
         }
         .check-box.checked { background: #4ADE80; border-color: #4ADE80; }
-        .check-box.checked::after { content: '✓'; color: white; font-weight: 900; }
+        .check-box.checked::after { content: '✓'; color: white; font-weight: 900; font-size: 14px; }
 
-        /* Mic Button Classic */
-        .mic { 
-            position: fixed; bottom: 35px; left: 50%; transform: translateX(-50%); 
-            width: 85px; height: 85px; border-radius: 50%; background: white; 
+        /* Mic Button V6 */
+        .mic-v6 { 
+            position: fixed; bottom: 40px; right: 25px; 
+            width: 70px; height: 70px; border-radius: 50%; 
+            background: var(--theme); color: white;
             display: flex; justify-content: center; align-items: center; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 100; cursor: pointer; 
+            box-shadow: 0 8px 20px rgba(183, 148, 244, 0.4); z-index: 100; cursor: pointer; 
         }
-        .mic-on { background: #ff4757; color: white; animation: ripple 1.5s infinite; }
-        @keyframes ripple { 0% {box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4);} 70% {box-shadow: 0 0 0 25px rgba(255, 71, 87, 0);} }
+        .mic-on { background: #F56565; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.1);} 100% {transform: scale(1);} }
     </style>
 </head>
 <body>
 
-<div id="landing" class="screen active">
-    <div class="hologram-book" onclick="switchPage('workspace')"></div>
-    <p style="margin-top: 30px; font-weight: 900; text-align: center;">BẤM ĐỂ MỞ SỔ ĐI CƯNG!</p>
+<div id="landing" class="screen active" onclick="switchPage('workspace')">
+    <div class="simple-book">📓</div>
+    <h2 style="font-weight: 900;">BẤM ĐỂ MỞ SỔ<br>NÀ CƯNG!</h2>
+    <p style="color: #A0AEC0; font-weight: 600; font-size: 14px;">(V6 Classic Return)</p>
 </div>
 
 <div id="workspace" class="screen hidden">
-    <h1 style="font-weight:900; letter-spacing:-1.5px; margin-bottom: 20px;">Não lag? Mở Notezy 😎</h1>
+    <div class="header-v6">
+        <h1 class="slogan">Não lag? Mở Notezy 😎</h1>
+    </div>
     <div class="tab-bar">
-        <div id="t-w" class="tab-btn active-tab" onclick="setTab('work')">CÔNG VIỆC</div>
-        <div id="t-p" class="tab-btn" onclick="setTab('personal')">CÁ NHÂN</div>
+        <button id="t-w" class="tab-btn active-tab" onclick="setTab('work')">WORK</button>
+        <button id="t-p" class="tab-btn" onclick="setTab('personal')">PERSONAL</button>
     </div>
     <div id="list" class="list"></div>
 </div>
 
-<div class="mic" id="master-mic" onclick="toggleSpeech()">
-    <span class="material-icons-round" style="font-size: 40px;">mic</span>
+<div class="mic-v6" id="master-mic" onclick="toggleSpeech()">
+    <span class="material-icons-round" style="font-size: 35px;">mic</span>
 </div>
 
 <script>
-    const KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
-    let notes = JSON.parse(localStorage.getItem('notezy_v7_classic')) || [];
+    const API_KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
+    let notes = JSON.parse(localStorage.getItem('notezy_v6')) || [];
     let currentTab = 'work', rec, isListening = false;
 
     function toggleSpeech() {
@@ -118,7 +121,6 @@
         } else {
             isListening = false;
             if(rec) rec.stop();
-            document.getElementById('master-mic').classList.remove('mic-on');
         }
     }
 
@@ -131,8 +133,7 @@
             document.getElementById('master-mic').classList.add('mic-on'); 
         };
         rec.onresult = (e) => { 
-            const txt = e.results[0][0].transcript;
-            processAI(txt);
+            processAI(e.results[0][0].transcript);
         };
         rec.onend = () => { 
             document.getElementById('master-mic').classList.remove('mic-on');
@@ -144,4 +145,54 @@
     async function processAI(txt) {
         if(document.getElementById('landing').classList.contains('active')) switchPage('workspace');
         const isDone = /xong|đã|rồi/.test(txt.toLowerCase());
-        const p = `Phân loại
+        const p = `Phân loại "${txt}" vào "work" hoặc "personal". Trả về JSON: {"type": "work/personal", "reply": "câu khịa gọi cưng", "text": "nội dung"}`;
+        try {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ contents: [{ parts: [{ text: p }] }] })
+            });
+            const d = await res.json();
+            const resAI = JSON.parse(d.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, ""));
+            let cleanText = resAI.text.replace(/xong|đã|rồi/gi, "").trim();
+            
+            notes.unshift({ id: Date.now(), text: cleanText || resAI.text, type: resAI.type, done: isDone });
+            save();
+            responsiveVoice.speak(isDone ? "Cưng làm xong rồi hả? Ghê ta!" : resAI.reply, "Vietnamese Female");
+            setTab(resAI.type);
+        } catch(e) { 
+            notes.unshift({ id: Date.now(), text: txt, type: currentTab, done: isDone });
+            save(); 
+        }
+    }
+
+    function save() { localStorage.setItem('notezy_v6', JSON.stringify(notes)); render(); }
+    function render() {
+        const l = document.getElementById('list'); l.innerHTML = '';
+        notes.filter(n => n.type === currentTab).forEach(n => {
+            l.innerHTML += `<div class="card ${n.done?'done':''}">
+                <div class="check-box ${n.done?'checked':''}" onclick="toggleDone(${n.id})"></div>
+                <span style="flex:1; font-weight:800; font-size: 1rem;">${n.text}</span>
+                <span class="material-icons-round" onclick="del(${n.id})" style="opacity:0.2; font-size:22px; cursor:pointer;">delete_outline</span>
+            </div>`;
+        });
+    }
+
+    function toggleDone(id) {
+        const n = notes.find(x => x.id === id);
+        n.done = !n.done;
+        if(n.done) responsiveVoice.speak("Nay ngoan ta, cũng biết xong việc!", "Vietnamese Female");
+        save();
+    }
+
+    function del(id) { notes = notes.filter(n => n.id !== id); save(); }
+    function setTab(t) { 
+        currentTab = t; 
+        document.getElementById('t-w').className = t === 'work' ? 'tab-btn active-tab' : 'tab-btn';
+        document.getElementById('t-p').className = t === 'personal' ? 'tab-btn active-tab' : 'tab-btn';
+        render(); 
+    }
+    function switchPage(p) { document.getElementById('landing').className='screen hidden'; document.getElementById('workspace').className='screen active'; render(); }
+    window.onload = render;
+</script>
+</body>
+</html>

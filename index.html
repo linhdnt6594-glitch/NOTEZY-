@@ -216,7 +216,7 @@
         .note-list {
             flex: 1; overflow-y: auto; overflow-x: hidden;
             padding-bottom: 120px;
-            display: flex; flex-direction: column; gap: 8px;
+            display: flex; flex-direction: column; gap: 10px;
         }
         .note-list::-webkit-scrollbar { width: 6px; }
         .note-list::-webkit-scrollbar-track { background: transparent; }
@@ -241,10 +241,10 @@
         .note-card:hover::before { opacity: 1; }
 
         .checkbox {
-            width: 20px; height: 20px;
-            border-radius: 6px;
+            width: 22px; height: 22px;
+            border-radius: 8px;
             border: 2px solid #CBD5E1;
-            margin-right: 14px;
+            margin-right: 16px;
             cursor: pointer;
             display: flex; justify-content: center; align-items: center;
             transition: all 0.2s;
@@ -258,7 +258,7 @@
             background: var(--brand-secondary); border-color: var(--brand-secondary);
         }
         .note-card.done .checkbox::after {
-            content: '✓'; color: #FFF; font-weight: 900; font-size: 12px;
+            content: '✓'; color: #FFF; font-weight: 900; font-size: 14px;
         }
         .note-card.done .content {
             text-decoration: line-through; color: var(--text-muted);
@@ -266,10 +266,10 @@
 
         .note-body { flex: 1; min-width: 0; } 
         .note-body .content { 
-            font-size: 1rem; font-weight: 600; line-height: 1.4; margin: 0; color: var(--text-main);
+            font-size: 1.05rem; font-weight: 600; line-height: 1.4; margin: 0; color: var(--text-main);
             word-wrap: break-word;
         }
-        .note-body .meta { font-size: 0.75rem; margin-top: 4px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap;}
+        .note-body .meta { font-size: 0.75rem; margin-top: 6px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap;}
         
         .meta-tag { 
             background: #F1F5F9; color: #475569; 
@@ -284,7 +284,7 @@
 
         .delete-btn { 
             cursor: pointer; color: #CBD5E1;
-            transition: all 0.3s; padding: 6px; margin-left: 10px;
+            transition: all 0.3s; padding: 10px; margin-left: 10px;
         }
         .note-card:hover .delete-btn { color: #94A3B8; }
         .delete-btn:hover { color: var(--brand-primary) !important; background: rgba(255,51,102,0.1); border-radius: 50%;}

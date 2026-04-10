@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Notezy pro - Full Control</title>
+    <title>Notezy pro - Split Vision</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
@@ -11,97 +11,95 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
     <style>
-        :root { --bg: #F1F5F9; --theme: #B794F4; --text: #2D3748; }
+        :root { --bg: #F1F5F9; --work-theme: #B794F4; --personal-theme: #F6AD55; --text: #2D3748; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100dvh; font-family: 'Inter', sans-serif; overflow: hidden; background: var(--bg); color: var(--text); }
 
-        .screen { position: absolute; width: 100%; height: 100%; transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); display: flex; flex-direction: column; padding: 30px 25px; box-sizing: border-box; }
-        .hidden { transform: translateY(100vh); opacity: 0; pointer-events: none; }
-        .active { transform: translateY(0); opacity: 1; z-index: 10; }
+        .app-container { display: flex; flex-direction: column; height: 100%; }
+        .header { padding: 20px; text-align: center; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 10; }
+        
+        /* Chia đôi màn hình */
+        .split-view { display: flex; flex: 1; overflow: hidden; gap: 2px; background: #E2E8F0; }
+        .column { flex: 1; display: flex; flex-direction: column; background: var(--bg); padding: 15px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+        
+        .col-header { font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; padding: 10px; border-radius: 10px; text-align: center; position: sticky; top: 0; z-index: 5; }
+        .work-header { background: #E9D8FD; color: var(--work-theme); }
+        .personal-header { background: #FEEBC8; color: var(--personal-theme); }
 
-        /* Tabs */
-        .tab-bar { display: flex; gap: 10px; margin-bottom: 20px; background: rgba(0,0,0,0.03); padding: 5px; border-radius: 18px; }
-        .tab-btn { flex: 1; padding: 15px; border-radius: 14px; text-align: center; font-weight: 900; border: none; cursor: pointer; transition: 0.3s; color: #718096; background: transparent; }
-        .active-tab { background: white; color: var(--theme); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-
-        /* List */
-        .list { flex: 1; overflow-y: auto; padding-bottom: 120px; }
-        .card { background: white; padding: 22px; border-radius: 24px; margin-bottom: 12px; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        /* Card Note */
+        .card { background: white; padding: 15px; border-radius: 18px; margin-bottom: 10px; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.03); animation: pop 0.3s ease; }
         .card.done span { text-decoration: line-through; opacity: 0.3; }
-        @keyframes popIn { from {transform: scale(0.9); opacity: 0;} }
+        @keyframes pop { from {transform: scale(0.95); opacity: 0;} }
 
-        /* Dock Pro */
-        .dock { position: fixed; bottom: 35px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); padding: 10px 20px; border-radius: 50px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid white; z-index: 100; }
-        .btn-add { width: 55px; height: 55px; border-radius: 50%; background: var(--theme); color: white; display: flex; justify-content: center; align-items: center; cursor: pointer; border: none; }
-        .mic { width: 65px; height: 65px; border-radius: 50%; background: white; color: var(--text); display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .mic.on { background: #ff4757; color: white; animation: pulse 1.5s infinite; }
+        .check-box { width: 22px; height: 22px; border-radius: 7px; border: 2px solid #EDF2F7; margin-right: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .checked { background: #4ADE80 !important; border-color: #4ADE80 !important; }
 
-        /* Modal nhập tay */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 200; padding: 20px; box-sizing: border-box; }
-        .modal-content { background: white; width: 100%; max-width: 400px; border-radius: 30px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
-        input { width: 100%; border: 2px solid #EDF2F7; padding: 15px; border-radius: 15px; font-size: 16px; font-family: inherit; font-weight: 600; outline: none; box-sizing: border-box; margin-bottom: 15px; }
-        .btn-save { width: 100%; background: var(--theme); color: white; border: none; padding: 15px; border-radius: 15px; font-weight: 900; cursor: pointer; }
+        /* Controls */
+        .dock { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.9); backdrop-filter: blur(15px); padding: 12px 25px; border-radius: 50px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); z-index: 100; border: 1px solid white; }
+        .btn { border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .btn-add { width: 50px; height: 50px; border-radius: 50%; background: var(--work-theme); color: white; }
+        .btn-mic { width: 60px; height: 60px; border-radius: 50%; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .btn-mic.active { background: #FF4757; color: white; animation: pulse 1.5s infinite; }
 
+        /* Input Modal */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
+        .modal-box { background: white; width: 100%; max-width: 400px; padding: 25px; border-radius: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        input { width: 100%; padding: 15px; border: 2px solid #F1F5F9; border-radius: 15px; font-size: 16px; font-weight: 600; outline: none; margin: 15px 0; }
+        
         @keyframes pulse { 0% {box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4);} 70% {box-shadow: 0 0 0 20px rgba(255, 71, 87, 0);} }
     </style>
 </head>
 <body>
 
-<div id="landing" class="screen active" onclick="switchPage('workspace')">
-    <div style="font-size: 120px; margin: auto;">📓</div>
-    <h2 style="font-weight: 900; text-align: center; margin-top: 20px;">Não lag? Mở Notezy 😎</h2>
-</div>
-
-<div id="workspace" class="screen hidden">
-    <h1 style="font-weight:900; margin-bottom: 20px;">Não lag? Mở Notezy 😎</h1>
-    <div class="tab-bar">
-        <button id="t-w" class="tab-btn active-tab" onclick="setTab('work')">WORK</button>
-        <button id="t-p" class="tab-btn" onclick="setTab('personal')">PERSONAL</button>
+<div class="app-container">
+    <div class="header"><h1 style="font-weight:900; margin:0; font-size:1.4rem;">Notezy Split Vision 😎</h1></div>
+    
+    <div class="split-view">
+        <div class="column">
+            <div class="col-header work-header">Công việc</div>
+            <div id="list-work"></div>
+        </div>
+        <div class="column">
+            <div class="col-header personal-header">Cá nhân</div>
+            <div id="list-personal"></div>
+        </div>
     </div>
-    <div id="list" class="list"></div>
 </div>
 
 <div class="dock">
-    <button class="btn-add" onclick="showModal()"><span class="material-icons-round">add</span></button>
-    <div class="mic" id="master-mic" onclick="toggleSpeech()"><span class="material-icons-round" style="font-size: 32px;">mic</span></div>
+    <button class="btn btn-add" onclick="showModal()"><span class="material-icons-round">edit</span></button>
+    <button class="btn btn-mic" id="mic" onclick="toggleSpeech()"><span class="material-icons-round" style="font-size:32px;">mic</span></button>
 </div>
 
-<div id="modal" class="modal" onclick="if(event.target == this) hideModal()">
-    <div class="modal-content">
-        <h3 style="margin-top:0; font-weight:900;">Ghi chú mới nà cưng!</h3>
-        <input type="text" id="manual-input" placeholder="Nhập gì đó đi cưng..." onkeyup="if(event.key==='Enter') saveManual()">
-        <button class="btn-save" onclick="saveManual()">LƯU LẠI</button>
+<div id="modal" class="modal" onclick="if(event.target==this) hideModal()">
+    <div class="modal-box">
+        <h3 style="margin:0; font-weight:900;">Nhập note nà cưng!</h3>
+        <input type="text" id="inp" placeholder="Ví dụ: mua trà sữa..." onkeyup="if(event.key==='Enter') saveManual()">
+        <button onclick="saveManual()" style="width:100%; padding:15px; border-radius:15px; border:none; background:var(--work-theme); color:white; font-weight:900; cursor:pointer;">LƯU LẠI</button>
     </div>
 </div>
 
 <script>
     const KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
-    let notes = JSON.parse(localStorage.getItem('notezy_v34')) || [];
-    let currentTab = 'work', rec, isListening = false;
+    let notes = JSON.parse(localStorage.getItem('notezy_v35')) || [];
+    let isListening = false, rec;
 
-    function showModal() { document.getElementById('modal').style.display = 'flex'; document.getElementById('manual-input').focus(); }
-    function hideModal() { document.getElementById('modal').style.display = 'none'; document.getElementById('manual-input').value = ''; }
-
-    function saveManual() {
-        const val = document.getElementById('manual-input').value;
-        if(val.trim()) { processAI(val); hideModal(); }
-    }
+    function showModal() { document.getElementById('modal').style.display='flex'; document.getElementById('inp').focus(); }
+    function hideModal() { document.getElementById('modal').style.display='none'; document.getElementById('inp').value=''; }
 
     function toggleSpeech() {
         if(!isListening) {
             const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if(!Speech) return;
             rec = new Speech(); rec.lang = 'vi-VN';
-            rec.onstart = () => { isListening = true; document.getElementById('master-mic').classList.add('on'); };
+            rec.onstart = () => { isListening=true; document.getElementById('mic').classList.add('active'); };
             rec.onresult = (e) => { processAI(e.results[0][0].transcript); };
-            rec.onend = () => { isListening = false; document.getElementById('master-mic').classList.remove('on'); };
+            rec.onend = () => { isListening=false; document.getElementById('mic').classList.remove('active'); };
             rec.start();
-            responsiveVoice.speak("Hóng nà cưng!", "Vietnamese Female");
+            responsiveVoice.speak("Tui hóng nà cưng!", "Vietnamese Female");
         } else { rec.stop(); }
     }
 
     async function processAI(txt) {
-        if(document.getElementById('landing').classList.contains('active')) switchPage('workspace');
-        const p = `Phân loại "${txt}" vào "work" hoặc "personal". Nếu ý hoàn thành (xong, rồi, đã) thì done:true. JSON: {"type": "work/personal", "reply": "khịa gọi cưng", "text": "nội dung", "done": boolean}`;
+        const p = `Phân loại "${txt}" vào "work" hoặc "personal". Nếu ý hoàn thành (xong, rồi, đã) thì done:true. JSON: {"type": "work/personal", "reply": "câu khịa gọi cưng", "text": "nội dung", "done": boolean}`;
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${KEY}`, {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -112,38 +110,34 @@
             notes.unshift({ id: Date.now(), text: resAI.text, type: resAI.type, done: resAI.done });
             save();
             responsiveVoice.speak(resAI.done ? "Xong rồi hả cưng? Giỏi!" : resAI.reply, "Vietnamese Female");
-            if(resAI.done) confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-            setTab(resAI.type);
+            if(resAI.done) confetti({ particleCount: 80, spread: 60 });
         } catch(e) { 
-            notes.unshift({ id: Date.now(), text: txt, type: currentTab, done: false }); 
+            notes.unshift({ id: Date.now(), text: txt, type: 'work', done: false }); 
             save(); 
         }
     }
 
-    function save() { localStorage.setItem('notezy_v34', JSON.stringify(notes)); render(); }
+    function saveManual() { const v = document.getElementById('inp').value; if(v.trim()) { processAI(v); hideModal(); } }
+    function save() { localStorage.setItem('notezy_v35', JSON.stringify(notes)); render(); }
+    
     function render() {
-        const c = document.getElementById('list'); c.innerHTML = '';
-        notes.filter(n => n.type === currentTab).forEach(n => {
-            c.innerHTML += `<div class="card ${n.done?'done':''}">
-                <div class="check-box ${n.done?'checked':''}" onclick="toggleDone(${n.id})" style="width:24px; height:24px; border:3px solid #EDF2F7; border-radius:8px; margin-right:15px; display:flex; align-items:center; justify-content:center; background:${n.done?'#4ADE80':'white'}; color:white; font-weight:900;">${n.done?'✓':''}</div>
-                <span style="flex:1; font-weight:800;">${n.text}</span>
-                <span class="material-icons-round" onclick="del(${n.id})" style="opacity:0.1; font-size:20px; cursor:pointer;">delete</span>
-            </div>`;
+        ['work', 'personal'].forEach(type => {
+            const el = document.getElementById(`list-${type}`);
+            el.innerHTML = '';
+            notes.filter(n => n.type === type).forEach(n => {
+                el.innerHTML += `<div class="card ${n.done?'done':''}">
+                    <div class="check-box ${n.done?'checked':''}" onclick="toggleDone(${n.id})">${n.done?'<span style="color:white; font-size:12px;">✓</span>':''}</div>
+                    <span style="flex:1; font-weight:700; font-size:14px;">${n.text}</span>
+                </div>`;
+            });
         });
     }
 
     function toggleDone(id) {
         const n = notes.find(x => x.id === id);
-        if(n) { 
-            n.done = !n.done; 
-            if(n.done) { responsiveVoice.speak("Xong rồi nà cưng!", "Vietnamese Female"); confetti({ particleCount: 80, spread: 50 }); }
-            save(); 
-        }
+        if(n) { n.done = !n.done; if(n.done) { responsiveVoice.speak("Xong rồi nà cưng!", "Vietnamese Female"); confetti(); } save(); }
     }
 
-    function setTab(t) { currentTab = t; document.getElementById('t-w').className = t==='work'?'tab-btn active-tab':'tab-btn'; document.getElementById('t-p').className = t==='personal'?'tab-btn active-tab':'tab-btn'; render(); }
-    function switchPage(p) { document.getElementById('landing').className='screen hidden'; document.getElementById('workspace').className='screen active'; render(); }
-    function del(id) { notes = notes.filter(n => n.id !== id); save(); }
     window.onload = render;
 </script>
 </body>

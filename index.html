@@ -2,161 +2,654 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>HoloNotes V6 Pro Immortal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoloNotes V7 Aurora Infinity</title>
+    <!-- Thêm font Outfit cho tiêu đề cực chất, Inter cho nội dung -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
     <style>
-        :root { --glass-bg: rgba(255, 255, 255, 0.2); --glass-border: rgba(255, 255, 255, 0.5); --text-dark: #1E293B; }
-        body, html { margin: 0; padding: 0; font-family: 'Inter', sans-serif; height: 100dvh; width: 100%; overflow: hidden; color: var(--text-dark); background: linear-gradient(-45deg, #FFDEE9, #B5FFFC, #D4C4FB, #FFDEE9); background-size: 400% 400%; animation: gradientBG 15s ease infinite; }
-        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        :root {
+            /* Neon Aurora Palette */
+            --aurora-1: #0F2027;
+            --aurora-2: #203A43;
+            --aurora-3: #2C5364;
+            --neon-pink: #FF007F;
+            --neon-cyan: #00F0FF;
+            --neon-purple: #8A2BE2;
+            
+            /* Dark Glass */
+            --glass-bg: rgba(20, 25, 30, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+        }
 
-        .glass { background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 32px; border: 1px solid var(--glass-border); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05); }
-        .screen { position: absolute; inset: 0; transition: opacity 0.5s ease, transform 0.5s ease; display: flex; flex-direction: column; box-sizing: border-box; padding: 25px; }
-        .hidden { opacity: 0; pointer-events: none; transform: translateY(20px); }
-        .active { opacity: 1; pointer-events: auto; transform: translateY(0); z-index: 10; }
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100%; width: 100%;
+            overflow: hidden;
+            color: var(--text-main);
+            background-color: #050505;
+        }
 
-        /* Trang 1 */
-        #landing-page { justify-content: center; align-items: center; text-align: center; }
-        .book-3d { font-size: 140px; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.1)); animation: float 3s ease-in-out infinite; cursor: pointer; margin-bottom: 30px; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        /* 🌌 V7 Gradient Background Aurora */
+        body::before {
+            content: "";
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.15), transparent 40%),
+                        radial-gradient(circle at 20% 80%, rgba(0, 240, 255, 0.1), transparent 40%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 0, 127, 0.1), transparent 40%);
+            animation: auroraPan 25s infinite alternate ease-in-out;
+            z-index: -2;
+        }
 
-        /* Trang 2 */
-        header h1 { font-size: 2rem; font-weight: 800; margin: 0; letter-spacing: -1px; }
-        .note-list { flex: 1; overflow-y: auto; padding-bottom: 120px; }
-        .note-list::-webkit-scrollbar { display: none; }
-        .note-card { padding: 20px; margin-bottom: 16px; display: flex; align-items: center; animation: pop 0.3s ease; }
-        @keyframes pop { from { transform: scale(0.9); opacity: 0; } }
-        .note-card.done { opacity: 0.5; }
-        .note-card.done .content { text-decoration: line-through; }
+        @keyframes auroraPan {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(10%, 10%) rotate(15deg); }
+        }
 
-        .checkbox { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--text-dark); margin-right: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .checked { background: var(--text-dark); }
-        .checked::after { content: '✓'; color: white; font-weight: bold; }
+        /* Lưới Cyberpunk chìm */
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            pointer-events: none;
+        }
 
-        /* Dock Căn Giữa */
-        .dock-pill { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 12px; z-index: 100; }
-        .dock-btn { width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; }
-        .btn-mic.recording { background: #f43f5e !important; color: white !important; animation: pulse 1s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.4); } 70% { box-shadow: 0 0 0 20px rgba(244, 63, 94, 0); } }
+        /* Siêu Glassmorphism 2.0 */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 28px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+        }
 
-        /* Modal */
-        #inputModal { position: fixed; inset: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 2000; }
-        .modal-box { width: 85%; max-width: 400px; padding: 30px; }
-        input { width: 100%; padding: 15px; border-radius: 15px; border: none; outline: none; font-size: 16px; font-weight: 600; margin-bottom: 15px; }
+        /* Hệ thống chuyển trang mượt */
+        .screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column;
+            box-sizing: border-box;
+        }
+        .hidden {
+            opacity: 0; pointer-events: none; z-index: -1;
+            transform: scale(0.96) translateY(20px);
+        }
+        .active {
+            opacity: 1; pointer-events: auto; z-index: 10;
+            transform: scale(1) translateY(0);
+        }
+
+        /* --- LANDING TRANG 1 --- */
+        #landing-page {
+            justify-content: center; align-items: center;
+            text-align: center;
+        }
+
+        .title-3d {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(to right, var(--text-main), #D4A5FF, var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 60px;
+            letter-spacing: -2px;
+            filter: drop-shadow(0 4px 15px rgba(0,240,255,0.2));
+            padding: 0 20px;
+        }
+
+        /* Nút Mic Hạch Tâm (Arc Reactor) */
+        .mic-btn-huge {
+            width: 140px; height: 140px;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer;
+            position: relative;
+            background: rgba(10, 15, 20, 0.8);
+            border: 2px solid rgba(255,255,255,0.05);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+            z-index: 2;
+        }
+        .mic-btn-huge:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.3);
+            border-color: rgba(0,240,255,0.4);
+        }
+        .mic-btn-huge .material-icons-round {
+            font-size: 60px; color: var(--text-main);
+            transition: color 0.3s;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        
+        .mic-btn-huge::before {
+            content: '';
+            position: absolute;
+            top: -12px; left: -12px; right: -12px; bottom: -12px;
+            border-radius: 50%;
+            border: 2px dashed rgba(255,255,255,0.15);
+            animation: spin-slow 20s linear infinite;
+        }
+
+        @keyframes spin-slow { 100% { transform: rotate(360deg); } }
+
+        /* Trạng thái thu âm (Visualizer V2) */
+        .mic-recording {
+            border-color: var(--neon-pink) !important;
+            box-shadow: 0 0 50px rgba(255, 0, 127, 0.6), inset 0 0 20px rgba(255,0,127,0.3) !important;
+        }
+        .mic-recording::before { border-color: rgba(255,0,127,0.4); animation-duration: 5s; }
+        .mic-recording .material-icons-round { 
+            color: var(--neon-pink) !important;
+            animation: pulse-icon 0.8s alternate infinite;
+        }
+        .mic-recording::after {
+            content: '';
+            position: absolute;
+            top: -25px; left: -25px; right: -25px; bottom: -25px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,0,127,0.3) 0%, transparent 70%);
+            z-index: -1;
+            animation: throb 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse-icon { 100% { transform: scale(1.15); } }
+        @keyframes throb { 0% { transform: scale(0.9); opacity: 0.5; } 100% { transform: scale(1.3); opacity: 1; } }
+
+        .hint-text {
+            margin-top: 50px; font-weight: 500; color: var(--text-muted);
+            cursor: pointer; transition: color 0.3s, transform 0.3s;
+            text-transform: uppercase; font-size: 0.85rem; letter-spacing: 3px;
+            opacity: 0.7;
+        }
+        .hint-text:hover { color: var(--neon-cyan); opacity: 1; transform: translateY(-2px); }
+
+        /* --- WORKSPACE TRANG 2 --- */
+        #workspace-page {
+            padding: 30px 24px;
+            max-width: 800px;
+            margin: 0 auto; /* Căn giữa form trên màn to */
+        }
+
+        header {
+            margin-bottom: 30px;
+            display: flex; justify-content: space-between; align-items: flex-end;
+        }
+        header h1 { 
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem; margin: 0;
+            color: var(--text-main);
+            letter-spacing: -1px;
+        }
+        header h1 span {
+            color: var(--neon-cyan); font-size: 0.5em; vertical-align: super;
+            text-shadow: 0 0 10px rgba(0,240,255,0.5); font-weight: 900;
+        }
+        header p { margin: 6px 0 0; color: var(--text-muted); font-size: 0.95rem; font-weight: 500; font-family: monospace;}
+
+        .avatar-box {
+            width: 44px; height: 44px; border-radius: 14px; 
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan)); 
+            display:flex; align-items:center; justify-content:center; 
+            box-shadow: 0 5px 15px rgba(0,240,255,0.3);
+        }
+
+        /* Note Cards */
+        .note-list {
+            flex: 1; overflow-y: auto; overflow-x: hidden;
+            padding-bottom: 120px;
+            display: flex; flex-direction: column; gap: 14px;
+        }
+        .note-list::-webkit-scrollbar { width: 4px; }
+        .note-list::-webkit-scrollbar-track { background: transparent; }
+        .note-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+        .note-card {
+            padding: 22px;
+            display: flex; align-items: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative; overflow: hidden;
+        }
+        
+        /* Hiệu ứng Hover dạng Neon mỏng */
+        .note-card::before {
+            content: "";
+            position: absolute; left: 0; top: 0; width: 3px; height: 100%;
+            background: var(--neon-purple);
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .note-card:hover { transform: translateX(6px); background: rgba(30, 35, 45, 0.5); }
+        .note-card:hover::before { opacity: 1; box-shadow: 0 0 12px var(--neon-purple); }
+
+        .checkbox {
+            width: 24px; height: 24px;
+            border-radius: 8px; /* Vuông vức tương lai hơn */
+            border: 2px solid rgba(255,255,255,0.3);
+            margin-right: 18px;
+            cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        .checkbox:hover { border-color: var(--neon-cyan); box-shadow: 0 0 10px rgba(0,240,255,0.3); }
+
+        .note-card.done { opacity: 0.4; background: rgba(10,10,15,0.4); }
+        .note-card.done .checkbox {
+            background: var(--neon-cyan); border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0,240,255,0.5);
+        }
+        .note-card.done .checkbox::after {
+            content: '✓'; color: #000; font-weight: 900; font-size: 14px;
+        }
+        .note-card.done .content {
+            text-decoration: line-through; color: var(--text-muted);
+        }
+
+        .note-body { flex: 1; min-width: 0; } /* min-width 0 to prevent overflow */
+        .note-body .content { 
+            font-size: 1.1rem; font-weight: 500; line-height: 1.5; margin: 0; letter-spacing: 0.3px;
+            word-wrap: break-word;
+        }
+        .note-body .meta { font-size: 0.8rem; margin-top: 8px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap;}
+        
+        .meta-tag { 
+            background: rgba(138, 43, 226, 0.1); color: #D4A5FF; 
+            padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(138,43,226,0.2);
+            font-weight: 600; font-size: 0.75rem; white-space: nowrap;
+        }
+        .price-tag {
+            background: rgba(255, 0, 127, 0.1); color: var(--neon-pink);
+            padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(255,0,127,0.2);
+            font-weight: 700; font-size: 0.75rem; white-space: nowrap;
+        }
+
+        .delete-btn { 
+            cursor: pointer; color: rgba(255,255,255,0.2);
+            transition: all 0.3s; padding: 10px; margin-left: 10px;
+        }
+        .note-card:hover .delete-btn { color: rgba(255,255,255,0.6); }
+        .delete-btn:hover { color: var(--neon-pink) !important; transform: scale(1.1); }
+
+        /* --- INPUT CĂN CỨ DƯỚI --- */
+        .input-area {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: calc(100% - 48px); max-width: 752px; /* 800 - 24*2 padding */
+            display: flex; align-items: stretch; gap: 14px;
+            z-index: 100;
+        }
+
+        .input-wrapper {
+            flex: 1; position: relative;
+            background: rgba(10, 15, 20, 0.7);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            display: flex; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: border-color 0.3s;
+        }
+        .input-wrapper:focus-within { border-color: var(--neon-cyan); box-shadow: 0 10px 25px rgba(0,240,255,0.15); }
+
+        .input-glass {
+            width: 100%; padding: 0 20px;
+            border: none; outline: none; background: transparent;
+            font-size: 1.05rem; color: var(--text-main); font-weight: 500; font-family: 'Inter';
+        }
+        .input-glass::placeholder { color: rgba(255,255,255,0.3); }
+
+        .send-btn, .micro-btn-small {
+            width: 60px; height: 60px;
+            border-radius: 20px;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer;
+            background: rgba(10, 15, 20, 0.7);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        .send-btn:hover { background: rgba(255,255,255,0.1); }
+        .send-btn .material-icons-round { color: var(--text-muted); transition: color 0.3s; }
+        .input-wrapper:focus-within .send-btn .material-icons-round { color: var(--neon-cyan); }
+        
+        .micro-btn-small:hover { border-color: var(--neon-pink); box-shadow: 0 0 15px rgba(255,0,127,0.2); }
+        .micro-btn-small .material-icons-round { color: var(--neon-pink); }
+
+        /* Loader Neon Effect */
+        .loading-toast {
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+            padding: 12px 30px; font-weight: 600; font-size: 0.95rem;
+            background: rgba(10, 15, 20, 0.9);
+            border: 1px solid var(--neon-purple);
+            backdrop-filter: blur(15px);
+            color: white; border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(138,43,226,0.3);
+            z-index: 1000;
+            transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; align-items: center; gap: 12px;
+        }
+        .loading-toast.show { top: 30px; }
+        
+        .spinner {
+            width: 18px; height: 18px;
+            border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--neon-cyan);
+            border-radius: 50%; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
     </style>
 </head>
 <body>
 
-    <div id="landing-page" class="screen active" onclick="goToWorkspace()">
-        <div class="book-3d">📓</div>
-        <h1 style="font-weight:800; font-size: 1.8rem;">Não lag? Mở Notezy 😎</h1>
-        <p style="opacity: 0.6; font-weight: 600;">Chạm để bắt đầu nà cưng!</p>
+    <!-- Notification Top -->
+    <div id="loading" class="loading-toast">
+        <div class="spinner"></div>
+        <span id="loading-text">Nanh Nọc đang suy nghĩ...</span>
     </div>
 
+    <!-- TRANG 1: LANDING PAGE -->
+    <div id="landing-page" class="screen active">
+        <h1 class="title-3d" id="greeting-text">Hế lô cưng!<br>Lại chốt đơn gì đây?</h1>
+        
+        <div class="mic-btn-huge glass" id="main-mic-btn" onclick="startGlobalVoiceInput()">
+            <span class="material-icons-round">mic</span>
+        </div>
+        
+        <p class="hint-text" onclick="goToWorkspace()">—— Nhấn để vô sổ ——</p>
+    </div>
+
+    <!-- TRANG 2: WORKSPACE PAGE -->
     <div id="workspace-page" class="screen hidden">
         <header>
-            <h1>HoloNotes</h1>
-            <p id="current-date">Hôm nay</p>
+            <div>
+                <h1>HoloNotes <span>VIP</span></h1>
+                <p id="current-date">Hôm nay</p>
+            </div>
+            <div class="avatar-box">
+                <span class="material-icons-round" style="color:#000; font-size: 24px;">face_3</span>
+            </div>
         </header>
-        <div class="note-list" id="note-container"></div>
-    </div>
 
-    <div class="dock-pill">
-        <div class="glass dock-btn" onclick="showModal()"><span class="material-icons-round">add</span></div>
-        <div class="glass dock-btn btn-mic" id="main-mic" onclick="startVoice()"><span class="material-icons-round">mic</span></div>
-    </div>
+        <div class="note-list" id="note-container">
+            <!-- Thẻ HTML render qua JS -->
+        </div>
 
-    <div id="inputModal" onclick="if(event.target==this) hideModal()">
-        <div class="glass modal-box">
-            <h3 style="margin:0 0 15px; font-weight:800;">Note gì nà?</h3>
-            <input type="text" id="manual-input" placeholder="Nhập việc cần làm..." onkeyup="if(event.key==='Enter') submitManual()">
-            <button onclick="submitManual()" style="width:100%; padding:15px; border-radius:15px; border:none; background:var(--text-dark); color:white; font-weight:800;">LƯU LẠI</button>
+        <div class="input-area">
+            <div class="input-wrapper">
+                <input type="text" class="input-glass" id="text-input" placeholder="Viết chỉ thị cho Nanh Nọc..." onkeypress="handleKey(event)" autocomplete="off">
+                <div class="send-btn" style="border:none; border-radius: 0; background:transparent;" onclick="submitTextInput()">
+                    <span class="material-icons-round">send</span>
+                </div>
+            </div>
+            
+            <div class="micro-btn-small" id="workspace-mic-btn" onclick="startGlobalVoiceInput()">
+                <span class="material-icons-round">mic</span>
+            </div>
         </div>
     </div>
 
+    <!-- LÕI JAVA SCRIPT -->
     <script>
-        const AI_KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
-        let notes = JSON.parse(localStorage.getItem('holonotes_pro')) || [];
-        let isListening = false, recognition;
+        // CẤU HÌNH AI PRO
+        const AI_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
+        const SYSTEM_PROMPT = `Bạn là trợ lý ảo nữ miền Nam nanh nọc, sang chảnh, lầy lội, gọi 'cưng' xưng 'tui'. Trả về duy nhất JSON: {"reply": "câu khịa", "item": "việc/món đồ rút gọn thành title", "price": số_tiền_hoặc_0, "reminderTime": "thời_gian_iso8601_nếu_có"}`;
 
-        function initApp() {
-            document.getElementById('current-date').innerText = new Date().toLocaleDateString('vi-VN', { weekday: 'long', day: 'numeric', month: 'long' });
-            renderNotes();
-            const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (Speech) {
-                recognition = new Speech(); recognition.lang = 'vi-VN';
-                recognition.onstart = () => { isListening = true; document.getElementById('main-mic').classList.add('recording'); };
-                recognition.onend = () => { isListening = false; document.getElementById('main-mic').classList.remove('recording'); };
-                recognition.onresult = (e) => processInput(e.results[0][0].transcript);
+        let notes = [];
+        let isListening = false;
+        let recognition = null;
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Âm thanh UI VIP
+        function playHoloSound(type="success") {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            if(type === "success") {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+                osc.frequency.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+            } else if (type === "delete") {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.3);
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            } else if (type === "micOn") {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(900, audioCtx.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
             }
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
         }
 
-        function startVoice() { if(!isListening) { recognition.start(); responsiveVoice.speak("Tui hóng nà cưng!", "Vietnamese Female"); } else { recognition.stop(); } }
-
-        async function processInput(txt) {
-            goToWorkspace();
-            let rawTxt = txt.toLowerCase();
-            const isDone = /\bxong\b/.test(rawTxt);
-            let cleanTxt = txt.replace(/\bxong\b/gi, "").trim();
-
-            if (!cleanTxt) return;
-
-            // Kiểm tra tích xanh ngay tại chỗ nếu có chữ "Xong"
-            if (isDone) {
-                let found = false;
-                for (let n of notes) {
-                    if (!n.is_done && cleanTxt.length > 2 && n.item.toLowerCase().includes(cleanTxt.toLowerCase())) {
-                        n.is_done = true; found = true;
-                        responsiveVoice.speak("Xong rồi hả? Giỏi ta!", "Vietnamese Female");
-                        break;
-                    }
+        // 1. Storage Manager (Lưu Song Song)
+        const StorageManager = {
+            saveLocal: function(dataArray) {
+                localStorage.setItem('holonotes_v7', JSON.stringify(dataArray));
+            },
+            loadLocal: function() {
+                let data = localStorage.getItem('holonotes_v7');
+                if(!data) {
+                    data = localStorage.getItem('holonotes_v6'); // Migrate from v6
+                    if(data) localStorage.setItem('holonotes_v7', data);
                 }
-                if (found) { save(); return; }
-            }
-
-            // Gọi AI phân loại
-            try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${AI_KEY}`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ contents: [{ parts: [{ text: `Trả về JSON: {"reply": "câu khịa gọi cưng", "item": "${cleanTxt}"}` }] }] })
-                });
-                const d = await res.json();
-                const ai = JSON.parse(d.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, ""));
-                notes.unshift({ id: Date.now(), item: ai.item, is_done: isDone });
-                save();
-                responsiveVoice.speak(isDone ? "Làm xong rồi hả?" : ai.reply, "Vietnamese Female");
-            } catch (e) {
-                notes.unshift({ id: Date.now(), item: cleanTxt, is_done: isDone });
-                save();
+                return JSON.parse(data) || [];
             }
         }
 
+        // 2. Init
+        function initApp() {
+            notes = StorageManager.loadLocal();
+            
+            const days = ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+            const date = new Date();
+            document.getElementById('current-date').innerText = `${days[date.getDay()]}, ${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
+            
+            renderNotes();
+            initSpeechAPI();
+        }
+
+        // 3. Render
         function renderNotes() {
             const container = document.getElementById('note-container');
             container.innerHTML = '';
-            notes.forEach((n, i) => {
-                const card = document.createElement('div');
-                card.className = `glass note-card ${n.is_done ? 'done' : ''}`;
-                card.innerHTML = `
-                    <div class="checkbox ${n.is_done ? 'checked' : ''}" onclick="toggleDone(${i})"></div>
-                    <div style="flex:1"><p class="content" style="margin:0; font-weight:600;">${n.item}</p></div>
-                    <span class="material-icons-round" style="opacity:0.3" onclick="del(${i})">delete</span>
+            notes.slice().reverse().forEach((note, reversedIndex) => {
+                const i = notes.length - 1 - reversedIndex;
+                const div = document.createElement('div');
+                div.className = `glass note-card ${note.is_done ? 'done' : ''}`;
+                div.id = `note-card-${i}`;
+                
+                let metaTags = `<span class="meta-tag">⚡ Việc cần làm</span>`;
+                if(note.price > 0) metaTags += `<span class="price-tag">💸 ${note.price.toLocaleString('vi-VN')}đ</span>`;
+                if(note.reminderTime) {
+                    const d = new Date(note.reminderTime);
+                    metaTags += `<span class="meta-tag" style="background: rgba(0,240,255,0.1); border-color: rgba(0,240,255,0.2); color: var(--neon-cyan);">⏰ ${d.getHours()}:${d.getMinutes().toString().padStart(2,'0')} ${d.getDate()}/${d.getMonth()+1}</span>`;
+                }
+
+                div.innerHTML = `
+                    <div class="checkbox" onclick="toggleDone(${i})"></div>
+                    <div class="note-body">
+                        <p class="content">${note.item}</p>
+                        <div class="meta">${metaTags}</div>
+                    </div>
+                    <div class="delete-btn material-icons-round" onclick="deleteNote(${i})">close</div>
                 `;
-                container.appendChild(card);
+                container.appendChild(div);
             });
         }
 
-        function toggleDone(i) { notes[i].is_done = !notes[i].is_done; save(); if(notes[i].is_done) responsiveVoice.speak("Tuyệt vời nà cưng!", "Vietnamese Female"); }
-        function del(i) { notes.splice(i, 1); save(); }
-        function save() { localStorage.setItem('holonotes_pro', JSON.stringify(notes)); renderNotes(); }
-        function showModal() { document.getElementById('inputModal').style.display='flex'; document.getElementById('manual-input').focus(); }
-        function hideModal() { document.getElementById('inputModal').style.display='none'; }
-        function submitManual() { const v = document.getElementById('manual-input').value; if(v) { processInput(v); hideModal(); document.getElementById('manual-input').value=''; } }
-        function goToWorkspace() { document.getElementById('landing-page').className='screen hidden'; document.getElementById('workspace-page').className='screen active'; }
-        
+        function toggleDone(index) {
+            notes[index].is_done = !notes[index].is_done;
+            StorageManager.saveLocal(notes);
+            renderNotes();
+            if(notes[index].is_done) playHoloSound("success");
+        }
+
+        function deleteNote(index) {
+            playHoloSound("delete");
+            const targetCard = document.getElementById(`note-card-${index}`);
+            if(targetCard) {
+                targetCard.style.transform = "translateX(50px)";
+                targetCard.style.opacity = "0";
+                setTimeout(() => {
+                    notes.splice(index, 1);
+                    StorageManager.saveLocal(notes);
+                    renderNotes();
+                }, 300);
+            } else {
+                notes.splice(index, 1);
+                StorageManager.saveLocal(notes);
+                renderNotes();
+            }
+        }
+
+        function goToWorkspace() {
+            document.getElementById('landing-page').classList.replace('active', 'hidden');
+            document.getElementById('workspace-page').classList.replace('hidden', 'active');
+        }
+
+        function toggleLoader(show, text="Nanh Nọc đang nghĩ...") {
+            const el = document.getElementById('loading');
+            document.getElementById('loading-text').innerText = text;
+            show ? el.classList.add('show') : el.classList.remove('show');
+        }
+
+        // 4. Voice Core
+        function initSpeechAPI() {
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if(!SpeechRec) { console.warn("Trình duyệt không hỗ trợ Web Speech API."); return; }
+            recognition = new SpeechRec();
+            recognition.lang = 'vi-VN';
+            recognition.continuous = false;
+            
+            recognition.onstart = () => { UI_setListeningState(true); playHoloSound("micOn"); };
+            recognition.onend = () => { UI_setListeningState(false); };
+            recognition.onerror = () => { UI_setListeningState(false); toggleLoader(false); };
+            recognition.onresult = (event) => {
+                const text = event.results[0][0].transcript;
+                processUserInput(text);
+            };
+        }
+
+        function startGlobalVoiceInput() {
+            if(!recognition) { alert("Trình duyệt không hỗ trợ mic (Thử dùng Chrome/Edge)!"); return;}
+            if(isListening) { recognition.stop(); }
+            else { recognition.start(); }
+        }
+
+        function UI_setListeningState(state) {
+            isListening = state;
+            const b1 = document.getElementById('main-mic-btn');
+            const b2 = document.getElementById('workspace-mic-btn');
+            if(state) {
+                b1.classList.add('mic-recording'); b2.classList.add('mic-recording');
+                document.getElementById('greeting-text').innerHTML = "Đang rình nghe cưng nói... <br><span style='color:var(--neon-pink); font-size:0.6em;'>🎙️ Lẹ lên</span>";
+            } else {
+                b1.classList.remove('mic-recording'); b2.classList.remove('mic-recording');
+                document.getElementById('greeting-text').innerHTML = "Hế lô cưng!<br>Lại chốt đơn gì đây?";
+            }
+        }
+
+        function handleKey(e) { if(e.key === 'Enter') submitTextInput(); }
+        function submitTextInput() {
+            const val = document.getElementById('text-input').value.trim();
+            if(val) {
+                document.getElementById('text-input').value = '';
+                processUserInput(val);
+            }
+        }
+
+        // 5. AI Logic
+        async function processUserInput(inputStr) {
+            goToWorkspace(); 
+            const lowerStr = inputStr.toLowerCase();
+            
+            // Xử lý Check công việc cục bộ nhanh
+            if(lowerStr.includes("xong") || lowerStr.includes("rồi") || lowerStr.includes("đã làm")) {
+                const target = lowerStr.replace("đã làm", "").replace("xong", "").replace("rồi", "").replace("đã", "").trim();
+                let found = false;
+                for(let i=0; i<notes.length; i++) {
+                    if(!notes[i].is_done && target && notes[i].item.toLowerCase().includes(target)) {
+                        notes[i].is_done = true; found = true;
+                        StorageManager.saveLocal(notes); renderNotes();
+                        playHoloSound("success");
+                        responsiveVoice.speak("Xong! Tui gạch tên nó cho cưng rồi đó!", "Vietnamese Female");
+                        break;
+                    }
+                }
+                if(found) return;
+            }
+
+            // Gọi API
+            toggleLoader(true, "Đang bay qua server chửi mướn...");
+            try {
+                const res = await fetch(AI_URL, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+                        contents: [{ parts: [{ text: `Câu nói: "${inputStr}"` }] }]
+                    })
+                });
+                const data = await res.json();
+                
+                let rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+                rawText = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
+                
+                const aiResult = JSON.parse(rawText);
+                
+                notes.push({
+                    id: Date.now(),
+                    item: aiResult.item || inputStr,
+                    price: aiResult.price || 0,
+                    reminderTime: aiResult.reminderTime || null,
+                    is_done: false,
+                    createdAt: new Date().toISOString()
+                });
+                StorageManager.saveLocal(notes);
+                renderNotes();
+
+                if(aiResult.reply) {
+                    responsiveVoice.speak(aiResult.reply, "Vietnamese Female");
+                }
+                playHoloSound("success");
+
+            } catch (err) {
+                console.error(err);
+                // Fallback
+                notes.push({ id: Date.now(), item: inputStr, price: 0, is_done: false, createdAt: new Date().toISOString() });
+                StorageManager.saveLocal(notes);
+                renderNotes();
+                responsiveVoice.speak("Nay mạng lag quá nha cưng, tui lưu đại cái note vô sổ thôi đó!", "Vietnamese Female");
+                playHoloSound("success");
+            }
+            toggleLoader(false);
+        }
+
         window.onload = initApp;
+
     </script>
 </body>
 </html>

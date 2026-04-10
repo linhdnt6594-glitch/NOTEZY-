@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Notezy V4 - Clean Complete</title>
+    <title>Notezy V4 - Only Xong</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
@@ -48,7 +48,7 @@
 <div class="bg-overlay"></div>
 
 <div id="landing" class="screen active" onclick="switchPage('workspace')">
-    <div style="position: absolute; top: 60px; left: 30px;"><h1 style="font-weight: 900; margin: 0; font-size: 1.6rem;">NOTEZY</h1><p style="color: #718096; font-weight: 600; font-size: 11px;">The Unforgettable</p></div>
+    <div style="position: absolute; top: 60px; left: 30px;"><h1 style="font-weight: 900; margin: 0; font-size: 1.6rem;">NOTEZY</h1><p style="color: #718096; font-weight: 600; font-size: 11px;">Refined Royal Hologram</p></div>
     <div class="book-frame"><div class="book-icon">📓</div></div>
     <h2 style="font-weight:900; margin-top:40px;">MỞ SỔ ĐI CƯNG!</h2>
 </div>
@@ -73,7 +73,7 @@
 
 <script>
     const API_KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
-    let notes = JSON.parse(localStorage.getItem('notezy_v41')) || [];
+    let notes = JSON.parse(localStorage.getItem('notezy_v42')) || [];
 
     function startSpeech() {
         const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -89,18 +89,15 @@
     async function processAI(txt) {
         if(document.getElementById('landing').classList.contains('active')) switchPage('workspace');
         
-        // 💥 BƯỚC 1: LÀM SẠCH NỘI DUNG (Nuốt từ khóa hoàn thành)
+        // CHỈ QUÉT TỪ "XONG"
         let normalized = txt.toLowerCase();
+        const isDone = /\bxong\b/.test(normalized);
         
-        // Kiểm tra xem có từ khóa hoàn thành không
-        const isDone = /\bxong\b|\bđã\b|\brồi\b/.test(normalized);
-        
-        // Xóa sạch các chữ xong/đã/rồi khỏi nội dung note
-        let cleanText = txt.replace(/\bxong\b|\bđã\b|\brồi\b/gi, "").trim();
+        // Nuốt từ "xong" khỏi nội dung lưu
+        let cleanText = txt.replace(/\bxong\b/gi, "").trim();
 
-        // 💥 BƯỚC 2: KIỂM TRA LẠI (Nếu nội dung note trống rỗng thì không lưu)
-        if (!cleanText || cleanText.length < 1) {
-            responsiveVoice.speak("Cưng nói gì vậy? Tui nghe hổng rõ!", "Vietnamese Female");
+        if (!cleanText) {
+            responsiveVoice.speak("Nói gì nà cưng? Đừng im lặng vậy chớ!", "Vietnamese Female");
             return;
         }
 
@@ -114,36 +111,34 @@
             const d = await res.json();
             const resAI = JSON.parse(d.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, ""));
             
-            // Chống trùng note trong cùng một lần nói
+            // Chống trùng lặp
             const isDuplicate = notes.some(n => n.text.toLowerCase() === resAI.text.toLowerCase() && n.done === isDone);
             if(isDuplicate) return;
 
-            // 💥 BƯỚC 3: LƯU NOTE SẠCH VỚI TRẠNG THÁI DONE ĐÚNG
             notes.unshift({ id: Date.now(), text: resAI.text, type: resAI.type, done: isDone });
             save();
-            responsiveVoice.speak(isDone ? "Làm xong rồi hả cưng? Giỏi ta!" : resAI.reply, "Vietnamese Female");
+            responsiveVoice.speak(isDone ? "Xong rồi hả cưng? Giỏi ta!" : resAI.reply, "Vietnamese Female");
         } catch(e) { 
-            // Fallback nếu AI lag, vẫn nuốt từ khóa
             notes.unshift({ id: Date.now(), text: cleanText, type: 'work', done: isDone }); 
             save(); 
         }
     }
 
-    function save() { localStorage.setItem('notezy_v41', JSON.stringify(notes)); render(); }
+    function save() { localStorage.setItem('notezy_v42', JSON.stringify(notes)); render(); }
     function render() {
         const l = document.getElementById('list'); l.innerHTML = '';
         notes.forEach(n => {
             l.innerHTML += `<div class="card ${n.done?'done':''}" style="border-left-color:${n.type==='work'?'#B794F4':'#F6AD55'}">
                 <div class="check-box ${n.done?'checked':''}" onclick="toggleDone(${n.id})"></div>
                 <span style="flex:1; font-weight:800; font-size:1.05rem;">${n.text}</span>
-                <span class="material-icons-round" style="opacity:0.1; padding-left:10px;" onclick="del(${n.id})">delete</span>
+                <span class="material-icons-round" style="opacity:0.1; padding-left:10px; cursor:pointer;" onclick="del(${n.id})">delete</span>
             </div>`;
         });
     }
 
     function toggleDone(id) {
         const n = notes.find(x => x.id === id);
-        if(n) { n.done = !n.done; if(n.done) responsiveVoice.speak("Tuyệt vời nà cưng!", "Vietnamese Female"); save(); }
+        if(n) { n.done = !n.done; if(n.done) responsiveVoice.speak("Xong rồi hả cưng?", "Vietnamese Female"); save(); }
     }
 
     function addManual() {

@@ -3,154 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Notezy V4 - Only Xong</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    <title>HoloNotes V6 Pro Immortal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
-
     <style>
-        :root { --bg-stone: #D8D8D8; --lavender: #E0CFFC; --blush: #F8E0F2; --deep-lavender: #B794F4; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100dvh; font-family: 'Inter', sans-serif; overflow: hidden; background: var(--bg-stone); }
-        .bg-overlay { position: fixed; inset: 0; background: radial-gradient(circle at 10% 10%, var(--lavender) 0%, transparent 45%), radial-gradient(circle at 90% 90%, var(--blush) 0%, transparent 45%); z-index: -1; }
+        :root { --glass-bg: rgba(255, 255, 255, 0.2); --glass-border: rgba(255, 255, 255, 0.5); --text-dark: #1E293B; }
+        body, html { margin: 0; padding: 0; font-family: 'Inter', sans-serif; height: 100dvh; width: 100%; overflow: hidden; color: var(--text-dark); background: linear-gradient(-45deg, #FFDEE9, #B5FFFC, #D4C4FB, #FFDEE9); background-size: 400% 400%; animation: gradientBG 15s ease infinite; }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        .screen { position: absolute; width: 100%; height: 100dvh; transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); display: flex; flex-direction: column; padding: 20px 25px; box-sizing: border-box; align-items: center; }
-        .hidden { transform: translateY(100%); opacity: 0; pointer-events: none; }
-        .active { transform: translateY(0); opacity: 1; z-index: 10; }
+        .glass { background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 32px; border: 1px solid var(--glass-border); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05); }
+        .screen { position: absolute; inset: 0; transition: opacity 0.5s ease, transform 0.5s ease; display: flex; flex-direction: column; box-sizing: border-box; padding: 25px; }
+        .hidden { opacity: 0; pointer-events: none; transform: translateY(20px); }
+        .active { opacity: 1; pointer-events: auto; transform: translateY(0); z-index: 10; }
 
         /* Trang 1 */
-        #landing { justify-content: center; }
-        .book-frame { width: 260px; height: 340px; background: white; border-radius: 45px; display: flex; justify-content: center; align-items: center; box-shadow: 0 25px 50px rgba(0,0,0,0.08); animation: float 4s infinite; border: 1px solid rgba(255,255,255,0.8); cursor: pointer; }
-        .book-icon { font-size: 150px; filter: drop-shadow(0 0 10px var(--lavender)); }
-        @keyframes float { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-20px);} }
+        #landing-page { justify-content: center; align-items: center; text-align: center; }
+        .book-3d { font-size: 140px; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.1)); animation: float 3s ease-in-out infinite; cursor: pointer; margin-bottom: 30px; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
         /* Trang 2 */
-        .list-wrap { width: 100%; flex: 1; overflow-y: auto; padding-bottom: 120px; }
-        .card { background: white; padding: 22px; border-radius: 28px; margin-bottom: 12px; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02); animation: slide 0.3s; border-left: 6px solid #CBD5E0; }
-        .card.done span { text-decoration: line-through; opacity: 0.3; }
-        .check-box { width: 28px; height: 28px; border-radius: 10px; border: 3px solid #EDF2F7; margin-right: 18px; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; }
-        .check-box.checked { background: #4ADE80; border-color: #4ADE80; }
-        .check-box.checked::after { content: '✓'; color: white; font-weight: 900; }
+        header h1 { font-size: 2rem; font-weight: 800; margin: 0; letter-spacing: -1px; }
+        .note-list { flex: 1; overflow-y: auto; padding-bottom: 120px; }
+        .note-list::-webkit-scrollbar { display: none; }
+        .note-card { padding: 20px; margin-bottom: 16px; display: flex; align-items: center; animation: pop 0.3s ease; }
+        @keyframes pop { from { transform: scale(0.9); opacity: 0; } }
+        .note-card.done { opacity: 0.5; }
+        .note-card.done .content { text-decoration: line-through; }
 
-        /* Dock */
-        .dock-pill { position: fixed; bottom: 35px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); padding: 8px 15px; border-radius: 50px; display: flex; align-items: center; gap: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 1px solid white; z-index: 100; }
-        .dock-item { display: flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 35px; font-weight: 900; font-size: 12px; cursor: pointer; transition: 0.2s; }
-        .btn-mic.on { background: #ff4d4d; color: white !important; animation: pulse 1s infinite; }
-        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }
+        .checkbox { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--text-dark); margin-right: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .checked { background: var(--text-dark); }
+        .checked::after { content: '✓'; color: white; font-weight: bold; }
+
+        /* Dock Căn Giữa */
+        .dock-pill { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 12px; z-index: 100; }
+        .dock-btn { width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; }
+        .btn-mic.recording { background: #f43f5e !important; color: white !important; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.4); } 70% { box-shadow: 0 0 0 20px rgba(244, 63, 94, 0); } }
 
         /* Modal */
-        #inputModal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(15px); }
-        .modal-box { background: white; padding: 30px; border-radius: 40px; width: 85%; max-width: 400px; }
-        input { width: 100%; padding: 18px; border-radius: 18px; border: 1px solid #EDF2F7; outline: none; margin-bottom: 20px; font-size: 16px; font-weight: 600; box-sizing: border-box; }
+        #inputModal { position: fixed; inset: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .modal-box { width: 85%; max-width: 400px; padding: 30px; }
+        input { width: 100%; padding: 15px; border-radius: 15px; border: none; outline: none; font-size: 16px; font-weight: 600; margin-bottom: 15px; }
     </style>
 </head>
 <body>
-<div class="bg-overlay"></div>
 
-<div id="landing" class="screen active" onclick="switchPage('workspace')">
-    <div style="position: absolute; top: 60px; left: 30px;"><h1 style="font-weight: 900; margin: 0; font-size: 1.6rem;">NOTEZY</h1><p style="color: #718096; font-weight: 600; font-size: 11px;">Refined Royal Hologram</p></div>
-    <div class="book-frame"><div class="book-icon">📓</div></div>
-    <h2 style="font-weight:900; margin-top:40px;">MỞ SỔ ĐI CƯNG!</h2>
-</div>
-
-<div id="workspace" class="screen hidden">
-    <h1 style="font-weight:900; width:100%; margin-bottom:20px; font-size: 1.6rem;">Não lag? Mở Notezy 😎</h1>
-    <div id="list" class="list-wrap"></div>
-</div>
-
-<div class="dock-pill">
-    <div class="dock-item" onclick="showModal()" style="color:#718096;"><span class="material-icons-round">edit</span> ADD</div>
-    <div class="dock-item btn-mic" id="mic-btn" onclick="startSpeech()" style="color:var(--deep-lavender);"><span class="material-icons-round">mic</span> SPEECH</div>
-</div>
-
-<div id="inputModal" onclick="if(event.target == this) closeModal()">
-    <div class="modal-box">
-        <h3 style="margin:0 0 20px; font-weight:900;">Ghi chú nà cưng</h3>
-        <input type="text" id="manualInput" placeholder="Nhập note nhen..." onkeyup="if(event.key==='Enter') addManual()">
-        <button onclick="addManual()" style="width:100%; padding:18px; border-radius:18px; border:none; background:var(--deep-lavender); color:white; font-weight:900;">LƯU LẠI</button>
+    <div id="landing-page" class="screen active" onclick="goToWorkspace()">
+        <div class="book-3d">📓</div>
+        <h1 style="font-weight:800; font-size: 1.8rem;">Não lag? Mở Notezy 😎</h1>
+        <p style="opacity: 0.6; font-weight: 600;">Chạm để bắt đầu nà cưng!</p>
     </div>
-</div>
 
-<script>
-    const API_KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
-    let notes = JSON.parse(localStorage.getItem('notezy_v42')) || [];
+    <div id="workspace-page" class="screen hidden">
+        <header>
+            <h1>HoloNotes</h1>
+            <p id="current-date">Hôm nay</p>
+        </header>
+        <div class="note-list" id="note-container"></div>
+    </div>
 
-    function startSpeech() {
-        const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if(!Speech) return;
-        const rec = new Speech(); rec.lang = 'vi-VN';
-        rec.onstart = () => { document.getElementById('mic-btn').classList.add('on'); };
-        rec.onresult = (e) => { processAI(e.results[0][0].transcript); };
-        rec.onend = () => { document.getElementById('mic-btn').classList.remove('on'); };
-        rec.start();
-        responsiveVoice.speak("Tui hóng nà cưng!", "Vietnamese Female");
-    }
+    <div class="dock-pill">
+        <div class="glass dock-btn" onclick="showModal()"><span class="material-icons-round">add</span></div>
+        <div class="glass dock-btn btn-mic" id="main-mic" onclick="startVoice()"><span class="material-icons-round">mic</span></div>
+    </div>
 
-    async function processAI(txt) {
-        if(document.getElementById('landing').classList.contains('active')) switchPage('workspace');
-        
-        // CHỈ QUÉT TỪ "XONG"
-        let normalized = txt.toLowerCase();
-        const isDone = /\bxong\b/.test(normalized);
-        
-        // Nuốt từ "xong" khỏi nội dung lưu
-        let cleanText = txt.replace(/\bxong\b/gi, "").trim();
+    <div id="inputModal" onclick="if(event.target==this) hideModal()">
+        <div class="glass modal-box">
+            <h3 style="margin:0 0 15px; font-weight:800;">Note gì nà?</h3>
+            <input type="text" id="manual-input" placeholder="Nhập việc cần làm..." onkeyup="if(event.key==='Enter') submitManual()">
+            <button onclick="submitManual()" style="width:100%; padding:15px; border-radius:15px; border:none; background:var(--text-dark); color:white; font-weight:800;">LƯU LẠI</button>
+        </div>
+    </div>
 
-        if (!cleanText) {
-            responsiveVoice.speak("Nói gì nà cưng? Đừng im lặng vậy chớ!", "Vietnamese Female");
-            return;
+    <script>
+        const AI_KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
+        let notes = JSON.parse(localStorage.getItem('holonotes_pro')) || [];
+        let isListening = false, recognition;
+
+        function initApp() {
+            document.getElementById('current-date').innerText = new Date().toLocaleDateString('vi-VN', { weekday: 'long', day: 'numeric', month: 'long' });
+            renderNotes();
+            const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (Speech) {
+                recognition = new Speech(); recognition.lang = 'vi-VN';
+                recognition.onstart = () => { isListening = true; document.getElementById('main-mic').classList.add('recording'); };
+                recognition.onend = () => { isListening = false; document.getElementById('main-mic').classList.remove('recording'); };
+                recognition.onresult = (e) => processInput(e.results[0][0].transcript);
+            }
         }
 
-        const p = `Phân loại "${cleanText}" vào "work" hoặc "personal". JSON: {"type": "work/personal", "reply": "khịa cưng", "text": "nội dung sạch"}`;
-        
-        try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
-                method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ contents: [{ parts: [{ text: p }] }] })
+        function startVoice() { if(!isListening) { recognition.start(); responsiveVoice.speak("Tui hóng nà cưng!", "Vietnamese Female"); } else { recognition.stop(); } }
+
+        async function processInput(txt) {
+            goToWorkspace();
+            let rawTxt = txt.toLowerCase();
+            const isDone = /\bxong\b/.test(rawTxt);
+            let cleanTxt = txt.replace(/\bxong\b/gi, "").trim();
+
+            if (!cleanTxt) return;
+
+            // Kiểm tra tích xanh ngay tại chỗ nếu có chữ "Xong"
+            if (isDone) {
+                let found = false;
+                for (let n of notes) {
+                    if (!n.is_done && cleanTxt.length > 2 && n.item.toLowerCase().includes(cleanTxt.toLowerCase())) {
+                        n.is_done = true; found = true;
+                        responsiveVoice.speak("Xong rồi hả? Giỏi ta!", "Vietnamese Female");
+                        break;
+                    }
+                }
+                if (found) { save(); return; }
+            }
+
+            // Gọi AI phân loại
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${AI_KEY}`, {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ contents: [{ parts: [{ text: `Trả về JSON: {"reply": "câu khịa gọi cưng", "item": "${cleanTxt}"}` }] }] })
+                });
+                const d = await res.json();
+                const ai = JSON.parse(d.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, ""));
+                notes.unshift({ id: Date.now(), item: ai.item, is_done: isDone });
+                save();
+                responsiveVoice.speak(isDone ? "Làm xong rồi hả?" : ai.reply, "Vietnamese Female");
+            } catch (e) {
+                notes.unshift({ id: Date.now(), item: cleanTxt, is_done: isDone });
+                save();
+            }
+        }
+
+        function renderNotes() {
+            const container = document.getElementById('note-container');
+            container.innerHTML = '';
+            notes.forEach((n, i) => {
+                const card = document.createElement('div');
+                card.className = `glass note-card ${n.is_done ? 'done' : ''}`;
+                card.innerHTML = `
+                    <div class="checkbox ${n.is_done ? 'checked' : ''}" onclick="toggleDone(${i})"></div>
+                    <div style="flex:1"><p class="content" style="margin:0; font-weight:600;">${n.item}</p></div>
+                    <span class="material-icons-round" style="opacity:0.3" onclick="del(${i})">delete</span>
+                `;
+                container.appendChild(card);
             });
-            const d = await res.json();
-            const resAI = JSON.parse(d.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, ""));
-            
-            // Chống trùng lặp
-            const isDuplicate = notes.some(n => n.text.toLowerCase() === resAI.text.toLowerCase() && n.done === isDone);
-            if(isDuplicate) return;
-
-            notes.unshift({ id: Date.now(), text: resAI.text, type: resAI.type, done: isDone });
-            save();
-            responsiveVoice.speak(isDone ? "Xong rồi hả cưng? Giỏi ta!" : resAI.reply, "Vietnamese Female");
-        } catch(e) { 
-            notes.unshift({ id: Date.now(), text: cleanText, type: 'work', done: isDone }); 
-            save(); 
         }
-    }
 
-    function save() { localStorage.setItem('notezy_v42', JSON.stringify(notes)); render(); }
-    function render() {
-        const l = document.getElementById('list'); l.innerHTML = '';
-        notes.forEach(n => {
-            l.innerHTML += `<div class="card ${n.done?'done':''}" style="border-left-color:${n.type==='work'?'#B794F4':'#F6AD55'}">
-                <div class="check-box ${n.done?'checked':''}" onclick="toggleDone(${n.id})"></div>
-                <span style="flex:1; font-weight:800; font-size:1.05rem;">${n.text}</span>
-                <span class="material-icons-round" style="opacity:0.1; padding-left:10px; cursor:pointer;" onclick="del(${n.id})">delete</span>
-            </div>`;
-        });
-    }
-
-    function toggleDone(id) {
-        const n = notes.find(x => x.id === id);
-        if(n) { n.done = !n.done; if(n.done) responsiveVoice.speak("Xong rồi hả cưng?", "Vietnamese Female"); save(); }
-    }
-
-    function addManual() {
-        const val = document.getElementById('manualInput').value;
-        if(val) { processAI(val); closeModal(); document.getElementById('manualInput').value=''; }
-    }
-
-    function showModal() { document.getElementById('inputModal').style.display='flex'; document.getElementById('manualInput').focus(); }
-    function closeModal() { document.getElementById('inputModal').style.display='none'; }
-    function switchPage(p) { document.getElementById('landing').className='screen hidden'; document.getElementById('workspace').className='screen active'; render(); }
-    function del(id) { notes = notes.filter(n => n.id !== id); save(); }
-    window.onload = render;
-</script>
+        function toggleDone(i) { notes[i].is_done = !notes[i].is_done; save(); if(notes[i].is_done) responsiveVoice.speak("Tuyệt vời nà cưng!", "Vietnamese Female"); }
+        function del(i) { notes.splice(i, 1); save(); }
+        function save() { localStorage.setItem('holonotes_pro', JSON.stringify(notes)); renderNotes(); }
+        function showModal() { document.getElementById('inputModal').style.display='flex'; document.getElementById('manual-input').focus(); }
+        function hideModal() { document.getElementById('inputModal').style.display='none'; }
+        function submitManual() { const v = document.getElementById('manual-input').value; if(v) { processInput(v); hideModal(); document.getElementById('manual-input').value=''; } }
+        function goToWorkspace() { document.getElementById('landing-page').className='screen hidden'; document.getElementById('workspace-page').className='screen active'; }
+        
+        window.onload = initApp;
+    </script>
 </body>
 </html>

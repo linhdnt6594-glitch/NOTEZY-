@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Notezy V - Super Logic</title>
+    <title>Notezy V - Perfect Dock</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
@@ -18,24 +18,36 @@
         .hidden { transform: translateY(100%); opacity: 0; pointer-events: none; }
         .active { transform: translateY(0); opacity: 1; z-index: 10; }
 
-        /* Trang 1 - Sổ Hologram */
+        /* Trang 1 */
         #landing { justify-content: center; }
         .book-frame { width: 260px; height: 340px; background: white; border-radius: 45px; display: flex; justify-content: center; align-items: center; box-shadow: 0 25px 50px rgba(0,0,0,0.08); animation: float 4s infinite; border: 1px solid rgba(255,255,255,0.8); cursor: pointer; }
         .book-icon { font-size: 150px; filter: drop-shadow(0 0 10px var(--lavender)); }
         @keyframes float { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-20px);} }
 
-        /* Trang 2 - List */
+        /* Trang 2 */
         .list-wrap { width: 100%; flex: 1; overflow-y: auto; padding-bottom: 120px; }
         .card { background: white; padding: 22px; border-radius: 28px; margin-bottom: 12px; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02); animation: slide 0.4s; border-left: 6px solid #CBD5E0; }
         .card.done span { text-decoration: line-through; opacity: 0.3; }
-        .check-box { width: 28px; height: 28px; border-radius: 10px; border: 3px solid #EDF2F7; margin-right: 18px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .check-box { width: 28px; height: 28px; border-radius: 10px; border: 3px solid #EDF2F7; margin-right: 18px; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; }
         .check-box.checked { background: #4ADE80; border-color: #4ADE80; }
         .check-box.checked::after { content: '✓'; color: white; font-weight: 900; }
 
-        /* Dock */
-        .dock { position: fixed; bottom: 35px; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); padding: 10px 25px; border-radius: 50px; display: flex; gap: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
-        .btn-mic.on { color: #ff4d4d !important; animation: pulse 1s infinite; }
-        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.1);} 100% {transform: scale(1);} }
+        /* THANH DOCK VIÊN THUỐC CĂN GIỮA */
+        .dock-pill { 
+            position: fixed; bottom: 35px; left: 50%; transform: translateX(-50%); 
+            background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); 
+            padding: 8px 15px; border-radius: 50px; display: flex; align-items: center; gap: 10px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 1px solid white; z-index: 100; 
+        }
+        .dock-item { display: flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 35px; font-weight: 900; font-size: 13px; cursor: pointer; transition: 0.2s; }
+        .btn-add { background: transparent; color: #718096; }
+        .btn-mic { background: white; color: var(--deep-lavender); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .btn-mic.on { background: #ff4d4d; color: white !important; }
+
+        /* Modal nhập tay */
+        #inputModal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(15px); }
+        .modal-box { background: white; padding: 30px; border-radius: 40px; width: 85%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+        input { width: 100%; padding: 18px; border-radius: 18px; border: 1px solid #EDF2F7; outline: none; margin-bottom: 20px; font-size: 16px; font-weight: 600; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -43,7 +55,7 @@
 
 <div id="landing" class="screen active" onclick="switchPage('workspace')">
     <div class="book-frame"><div class="book-icon">📓</div></div>
-    <h2 style="font-weight:900; margin-top:40px;">MỞ SỔ ĐI CƯNG!</h2>
+    <h2 style="font-weight:900; margin-top:40px; text-align: center;">MỞ SỔ ĐI CƯNG!</h2>
 </div>
 
 <div id="workspace" class="screen hidden">
@@ -51,15 +63,26 @@
     <div id="list" class="list-wrap"></div>
 </div>
 
-<div class="dock">
-    <div onclick="startSpeech()" class="btn-mic" id="mic-btn" style="cursor:pointer; font-weight:900; display:flex; align-items:center; gap:10px; color:var(--deep-lavender);">
-        <span class="material-icons-round" style="font-size:35px;">mic</span> SPEECH
+<div class="dock-pill">
+    <div class="dock-item btn-add" onclick="showModal()">
+        <span class="material-icons-round">add</span> ADD
+    </div>
+    <div class="dock-item btn-mic" id="mic-btn" onclick="startSpeech()">
+        <span class="material-icons-round">mic</span> SPEECH
+    </div>
+</div>
+
+<div id="inputModal" onclick="if(event.target == this) closeModal()">
+    <div class="modal-box">
+        <h3 style="margin:0 0 20px; font-weight:900;">Nhập note nà cưng</h3>
+        <input type="text" id="manualInput" placeholder="Gõ gì đó nà..." onkeyup="if(event.key==='Enter') addManual()">
+        <button onclick="addManual()" style="width:100%; padding:18px; border-radius:18px; border:none; background:var(--deep-lavender); color:white; font-weight:900;">LƯU LẠI</button>
     </div>
 </div>
 
 <script>
     const API_KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
-    let notes = JSON.parse(localStorage.getItem('notezy_v37')) || [];
+    let notes = JSON.parse(localStorage.getItem('notezy_v38')) || [];
 
     function startSpeech() {
         const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -69,18 +92,14 @@
         rec.onresult = (e) => { processAI(e.results[0][0].transcript); };
         rec.onend = () => { document.getElementById('mic-btn').classList.remove('on'); };
         rec.start();
-        responsiveVoice.speak("Tui hóng nà cưng!", "Vietnamese Female");
+        responsiveVoice.speak("Hóng lệnh nà cưng!", "Vietnamese Female");
     }
 
     async function processAI(txt) {
         if(document.getElementById('landing').classList.contains('active')) switchPage('workspace');
-        
-        // KIỂM TRA TỪ KHÓA HOÀN THÀNH TRỰC TIẾP
         const normalized = txt.toLowerCase();
         const isDone = /\bxong\b|\bđã\b|\brồi\b/.test(normalized);
-        
-        const p = `Phân loại "${txt}" vào "work" hoặc "personal". JSON: {"type": "work/personal", "reply": "khịa gọi cưng", "text": "nội dung sạch"}`;
-        
+        const p = `Phân loại "${txt}" vào "work" hoặc "personal". JSON: {"type": "work/personal", "reply": "khịa cưng", "text": "nội dung sạch"}`;
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -88,36 +107,38 @@
             });
             const d = await res.json();
             const resAI = JSON.parse(d.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, ""));
-            
-            // Nếu có chữ "xong/đã/rồi" thì gán done = true
             notes.unshift({ id: Date.now(), text: resAI.text, type: resAI.type, done: isDone });
             save();
-            
-            let feedback = isDone ? "Xong rồi hả cưng? Giỏi ta!" : resAI.reply;
-            responsiveVoice.speak(feedback, "Vietnamese Female");
-        } catch(e) {
-            notes.unshift({ id: Date.now(), text: txt, type: 'work', done: isDone });
-            save();
-        }
+            responsiveVoice.speak(isDone ? "Xong rồi hả cưng? Giỏi ta!" : resAI.reply, "Vietnamese Female");
+        } catch(e) { notes.unshift({ id: Date.now(), text: txt, type: 'work', done: isDone }); save(); }
     }
 
-    function save() { localStorage.setItem('notezy_v37', JSON.stringify(notes)); render(); }
+    function save() { localStorage.setItem('notezy_v38', JSON.stringify(notes)); render(); }
     function render() {
         const l = document.getElementById('list'); l.innerHTML = '';
         notes.forEach(n => {
             l.innerHTML += `<div class="card ${n.done?'done':''}" style="border-left-color:${n.type==='work'?'#B794F4':'#F6AD55'}">
                 <div class="check-box ${n.done?'checked':''}" onclick="toggleDone(${n.id})"></div>
-                <span style="flex:1; font-weight:800;">${n.text}</span>
+                <span style="flex:1; font-weight:800; font-size:1.05rem;">${n.text}</span>
+                <span class="material-icons-round" style="opacity:0.1; padding-left:10px;" onclick="del(${n.id})">delete</span>
             </div>`;
         });
     }
 
     function toggleDone(id) {
         const n = notes.find(x => x.id === id);
-        if(n) { n.done = !n.done; if(n.done) responsiveVoice.speak("Xong rồi nà cưng!", "Vietnamese Female"); save(); }
+        if(n) { n.done = !n.done; if(n.done) responsiveVoice.speak("Xong rồi hả cưng?", "Vietnamese Female"); save(); }
     }
 
+    function addManual() {
+        const val = document.getElementById('manualInput').value;
+        if(val) { processAI(val); closeModal(); document.getElementById('manualInput').value=''; }
+    }
+
+    function showModal() { document.getElementById('inputModal').style.display='flex'; document.getElementById('manualInput').focus(); }
+    function closeModal() { document.getElementById('inputModal').style.display='none'; }
     function switchPage(p) { document.getElementById('landing').className='screen hidden'; document.getElementById('workspace').className='screen active'; render(); }
+    function del(id) { notes = notes.filter(n => n.id !== id); save(); }
     window.onload = render;
 </script>
 </body>

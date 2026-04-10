@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Notezy V3 - Ultimate Logic</title>
+    <title>Notezy V4 - Single Key</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
@@ -32,11 +32,9 @@
         .check-box.checked { background: #4ADE80; border-color: #4ADE80; }
         .check-box.checked::after { content: '✓'; color: white; font-weight: 900; }
 
-        /* Dock Viên Thuốc */
+        /* Dock */
         .dock-pill { position: fixed; bottom: 35px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); padding: 8px 15px; border-radius: 50px; display: flex; align-items: center; gap: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 1px solid white; z-index: 100; }
         .dock-item { display: flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 35px; font-weight: 900; font-size: 12px; cursor: pointer; transition: 0.2s; }
-        .btn-add { background: transparent; color: #718096; }
-        .btn-mic { background: white; color: var(--deep-lavender); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .btn-mic.on { background: #ff4d4d; color: white !important; animation: pulse 1s infinite; }
         @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }
 
@@ -50,7 +48,7 @@
 <div class="bg-overlay"></div>
 
 <div id="landing" class="screen active" onclick="switchPage('workspace')">
-    <div style="position: absolute; top: 60px; left: 30px;"><h1 style="font-weight: 900; margin: 0; font-size: 1.6rem;">NOTEZY</h1><p style="color: #718096; font-weight: 600; font-size: 11px;">Refined Royal Hologram</p></div>
+    <div style="position: absolute; top: 60px; left: 30px;"><h1 style="font-weight: 900; margin: 0; font-size: 1.6rem;">NOTEZY</h1><p style="color: #718096; font-weight: 600; font-size: 11px;">The Unforgettable</p></div>
     <div class="book-frame"><div class="book-icon">📓</div></div>
     <h2 style="font-weight:900; margin-top:40px;">MỞ SỔ ĐI CƯNG!</h2>
 </div>
@@ -61,8 +59,8 @@
 </div>
 
 <div class="dock-pill">
-    <div class="dock-item btn-add" onclick="showModal()"><span class="material-icons-round">edit</span> ADD</div>
-    <div class="dock-item btn-mic" id="mic-btn" onclick="startSpeech()"><span class="material-icons-round">mic</span> SPEECH</div>
+    <div class="dock-item" onclick="showModal()" style="color:#718096;"><span class="material-icons-round">edit</span> ADD</div>
+    <div class="dock-item btn-mic" id="mic-btn" onclick="startSpeech()" style="color:var(--deep-lavender);"><span class="material-icons-round">mic</span> SPEECH</div>
 </div>
 
 <div id="inputModal" onclick="if(event.target == this) closeModal()">
@@ -75,7 +73,7 @@
 
 <script>
     const API_KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
-    let notes = JSON.parse(localStorage.getItem('notezy_v39')) || [];
+    let notes = JSON.parse(localStorage.getItem('notezy_v40')) || [];
 
     function startSpeech() {
         const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -92,12 +90,13 @@
         if(document.getElementById('landing').classList.contains('active')) switchPage('workspace');
         const normalized = txt.toLowerCase();
         
-        // KIỂM TRA TỪ KHÓA TÍCH XANH CỰC MẠNH
-        const isDone = /\bxong\b|\bđã\b|\brồi\b/.test(normalized);
-        // Làm sạch nội dung: bỏ các từ khóa xong/đã/rồi để lưu note cho gọn
+        // CHỈ CẦN 1 TRONG 3 TỪ: ĐÃ HOẶC XONG HOẶC RỒI
+        const isDone = /\bxong\b/.test(normalized) || /\bđã\b/.test(normalized) || /\brồi\b/.test(normalized);
+        
+        // Làm sạch nội dung note
         let cleanText = txt.replace(/xong|đã|rồi/gi, "").trim();
 
-        const p = `Phân loại "${cleanText}" vào "work" hoặc "personal". JSON: {"type": "work/personal", "reply": "câu khịa cưng", "text": "nội dung"}`;
+        const p = `Phân loại "${cleanText}" vào "work" hoặc "personal". JSON: {"type": "work/personal", "reply": "khịa cưng", "text": "nội dung"}`;
         
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
@@ -107,20 +106,20 @@
             const d = await res.json();
             const resAI = JSON.parse(d.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, ""));
             
-            // CHỐNG NHÂN BẢN: Nếu note sạch này đã tồn tại, không thêm mới
+            // Chống trùng note trong cùng một lần nói
             const isDuplicate = notes.some(n => n.text.toLowerCase() === resAI.text.toLowerCase() && n.done === isDone);
-            if(isDuplicate) { responsiveVoice.speak("Cái này có rồi nà cưng, đừng có ngáo!", "Vietnamese Female"); return; }
+            if(isDuplicate) return;
 
             notes.unshift({ id: Date.now(), text: resAI.text, type: resAI.type, done: isDone });
             save();
-            responsiveVoice.speak(isDone ? "Xong rồi hả cưng? Giỏi ta!" : resAI.reply, "Vietnamese Female");
+            responsiveVoice.speak(isDone ? "Làm xong rồi hả cưng? Giỏi ta!" : resAI.reply, "Vietnamese Female");
         } catch(e) { 
             notes.unshift({ id: Date.now(), text: cleanText, type: 'work', done: isDone }); 
             save(); 
         }
     }
 
-    function save() { localStorage.setItem('notezy_v39', JSON.stringify(notes)); render(); }
+    function save() { localStorage.setItem('notezy_v40', JSON.stringify(notes)); render(); }
     function render() {
         const l = document.getElementById('list'); l.innerHTML = '';
         notes.forEach(n => {

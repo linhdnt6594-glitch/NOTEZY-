@@ -2,696 +2,165 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notezy - Não lag có Notezy lo</title>
-    <!-- Thêm font Outfit cho tiêu đề, Inter cho nội dung -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Notezy VIP - Mic Fix</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
     <style>
         :root {
-            /* Neon Light/Pastel Palette */
-            --bg-color-1: #FFF5F7;  /* Soft Pink */
-            --bg-color-2: #E6F8FE;  /* Soft Blue */
-            --bg-color-3: #F3E8FE;  /* Soft Purple */
-            
-            --brand-primary: #FF3366; /* Vibrant Pink */
-            --brand-secondary: #00C3FF; /* Bright Blue */
-            
-            /* Light Glass */
-            --glass-bg: rgba(255, 255, 255, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.9);
-            --text-main: #1E293B;
-            --text-muted: #64748B;
+            --brand-primary: #FF3366; --brand-secondary: #00C3FF;
+            --text-main: #1E293B; --text-muted: #64748B;
         }
 
-        body, html {
-            margin: 0; padding: 0;
-            font-family: 'Inter', sans-serif;
-            height: 100%; width: 100%;
-            overflow: hidden;
-            color: var(--text-main);
-            background-color: #F8FAFC;
-        }
+        body, html { margin: 0; padding: 0; font-family: 'Inter', sans-serif; height: 100dvh; width: 100%; overflow: hidden; background-color: #F8FAFC; }
+        body::before { content: ""; position: absolute; inset: -50%; background: radial-gradient(circle at 50% 50%, #FFF5F7 0%, transparent 40%), radial-gradient(circle at 20% 80%, #E6F8FE 0%, transparent 40%), radial-gradient(circle at 80% 20%, #F3E8FE 0%, transparent 40%); animation: lightPan 20s infinite alternate linear; z-index: -2; }
+        @keyframes lightPan { 100% { transform: translate(5%, 5%) rotate(5deg); } }
 
-        /* 🌞 Sáng sủa Background Animation */
-        body::before {
-            content: "";
-            position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle at 50% 50%, var(--bg-color-1) 0%, transparent 40%),
-                        radial-gradient(circle at 20% 80%, var(--bg-color-2) 0%, transparent 40%),
-                        radial-gradient(circle at 80% 20%, var(--bg-color-3) 0%, transparent 40%);
-            animation: lightPan 20s infinite alternate ease-in-out;
-            z-index: -2;
-        }
+        .screen { position: absolute; inset: 0; transition: 0.5s ease-out; display: flex; flex-direction: column; box-sizing: border-box; }
+        .hidden { opacity: 0; pointer-events: none; transform: scale(0.98); }
+        .active { opacity: 1; pointer-events: auto; transform: scale(1); z-index: 10; }
 
-        @keyframes lightPan {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(5%, 5%) rotate(10deg); }
-        }
+        /* Trang 1 */
+        #landing-page { justify-content: center; align-items: center; text-align: center; }
+        .mic-btn-huge { width: 140px; height: 140px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; background: white; border: 2px solid white; box-shadow: 0 15px 35px rgba(0, 195, 255, 0.2); transition: 0.3s; }
+        .mic-recording { border-color: var(--brand-primary) !important; box-shadow: 0 0 40px rgba(255, 51, 102, 0.4) !important; animation: beat 1s infinite; }
+        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
-        /* Siêu Glassmorphism Sáng */
-        .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-radius: 28px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), inset 0 2px 0 rgba(255,255,255,0.8);
-        }
+        /* Trang 2 */
+        #workspace-page { padding: 30px 24px; }
+        .note-list { flex: 1; overflow-y: auto; padding-bottom: 120px; display: flex; flex-direction: column; gap: 8px; }
+        .note-card { padding: 14px 18px; display: flex; align-items: center; background: rgba(255, 255, 255, 0.85); border-radius: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); animation: pop 0.3s ease; }
+        .note-card.done { opacity: 0.5; filter: grayscale(1); }
+        .note-card.done p { text-decoration: line-through; }
+        @keyframes pop { from { opacity: 0; transform: scale(0.9); } }
 
-        /* Hệ thống chuyển trang mượt */
-        .screen {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-            display: flex; flex-direction: column;
-            box-sizing: border-box;
-        }
-        .hidden {
-            opacity: 0; pointer-events: none; z-index: -1;
-            transform: scale(0.98) translateY(10px);
-        }
-        .active {
-            opacity: 1; pointer-events: auto; z-index: 10;
-            transform: scale(1) translateY(0);
-        }
+        .checkbox { width: 22px; height: 22px; border-radius: 6px; border: 2px solid #CBD5E1; margin-right: 15px; cursor: pointer; flex-shrink: 0; }
+        .done .checkbox { background: var(--brand-secondary); border-color: var(--brand-secondary); display: flex; align-items: center; justify-content: center; }
+        .done .checkbox::after { content: '✓'; color: white; font-weight: 900; font-size: 14px; }
 
-        /* --- LANDING TRANG 1 --- */
-        #landing-page {
-            justify-content: center; align-items: center;
-            text-align: center;
-        }
+        /* Dock */
+        .input-area { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: calc(100% - 48px); max-width: 600px; display: flex; gap: 12px; z-index: 100; }
+        .input-wrapper { flex: 1; display: flex; background: white; border-radius: 20px; padding: 0 15px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        input { flex: 1; border: none; outline: none; padding: 16px 5px; font-size: 1rem; font-weight: 600; }
+        .btn-small-mic { width: 60px; height: 60px; border-radius: 20px; display: flex; justify-content: center; align-items: center; cursor: pointer; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
 
-        .slogan {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--brand-primary);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            background: rgba(255, 51, 102, 0.1);
-            padding: 8px 20px;
-            border-radius: 20px;
-            display: inline-block;
-        }
-
-        .title-3d {
-            font-family: 'Outfit', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--text-main), var(--brand-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 50px;
-            margin-top: 0;
-            letter-spacing: -2px;
-            padding: 0 20px;
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.05));
-        }
-
-        /* Nút Mic Hạch Tâm Sáng (Light Arc Reactor) */
-        .mic-btn-huge {
-            width: 150px; height: 150px;
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            cursor: pointer;
-            position: relative;
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid rgba(255,255,255,1);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 2;
-            box-shadow: 0 15px 35px rgba(0, 195, 255, 0.2);
-        }
-        .mic-btn-huge:hover {
-            transform: scale(1.05);
-            box-shadow: 0 20px 40px rgba(0, 195, 255, 0.3);
-            border-color: var(--brand-secondary);
-        }
-        .mic-btn-huge .material-icons-round {
-            font-size: 64px; color: var(--text-main);
-            transition: color 0.3s;
-        }
-        
-        .mic-btn-huge::before {
-            content: '';
-            position: absolute;
-            top: -15px; left: -15px; right: -15px; bottom: -15px;
-            border-radius: 50%;
-            border: 2px dashed rgba(0, 195, 255, 0.3);
-            animation: spin-slow 25s linear infinite;
-        }
-
-        @keyframes spin-slow { 100% { transform: rotate(360deg); } }
-
-        /* Trạng thái thu âm (Light Visualizer) */
-        .mic-recording {
-            border-color: var(--brand-primary) !important;
-            box-shadow: 0 0 40px rgba(255, 51, 102, 0.4), inset 0 0 15px rgba(255,51,102,0.2) !important;
-        }
-        .mic-recording::before { border-color: rgba(255,51,102,0.5) !important; }
-        .mic-recording .material-icons-round { 
-            color: var(--brand-primary) !important;
-            animation: pulse-icon 0.8s alternate infinite;
-        }
-        .mic-recording::after {
-            content: '';
-            position: absolute;
-            top: -30px; left: -30px; right: -30px; bottom: -30px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,51,102,0.2) 0%, transparent 60%);
-            z-index: -1;
-            animation: throb 1s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulse-icon { 100% { transform: scale(1.1); } }
-        @keyframes throb { 0% { transform: scale(0.9); opacity: 0.5; } 100% { transform: scale(1.2); opacity: 1; } }
-
-        .hint-text {
-            margin-top: 60px; font-weight: 600; color: var(--text-muted);
-            cursor: pointer; transition: all 0.3s;
-            font-size: 0.95rem;
-            padding: 10px 20px; border-radius: 20px; background: rgba(255,255,255,0.5);
-        }
-        .hint-text:hover { color: var(--text-main); background: white; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05);}
-
-        /* --- WORKSPACE TRANG 2 --- */
-        #workspace-page {
-            padding: 30px 24px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        header {
-            margin-bottom: 25px;
-            display: flex; justify-content: space-between; align-items: flex-start;
-        }
-        header h1 { 
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.2rem; margin: 0;
-            color: var(--text-main);
-            letter-spacing: -1px;
-        }
-        header h1 span {
-            color: var(--brand-primary); font-size: 0.4em; vertical-align: super;
-            background: rgba(255,51,102,0.1); padding: 4px 8px; border-radius: 10px;
-            font-weight: 900;
-        }
-        .header-slogan {
-            font-size: 0.85rem; font-weight: 700; color: var(--brand-primary); 
-            margin: 5px 0 0 0; text-transform: uppercase; letter-spacing: 1px;
-        }
-        header p { margin: 6px 0 0; color: var(--text-muted); font-size: 0.95rem; font-weight: 500;}
-
-        .avatar-box {
-            width: 46px; height: 46px; border-radius: 16px; 
-            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary)); 
-            display:flex; align-items:center; justify-content:center; 
-            box-shadow: 0 8px 15px rgba(255,51,102,0.3);
-            color: white;
-        }
-
-        /* Note Cards */
-        .note-list {
-            flex: 1; overflow-y: auto; overflow-x: hidden;
-            padding-bottom: 120px;
-            display: flex; flex-direction: column; gap: 8px;
-        }
-        .note-list::-webkit-scrollbar { width: 6px; }
-        .note-list::-webkit-scrollbar-track { background: transparent; }
-        .note-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
-
-        .note-card {
-            padding: 8px 16px;
-            display: flex; align-items: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative; overflow: hidden;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-        }
-        
-        /* Hiệu ứng Hover dạng dải băng mỏng */
-        .note-card::before {
-            content: "";
-            position: absolute; left: 0; top: 0; width: 4px; height: 100%;
-            background: var(--brand-secondary);
-            opacity: 0; transition: opacity 0.3s;
-        }
-        .note-card:hover { transform: translateX(5px); background: #FFFFFF; box-shadow: 0 10px 25px rgba(0,0,0,0.06); }
-        .note-card:hover::before { opacity: 1; }
-
-        .checkbox {
-            width: 22px; height: 22px;
-            border-radius: 6px;
-            border: 2px solid #CBD5E1;
-            margin-right: 14px;
-            cursor: pointer;
-            display: flex; justify-content: center; align-items: center;
-            transition: all 0.2s;
-            flex-shrink: 0;
-            background: white;
-        }
-        .checkbox:hover { border-color: var(--brand-secondary); box-shadow: 0 0 10px rgba(0,195,255,0.2); }
-
-        .note-card.done { opacity: 0.6; background: rgba(241, 245, 249, 0.7); }
-        .note-card.done .checkbox {
-            background: var(--brand-secondary); border-color: var(--brand-secondary);
-        }
-        .note-card.done .checkbox::after {
-            content: '✓'; color: #FFF; font-weight: 900; font-size: 14px;
-        }
-        .note-card.done .content {
-            text-decoration: line-through; color: var(--text-muted);
-        }
-
-        .note-body { flex: 1; min-width: 0; } 
-        .note-body .content { 
-            font-size: 1.05rem; font-weight: 600; line-height: 1.4; margin: 0; color: var(--text-main);
-            word-wrap: break-word;
-        }
-        .note-body .meta { font-size: 0.75rem; margin-top: 4px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap;}
-        .note-body .meta:empty { display: none; }
-        
-        .meta-tag { 
-            background: #F1F5F9; color: #475569; 
-            padding: 4px 10px; border-radius: 8px;
-            font-weight: 600; font-size: 0.75rem; white-space: nowrap;
-        }
-        .price-tag {
-            background: rgba(255, 51, 102, 0.1); color: var(--brand-primary);
-            padding: 4px 10px; border-radius: 8px;
-            font-weight: 700; font-size: 0.75rem; white-space: nowrap;
-        }
-
-        .delete-btn { 
-            cursor: pointer; color: #CBD5E1;
-            transition: all 0.3s; padding: 10px; margin-left: 10px;
-        }
-        .note-card:hover .delete-btn { color: #94A3B8; }
-        .delete-btn:hover { color: var(--brand-primary) !important; background: rgba(255,51,102,0.1); border-radius: 50%;}
-
-        /* --- INPUT CĂN CỨ DƯỚI --- */
-        .input-area {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: calc(100% - 48px); max-width: 752px;
-            display: flex; align-items: stretch; gap: 14px;
-            z-index: 100;
-        }
-
-        .input-wrapper {
-            flex: 1; position: relative;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,1);
-            backdrop-filter: blur(20px);
-            display: flex; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-        .input-wrapper:focus-within { 
-            border-color: var(--brand-secondary); 
-            box-shadow: 0 10px 25px rgba(0,195,255,0.15); 
-        }
-
-        .input-glass {
-            width: 100%; padding: 0 20px;
-            border: none; outline: none; background: transparent;
-            font-size: 1.05rem; color: var(--text-main); font-weight: 500; font-family: 'Inter';
-        }
-        .input-glass::placeholder { color: #94A3B8; }
-
-        .send-btn, .micro-btn-small {
-            width: 60px; height: 60px;
-            border-radius: 20px;
-            display: flex; justify-content: center; align-items: center;
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(255,255,255,1);
-            backdrop-filter: blur(20px);
-            transition: all 0.3s;
-            flex-shrink: 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        .send-btn:hover { background: #F8FAFC; }
-        .send-btn .material-icons-round { color: var(--text-muted); transition: color 0.3s; }
-        .input-wrapper:focus-within .send-btn .material-icons-round { color: var(--brand-secondary); }
-        
-        .micro-btn-small:hover { 
-            border-color: var(--brand-primary); 
-            box-shadow: 0 10px 20px rgba(255,51,102,0.15); 
-            background: white;
-        }
-        .micro-btn-small .material-icons-round { color: var(--brand-primary); }
-
-        /* Loader Neon Effect */
-        .loading-toast {
-            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
-            padding: 12px 30px; font-weight: 600; font-size: 0.95rem;
-            background: white;
-            border: 1px solid rgba(0,0,0,0.05);
-            color: var(--text-main); border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            z-index: 1000;
-            transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex; align-items: center; gap: 12px;
-        }
-        .loading-toast.show { top: 30px; }
-        
-        .spinner {
-            width: 18px; height: 18px;
-            border: 3px solid #E2E8F0; border-top-color: var(--brand-secondary);
-            border-radius: 50%; animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
+        /* Thông báo trình duyệt lỗi */
+        #browser-warning { position: fixed; top: 20px; left: 20px; right: 20px; background: #FFF4E5; color: #663C00; padding: 15px; border-radius: 15px; border: 1px solid #FFE2B7; z-index: 9999; display: none; font-size: 13px; font-weight: 600; }
     </style>
 </head>
 <body>
 
-    <!-- Notification Top -->
-    <div id="loading" class="loading-toast">
-        <div class="spinner"></div>
-        <span id="loading-text">Nanh Nọc đang suy nghĩ...</span>
-    </div>
+    <div id="browser-warning">⚠️ Cưng ơi! Trình duyệt này hổng hỗ trợ Mic. Copy link dán vô <b>Chrome</b> hoặc <b>Safari</b> mới xài được nha!</div>
 
-    <!-- TRANG 1: LANDING PAGE -->
-    <div id="landing-page" class="screen active">
-        <div class="slogan">Não lag có Notezy lo</div>
-        <h1 class="title-3d" id="greeting-text">Hế lô cưng!<br>Lại chốt đơn gì đây?</h1>
-        
-        <div class="mic-btn-huge glass" id="main-mic-btn" onclick="startGlobalVoiceInput()">
-            <span class="material-icons-round">mic</span>
+    <div id="landing-page" class="screen active" onclick="goToWorkspace()">
+        <h1 style="font-family:'Outfit'; font-size:3.5rem; margin-bottom:50px; background: linear-gradient(135deg, var(--text-main), var(--brand-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Notezy VIP</h1>
+        <div class="mic-btn-huge" id="main-mic-btn" onclick="event.stopPropagation(); startVoice();">
+            <span class="material-icons-round" style="font-size:64px; color:var(--text-main);">mic</span>
         </div>
-        
-        <p class="hint-text" onclick="goToWorkspace()">Mở Sổ Ghi Chú</p>
+        <p style="margin-top:40px; font-weight:700; color:var(--text-muted); opacity: 0.6;">CHẠM MIC ĐỂ NÓI NÀ CƯNG</p>
     </div>
 
-    <!-- TRANG 2: WORKSPACE PAGE -->
     <div id="workspace-page" class="screen hidden">
-        <header>
-            <div>
-                <div class="header-slogan">Não lag có Notezy lo</div>
-                <h1>Notezy <span>VIP</span></h1>
-                <p id="current-date">Hôm nay</p>
-            </div>
-            <div class="avatar-box">
-                <span class="material-icons-round" style="font-size: 26px;">girl</span>
-            </div>
-        </header>
-
-        <div class="note-list" id="note-container">
-            <!-- Thẻ HTML render qua JS -->
-        </div>
-
+        <h2 style="font-family:'Outfit'; margin:0 0 25px 24px; font-size:2.2rem;">Sổ của Cưng 📓</h2>
+        <div class="note-list" id="note-container"></div>
         <div class="input-area">
-            <form class="input-wrapper" onsubmit="event.preventDefault(); submitTextInput();">
-                <input type="text" class="input-glass" id="text-input" placeholder="Viết chỉ thị cho Nanh Nọc..." autocomplete="off">
-                <button type="submit" class="send-btn" style="border:none; border-radius: 0; background:transparent; box-shadow:none; outline:none; cursor:pointer;">
-                    <span class="material-icons-round">send</span>
-                </button>
+            <form class="input-wrapper" onsubmit="event.preventDefault(); submitText();">
+                <input type="text" id="text-input" placeholder="Gõ lệnh ở đây nà..." autocomplete="off">
+                <span class="material-icons-round" onclick="submitText()" style="color:var(--brand-secondary); cursor:pointer;">send</span>
             </form>
-            
-            <div class="micro-btn-small" id="workspace-mic-btn" onclick="startGlobalVoiceInput()">
-                <span class="material-icons-round">mic</span>
-            </div>
+            <div class="btn-small-mic" id="workspace-mic-btn" onclick="startVoice()"><span class="material-icons-round" style="color:var(--brand-primary); font-size: 30px;">mic</span></div>
         </div>
     </div>
 
-    <!-- LÕI JAVA SCRIPT -->
     <script>
-        const AI_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
-        const SYSTEM_PROMPT = `Bạn là trợ lý ảo nữ miền Nam nanh nọc, lầy lội, gọi 'cưng' xưng 'tui'. Trả về duy nhất JSON (không bọc trong \`\`\`json): {"reply": "câu khịa", "item": "việc/món đồ siêu ngắn gọn", "price": số_tiền_hoặc_0, "reminderTime": "thời_gian_iso8601_nếu_có"}`;
-
-        let notes = [];
-        let isListening = false;
-        let recognition = null;
-        let audioCtx;
-
-        function initAudio() {
-            if(!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-        }
-
-        function playHoloSound(type="success") {
-            initAudio();
-            if(audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            
-            osc.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-
-            if(type === "success") {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
-                osc.frequency.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-            } else if (type === "delete") {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.2);
-                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-            } else if (type === "micOn") {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                osc.frequency.linearRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
-                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-            }
-            
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.4);
-        }
-
-        const StorageManager = {
-            saveLocal: function(dataArray) {
-                localStorage.setItem('holonotes_v8', JSON.stringify(dataArray));
-            },
-            loadLocal: function() {
-                let data = localStorage.getItem('holonotes_v8');
-                if(!data) {
-                    data = localStorage.getItem('holonotes_v7') || localStorage.getItem('holonotes_v6'); 
-                    if(data) localStorage.setItem('holonotes_v8', data);
-                }
-                return JSON.parse(data) || [];
-            }
-        }
+        const AI_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
+        let notes = JSON.parse(localStorage.getItem('notezy_immortal_v2')) || [];
+        let isListening = false, recognition;
 
         function initApp() {
-            notes = StorageManager.loadLocal();
-            
-            const days = ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
-            const date = new Date();
-            document.getElementById('current-date').innerText = `${days[date.getDay()]}, ${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
-            
             renderNotes();
-            initSpeechAPI();
-            
-            document.addEventListener('click', initAudio, {once:true});
+            const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (Speech) {
+                recognition = new Speech();
+                recognition.lang = 'vi-VN';
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.onstart = () => { isListening = true; updateMicUI(true); };
+                recognition.onend = () => { isListening = false; updateMicUI(false); };
+                recognition.onresult = (e) => {
+                    const result = e.results[0][0].transcript;
+                    if(result) processInput(result);
+                };
+                recognition.onerror = (e) => { console.error("Mic error:", e.error); isListening = false; updateMicUI(false); };
+            } else {
+                document.getElementById('browser-warning').style.display = 'block';
+            }
+        }
+
+        async function processInput(txt) {
+            goToWorkspace();
+            const raw = txt.toLowerCase();
+            const isDone = /\bxong\b/.test(raw);
+            let clean = txt.replace(/\bxong\b/gi, "").trim();
+            if(!clean) return;
+
+            // Xử lý XONG offline ngay lập tức
+            if(isDone) {
+                let found = false;
+                for(let n of notes) {
+                    if(!n.is_done && clean.length > 1 && n.item.toLowerCase().includes(clean.toLowerCase())) {
+                        n.is_done = true; found = true; break;
+                    }
+                }
+                if(found) { save(); responsiveVoice.speak("Xong rồi hả cưng? Giỏi!", "Vietnamese Female"); return; }
+            }
+
+            // Lưu note mới (Offline First)
+            notes.unshift({ id: Date.now(), item: clean, is_done: isDone });
+            save();
+
+            // Gọi AI khịa nếu có mạng
+            if(navigator.onLine) {
+                try {
+                    const res = await fetch(AI_URL, {
+                        method: 'POST', headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ contents: [{ parts: [{ text: `Trả về JSON cực gọn: {"reply": "câu khịa gọi cưng", "item": "${clean}"}` }] }] })
+                    });
+                    const data = await res.json();
+                    const ai = JSON.parse(data.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, ""));
+                    notes[0].item = ai.item; save();
+                    responsiveVoice.speak(isDone ? "Làm xong rồi hả?" : ai.reply, "Vietnamese Female");
+                } catch (e) { console.log("AI Offline Mode"); }
+            } else {
+                responsiveVoice.speak("Đã lưu nhen cưng!", "Vietnamese Female");
+            }
         }
 
         function renderNotes() {
             const container = document.getElementById('note-container');
             container.innerHTML = '';
-            notes.slice().reverse().forEach((note, reversedIndex) => {
-                const i = notes.length - 1 - reversedIndex;
+            notes.forEach((n, i) => {
                 const div = document.createElement('div');
-                div.className = `glass note-card ${note.is_done ? 'done' : ''}`;
-                div.id = `note-card-${i}`;
-                
-                let metaTags = ``;
-                if(note.price > 0) metaTags += `<span class="price-tag">💸 ${note.price.toLocaleString('vi-VN')}đ</span>`;
-                if(note.reminderTime) {
-                    const d = new Date(note.reminderTime);
-                    metaTags += `<span class="meta-tag" style="background:#E0F2FE; color:#0369A1;">⏰ ${d.getHours()}:${d.getMinutes().toString().padStart(2,'0')} ${d.getDate()}/${d.getMonth()+1}</span>`;
-                }
-
-                div.innerHTML = `
-                    <div class="checkbox" onclick="toggleDone(${i})"></div>
-                    <div class="note-body">
-                        <p class="content">${note.item}</p>
-                        <div class="meta">${metaTags}</div>
-                    </div>
-                    <div class="delete-btn material-icons-round" onclick="deleteNote(${i})" style="padding:4px; margin-left: 8px;">delete_outline</div>
-                `;
+                div.className = `note-card ${n.is_done ? 'done' : ''}`;
+                div.innerHTML = `<div class="checkbox" onclick="toggleDone(${i})"></div><p style="flex:1; margin:0; font-weight:700;">${n.item}</p><span class="material-icons-round" style="color:#CBD5E1; font-size: 20px;" onclick="del(${i})">delete</span>`;
                 container.appendChild(div);
             });
         }
 
-        function toggleDone(index) {
-            notes[index].is_done = !notes[index].is_done;
-            StorageManager.saveLocal(notes);
-            renderNotes();
-            if(notes[index].is_done) playHoloSound("success");
+        function save() { localStorage.setItem('notezy_immortal_v2', JSON.stringify(notes)); renderNotes(); }
+        function toggleDone(i) { notes[i].is_done = !notes[i].is_done; save(); if(notes[i].done) responsiveVoice.speak("Xong việc nà cưng!", "Vietnamese Female"); }
+        function del(i) { notes.splice(i, 1); save(); }
+        function startVoice() { 
+            if(!recognition) { document.getElementById('browser-warning').style.display = 'block'; return; }
+            if(!isListening) { recognition.start(); responsiveVoice.speak("Tui nghe!", "Vietnamese Female"); } 
+            else { recognition.stop(); } 
         }
-
-        function deleteNote(index) {
-            playHoloSound("delete");
-            const targetCard = document.getElementById(`note-card-${index}`);
-            if(targetCard) {
-                targetCard.style.transform = "translateX(50px)";
-                targetCard.style.opacity = "0";
-                setTimeout(() => {
-                    notes.splice(index, 1);
-                    StorageManager.saveLocal(notes);
-                    renderNotes();
-                }, 300);
-            } else {
-                notes.splice(index, 1);
-                StorageManager.saveLocal(notes);
-                renderNotes();
-            }
-        }
-
-        function goToWorkspace() {
-            document.getElementById('landing-page').classList.replace('active', 'hidden');
-            document.getElementById('workspace-page').classList.replace('hidden', 'active');
-        }
-
-        function toggleLoader(show, text="Nanh Nọc đang suy nghĩ...") {
-            const el = document.getElementById('loading');
-            document.getElementById('loading-text').innerText = text;
-            show ? el.classList.add('show') : el.classList.remove('show');
-        }
-
-        function initSpeechAPI() {
-            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if(!SpeechRec) return;
-            recognition = new SpeechRec();
-            recognition.lang = 'vi-VN';
-            recognition.continuous = false;
-            
-            recognition.onstart = () => { UI_setListeningState(true); playHoloSound("micOn"); };
-            recognition.onend = () => { UI_setListeningState(false); };
-            recognition.onerror = () => { UI_setListeningState(false); toggleLoader(false); };
-            recognition.onresult = (event) => {
-                const text = event.results[0][0].transcript;
-                processUserInput(text);
-            };
-        }
-
-        function startGlobalVoiceInput() {
-            if(!recognition) { alert("Trình duyệt không hỗ trợ mic!"); return;}
-            if(isListening) { recognition.stop(); }
-            else { recognition.start(); }
-        }
-
-        function UI_setListeningState(state) {
-            isListening = state;
-            const b1 = document.getElementById('main-mic-btn');
-            const b2 = document.getElementById('workspace-mic-btn');
-            if(state) {
-                b1.classList.add('mic-recording'); b2.classList.add('mic-recording');
-                document.getElementById('greeting-text').innerHTML = "Đang rình nghe nè... <br><span style='color:var(--brand-primary); font-size:0.6em;'>🎙️ Khai mau</span>";
-            } else {
-                b1.classList.remove('mic-recording'); b2.classList.remove('mic-recording');
-                document.getElementById('greeting-text').innerHTML = "Hế lô cưng!<br>Lại chốt đơn gì đây?";
-            }
-        }
-
-        function submitTextInput() {
-            const val = document.getElementById('text-input').value.trim();
-            if(val) {
-                document.getElementById('text-input').value = '';
-                processUserInput(val);
-            }
-        }
-
-        // Logic check Hoàn Thành Thông Minh
-        function smartCheckDone(spokenText) {
-            let sTr = spokenText.toLowerCase();
-            const doneKeywords = ["xong", "rồi", "đã làm", "hoàn thành", "ok"];
-            
-            // Check coi trong câu có từ chỉ sự hoàn thành không?
-            let hasDoneWord = doneKeywords.some(kw => sTr.includes(kw));
-            if(!hasDoneWord) return false;
-
-            // Xoá bớt các từ để lấy ra tên công việc cốt lõi mà người dùng nhắc tới
-            let coreTaskStr = sTr;
-            doneKeywords.forEach(kw => { coreTaskStr = coreTaskStr.replace(kw, ""); });
-            coreTaskStr = coreTaskStr.replace("đã", "").trim();
-
-            if(!coreTaskStr || coreTaskStr.length < 2) return false; // Tránh lỗi
-
-            // Quét qua sổ để tìm
-            for(let i=0; i<notes.length; i++) {
-                if(!notes[i].is_done) {
-                    let noteLabel = notes[i].item.toLowerCase();
-                    // So khớp 2 chiều: câu nói chứa tên note HOẶC tên note bám dính câu nói
-                    if(sTr.includes(noteLabel) || noteLabel.includes(coreTaskStr)) {
-                        notes[i].is_done = true;
-                        StorageManager.saveLocal(notes);
-                        renderNotes();
-                        playHoloSound("success");
-                        responsiveVoice.speak("Tuyệt vời! Gạch cái '" + notes[i].item + "' cho cưng rồi nghen!", "Vietnamese Female");
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        async function processUserInput(inputStr) {
-            goToWorkspace(); 
-            
-            // Bước 1: Check xem nó có phải là câu chốt đơn Hoàn Thành hay không?
-            if (smartCheckDone(inputStr)) {
-                return; // Nếu đã tích xanh thì xì tốp ở đây luôn, không gọi Gemini đỡ mất tiền
-            }
-
-            // Gọi API
-            toggleLoader(true, "Não đang nhảy số...");
-            try {
-                const res = await fetch(AI_URL, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-                        contents: [{ parts: [{ text: `Câu nói: "${inputStr}"` }] }]
-                    })
-                });
-                const data = await res.json();
-                
-                let rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
-                rawText = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
-                
-                const aiResult = JSON.parse(rawText);
-                
-                notes.push({
-                    id: Date.now(),
-                    item: aiResult.item || inputStr,
-                    price: aiResult.price || 0,
-                    reminderTime: aiResult.reminderTime || null,
-                    is_done: false,
-                    createdAt: new Date().toISOString()
-                });
-                StorageManager.saveLocal(notes);
-                renderNotes();
-
-                if(aiResult.reply) {
-                    responsiveVoice.speak(aiResult.reply, "Vietnamese Female");
-                }
-                playHoloSound("success");
-
-            } catch (err) {
-                console.error(err);
-                // Fallback
-                notes.push({ id: Date.now(), item: inputStr, price: 0, is_done: false, createdAt: new Date().toISOString() });
-                StorageManager.saveLocal(notes);
-                renderNotes();
-                responsiveVoice.speak("Mạng yếu nhớt, tui ghi đại vô sổ rồi tự coi đi!", "Vietnamese Female");
-                playHoloSound("success");
-            }
-            toggleLoader(false);
-        }
-
+        function submitText() { const v = document.getElementById('text-input').value.trim(); if(v) { processInput(v); document.getElementById('text-input').value = ''; } }
+        function goToWorkspace() { document.getElementById('landing-page').className = 'screen hidden'; document.getElementById('workspace-page').className = 'screen active'; }
+        function updateMicUI(s) { document.getElementById('main-mic-btn').classList.toggle('mic-recording', s); document.getElementById('workspace-mic-btn').classList.toggle('mic-recording', s); }
+        
         window.onload = initApp;
-
     </script>
 </body>
 </html>

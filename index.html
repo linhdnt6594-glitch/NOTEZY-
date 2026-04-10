@@ -3,174 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Notezy V - Hologram</title>
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="icon.png">
+    <title>Notezy V - Super Logic</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 
     <style>
-        :root {
-            --bg-stone: #D8D8D8; 
-            --lavender: #E0CFFC; 
-            --blush: #F8E0F2;
-            --deep-lavender: #B794F4;
-        }
+        :root { --bg-stone: #D8D8D8; --lavender: #E0CFFC; --blush: #F8E0F2; --deep-lavender: #B794F4; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100dvh; font-family: 'Inter', sans-serif; overflow: hidden; background: var(--bg-stone); }
+        .bg-overlay { position: fixed; inset: 0; background: radial-gradient(circle at 10% 10%, var(--lavender) 0%, transparent 45%), radial-gradient(circle at 90% 90%, var(--blush) 0%, transparent 45%); z-index: -1; }
 
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100dvh; 
-            font-family: 'Inter', sans-serif; overflow: hidden; 
-            background: var(--bg-stone);
-        }
-
-        /* Nền loang màu Pastel */
-        .bg-overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: radial-gradient(circle at 10% 10%, var(--lavender) 0%, transparent 45%), 
-                        radial-gradient(circle at 90% 90%, var(--blush) 0%, transparent 45%); 
-            z-index: -1; 
-        }
-
-        .screen { 
-            position: absolute; width: 100%; height: 100dvh; 
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
-            display: flex; flex-direction: column; padding: 20px 25px; 
-            box-sizing: border-box; align-items: center; 
-        }
+        .screen { position: absolute; width: 100%; height: 100dvh; transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); display: flex; flex-direction: column; padding: 20px 25px; box-sizing: border-box; align-items: center; }
         .hidden { transform: translateY(100%); opacity: 0; pointer-events: none; }
         .active { transform: translateY(0); opacity: 1; z-index: 10; }
 
-        /* TRANG 1: CUỐN SỔ 3D HOLOGAM (Fix lỗi đè chữ) */
+        /* Trang 1 - Sổ Hologram */
         #landing { justify-content: center; }
-        .book-frame { 
-            width: 260px; height: 340px; background: white; border-radius: 45px; 
-            display: flex; justify-content: center; align-items: center; 
-            box-shadow: 0 25px 50px rgba(0,0,0,0.08); 
-            animation: float 4s infinite; border: 1px solid rgba(255,255,255,0.8);
-            position: relative; z-index: 20; cursor: pointer;
-        }
-        /* Icon sổ giả lập hiệu ứng Hologram */
-        .book-icon { 
-            font-size: 150px; 
-            filter: drop-shadow(0 0 10px var(--lavender)) saturate(0.8);
-            background: linear-gradient(135deg, #fff, #B794F4);
-            -webkit-background-clip: text;
-        }
+        .book-frame { width: 260px; height: 340px; background: white; border-radius: 45px; display: flex; justify-content: center; align-items: center; box-shadow: 0 25px 50px rgba(0,0,0,0.08); animation: float 4s infinite; border: 1px solid rgba(255,255,255,0.8); cursor: pointer; }
+        .book-icon { font-size: 150px; filter: drop-shadow(0 0 10px var(--lavender)); }
         @keyframes float { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-20px);} }
 
-        /* TRANG 2: DANH SÁCH GỘP SIÊU GỌN */
-        .header-main { width: 100%; text-align: left; padding-top: env(safe-area-inset-top); margin-bottom: 25px; }
-        .header-main h1 { font-weight: 900; margin: 0; font-size: 1.7rem; color: #1a202c; }
-
-        .list-wrap { 
-            width: 100%; flex: 1; overflow-y: auto; 
-            padding-bottom: 120px;
-            -webkit-overflow-scrolling: touch;
-        }
-        .card { 
-            background: white; padding: 22px; border-radius: 28px; 
-            margin-bottom: 12px; display: flex; align-items: center; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02); 
-            animation: slideUp 0.4s ease-out;
-            border-left: 6px solid #CBD5E0; /* Màu mặc định */
-        }
-        .card.work { border-left-color: var(--deep-lavender); }
-        .card.personal { border-left-color: #F6AD55; }
+        /* Trang 2 - List */
+        .list-wrap { width: 100%; flex: 1; overflow-y: auto; padding-bottom: 120px; }
+        .card { background: white; padding: 22px; border-radius: 28px; margin-bottom: 12px; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02); animation: slide 0.4s; border-left: 6px solid #CBD5E0; }
         .card.done span { text-decoration: line-through; opacity: 0.3; }
-
-        @keyframes slideUp { from {opacity: 0; transform: translateY(20px);} }
-
-        .check-box { 
-            width: 28px; height: 28px; border-radius: 10px; border: 3px solid #EDF2F7; 
-            margin-right: 18px; cursor: pointer; flex-shrink: 0; 
-            display: flex; align-items: center; justify-content: center;
-        }
+        .check-box { width: 28px; height: 28px; border-radius: 10px; border: 3px solid #EDF2F7; margin-right: 18px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
         .check-box.checked { background: #4ADE80; border-color: #4ADE80; }
         .check-box.checked::after { content: '✓'; color: white; font-weight: 900; }
 
-        /* THANH DOCK VIÊN THUỐC */
-        .dock-container { 
-            position: fixed; bottom: calc(30px + env(safe-area-inset-bottom)); 
-            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(25px); 
-            padding: 10px; border-radius: 50px; display: flex; gap: 12px; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid white; z-index: 100;
-        }
-        .dock-btn { 
-            display: flex; align-items: center; gap: 10px; padding: 14px 28px; 
-            border-radius: 40px; font-weight: 900; font-size: 13px; 
-            cursor: pointer; background: white; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-        }
-        .btn-speech.on { background: #ff4d4d !important; color: white !important; }
+        /* Dock */
+        .dock { position: fixed; bottom: 35px; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); padding: 10px 25px; border-radius: 50px; display: flex; gap: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .btn-mic.on { color: #ff4d4d !important; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.1);} 100% {transform: scale(1);} }
     </style>
 </head>
 <body>
-
 <div class="bg-overlay"></div>
 
-<div id="landing" class="screen active">
-    <div style="position: absolute; top: 60px; left: 30px;">
-        <h1 style="font-weight: 900; margin: 0; font-size: 1.6rem;">NOTEZY</h1>
-        <p style="color: #718096; font-weight: 600; font-size: 12px;">Refined Royal Hologram</p>
-    </div>
-
-    <div class="book-frame" onclick="switchPage('workspace')">
-        <div class="book-icon">📓</div>
-    </div>
-    
-    <h2 style="font-weight: 900; margin-top: 40px; text-align: center;">MỞ SỔ ĐI CƯNG!</h2>
-
-    <div class="dock-container">
-        <div class="dock-btn" onclick="openModal()" style="color:#718096;"><span class="material-icons-round">edit</span> ADD</div>
-        <div class="dock-btn btn-speech" id="mic-l" onclick="startSpeech()" style="color:var(--deep-lavender);"><span class="material-icons-round">mic_none</span> SPEECH</div>
-    </div>
+<div id="landing" class="screen active" onclick="switchPage('workspace')">
+    <div class="book-frame"><div class="book-icon">📓</div></div>
+    <h2 style="font-weight:900; margin-top:40px;">MỞ SỔ ĐI CƯNG!</h2>
 </div>
 
 <div id="workspace" class="screen hidden">
-    <div class="header-main">
-        <h1>Não lag? Mở Notezy 😎</h1>
-    </div>
-
+    <h1 style="font-weight:900; width:100%; margin-bottom:20px;">Não lag? Mở Notezy 😎</h1>
     <div id="list" class="list-wrap"></div>
-
-    <div class="dock-container">
-        <div class="dock-btn" onclick="openModal()" style="color:#718096;"><span class="material-icons-round">edit</span> ADD</div>
-        <div class="dock-btn btn-speech" id="mic-w" onclick="startSpeech()" style="color:var(--deep-lavender);"><span class="material-icons-round">mic_none</span> SPEECH</div>
-    </div>
 </div>
 
-<div id="inputModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; justify-content:center; align-items:center; z-index:2000; backdrop-filter:blur(15px);">
-    <div style="background:white; padding:30px; border-radius:40px; width:85%; max-width:400px;">
-        <h3 style="margin:0 0 20px; font-weight:900;">Nhập note nà cưng</h3>
-        <input type="text" id="manualInput" placeholder="Gõ gì đó..." style="width:100%; padding:18px; border-radius:20px; border:1px solid #eee; outline:none; margin-bottom:20px; font-size:16px; box-sizing:border-box;">
-        <button onclick="addManual()" style="width:100%; padding:18px; border-radius:20px; border:none; background:var(--deep-lavender); color:white; font-weight:900;">LƯU LẠI</button>
-        <p onclick="closeModal()" style="text-align:center; color:#999; font-size:13px; margin-top:20px; cursor:pointer;">Đóng</p>
+<div class="dock">
+    <div onclick="startSpeech()" class="btn-mic" id="mic-btn" style="cursor:pointer; font-weight:900; display:flex; align-items:center; gap:10px; color:var(--deep-lavender);">
+        <span class="material-icons-round" style="font-size:35px;">mic</span> SPEECH
     </div>
 </div>
 
 <script>
     const API_KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
-    let notes = JSON.parse(localStorage.getItem('notezy_v36')) || [];
-    let isListening = false, rec;
+    let notes = JSON.parse(localStorage.getItem('notezy_v37')) || [];
 
     function startSpeech() {
         const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
         if(!Speech) return;
-        rec = new Speech(); rec.lang = 'vi-VN'; rec.continuous = false;
-        rec.onstart = () => { isListening = true; updateUI(true); };
+        const rec = new Speech(); rec.lang = 'vi-VN';
+        rec.onstart = () => { document.getElementById('mic-btn').classList.add('on'); };
         rec.onresult = (e) => { processAI(e.results[0][0].transcript); };
-        rec.onend = () => { isListening = false; updateUI(false); };
+        rec.onend = () => { document.getElementById('mic-btn').classList.remove('on'); };
         rec.start();
-        responsiveVoice.speak("Hóng lệnh nà cưng!", "Vietnamese Female");
+        responsiveVoice.speak("Tui hóng nà cưng!", "Vietnamese Female");
     }
 
     async function processAI(txt) {
         if(document.getElementById('landing').classList.contains('active')) switchPage('workspace');
-        // AI nhận diện hoàn thành (xong, đã, rồi) và phân loại ngầm
-        const p = `Phân loại "${txt}" vào "work" hoặc "personal". Nếu có từ xong/đã/rồi thì done:true. JSON: {"type": "work/personal", "reply": "khịa cưng", "text": "nội dung sạch", "done": boolean}`;
+        
+        // KIỂM TRA TỪ KHÓA HOÀN THÀNH TRỰC TIẾP
+        const normalized = txt.toLowerCase();
+        const isDone = /\bxong\b|\bđã\b|\brồi\b/.test(normalized);
+        
+        const p = `Phân loại "${txt}" vào "work" hoặc "personal". JSON: {"type": "work/personal", "reply": "khịa gọi cưng", "text": "nội dung sạch"}`;
+        
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -179,47 +89,35 @@
             const d = await res.json();
             const resAI = JSON.parse(d.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, ""));
             
-            notes.unshift({ id: Date.now(), text: resAI.text, type: resAI.type, done: resAI.done });
+            // Nếu có chữ "xong/đã/rồi" thì gán done = true
+            notes.unshift({ id: Date.now(), text: resAI.text, type: resAI.type, done: isDone });
             save();
-            responsiveVoice.speak(resAI.done ? "Xong việc rồi hả cưng? Giỏi!" : resAI.reply, "Vietnamese Female");
-        } catch(e) { 
-            notes.unshift({ id: Date.now(), text: txt, type: 'work', done: false }); 
-            save(); 
+            
+            let feedback = isDone ? "Xong rồi hả cưng? Giỏi ta!" : resAI.reply;
+            responsiveVoice.speak(feedback, "Vietnamese Female");
+        } catch(e) {
+            notes.unshift({ id: Date.now(), text: txt, type: 'work', done: isDone });
+            save();
         }
     }
 
-    function save() { localStorage.setItem('notezy_v36', JSON.stringify(notes)); render(); }
-    
+    function save() { localStorage.setItem('notezy_v37', JSON.stringify(notes)); render(); }
     function render() {
         const l = document.getElementById('list'); l.innerHTML = '';
         notes.forEach(n => {
-            l.innerHTML += `<div class="card ${n.type} ${n.done?'done':''}">
+            l.innerHTML += `<div class="card ${n.done?'done':''}" style="border-left-color:${n.type==='work'?'#B794F4':'#F6AD55'}">
                 <div class="check-box ${n.done?'checked':''}" onclick="toggleDone(${n.id})"></div>
-                <span style="flex:1; font-weight:800; font-size:1rem;">${n.text}</span>
-                <span class="material-icons-round" style="opacity:0.1; padding-left:10px;" onclick="del(${n.id})">delete</span>
+                <span style="flex:1; font-weight:800;">${n.text}</span>
             </div>`;
         });
     }
 
     function toggleDone(id) {
         const n = notes.find(x => x.id === id);
-        if(n) { n.done = !n.done; if(n.done) responsiveVoice.speak("Xong rồi hả cưng?", "Vietnamese Female"); save(); }
-    }
-
-    function addManual() {
-        const val = document.getElementById('manualInput').value;
-        if(val) { processAI(val); closeModal(); document.getElementById('manualInput').value=''; }
-    }
-
-    function updateUI(on) { 
-        document.getElementById('mic-l').classList.toggle('on', on);
-        document.getElementById('mic-w').classList.toggle('on', on);
+        if(n) { n.done = !n.done; if(n.done) responsiveVoice.speak("Xong rồi nà cưng!", "Vietnamese Female"); save(); }
     }
 
     function switchPage(p) { document.getElementById('landing').className='screen hidden'; document.getElementById('workspace').className='screen active'; render(); }
-    function openModal() { document.getElementById('inputModal').style.display='flex'; }
-    function closeModal() { document.getElementById('inputModal').style.display='none'; }
-    function del(id) { notes = notes.filter(n => n.id !== id); save(); }
     window.onload = render;
 </script>
 </body>

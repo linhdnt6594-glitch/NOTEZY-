@@ -3,194 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Notezy V6 - Pure Classic</title>
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Notezy V10 - Voice Command</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 
     <style>
-        :root {
-            --bg: #FFFFFF;
-            --theme: #B794F4;
-            --text: #1A202C;
-            --gray: #F7FAFC;
-        }
+        :root { --bg: #F8FAFC; --theme: #B794F4; --text: #1E293B; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100dvh; font-family: 'Inter', sans-serif; overflow: hidden; background: var(--bg); color: var(--text); }
 
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100dvh; 
-            font-family: 'Inter', sans-serif; overflow: hidden; 
-            background: var(--bg); color: var(--text); 
-        }
-
-        .screen { 
-            position: absolute; width: 100%; height: 100%; 
-            transition: 0.5s ease; 
-            display: flex; flex-direction: column; padding: 30px 25px; 
-            box-sizing: border-box; 
-        }
-        .hidden { transform: translateX(100%); opacity: 0; }
+        .screen { position: absolute; width: 100%; height: 100%; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; padding: 30px 25px; box-sizing: border-box; }
+        .hidden { transform: translateX(-100%); opacity: 0; pointer-events: none; }
         .active { transform: translateX(0); opacity: 1; z-index: 10; }
 
-        /* Trang 1: Landing V6 */
-        #landing { justify-content: center; align-items: center; text-align: center; }
-        .simple-book { 
-            font-size: 120px; margin-bottom: 20px; 
-            animation: bounce 3s infinite ease-in-out;
-            cursor: pointer;
-        }
-        @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-20px);} }
+        /* Cuốn sổ V10 */
+        .book-container { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .v10-book { font-size: 140px; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.1)); animation: swing 3s infinite ease-in-out; cursor: pointer; }
+        @keyframes swing { 0%, 100% {transform: rotate(-5deg) translateY(0);} 50% {transform: rotate(5deg) translateY(-20px);} }
 
-        /* Trang 2: Workspace V6 */
-        .header-v6 { margin-bottom: 25px; border-bottom: 2px solid var(--gray); padding-bottom: 15px; }
-        .slogan { font-weight: 900; font-size: 1.5rem; letter-spacing: -1px; margin: 0; }
+        /* Giao diện chính */
+        .header { margin-bottom: 25px; }
+        .tab-group { display: flex; gap: 10px; margin-bottom: 20px; background: #E2E8F0; padding: 5px; border-radius: 15px; }
+        .tab { flex: 1; padding: 12px; text-align: center; border-radius: 12px; font-weight: 900; cursor: pointer; transition: 0.3s; color: #64748B; }
+        .tab.active-tab { background: white; color: var(--theme); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        .tab-bar { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { 
-            flex: 1; padding: 12px; border-radius: 12px; text-align: center; 
-            font-weight: 800; background: var(--gray); border: none; 
-            cursor: pointer; color: #718096;
-        }
-        .active-tab { background: var(--theme); color: white; }
+        .list { flex: 1; overflow-y: auto; padding-bottom: 120px; }
+        .note-card { background: white; padding: 20px; border-radius: 22px; margin-bottom: 12px; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.03); }
+        .note-card.done span { text-decoration: line-through; opacity: 0.3; }
 
-        /* List Note V6 */
-        .list { flex: 1; overflow-y: auto; padding-bottom: 100px; }
-        .card { 
-            background: var(--gray); padding: 20px; border-radius: 18px; 
-            margin-bottom: 10px; display: flex; align-items: center; 
-            border: 1px solid transparent; transition: 0.3s;
-        }
-        .card.done { background: #EDF2F7; }
-        .card.done span { text-decoration: line-through; opacity: 0.4; }
-        
-        .check-box { 
-            width: 22px; height: 22px; border-radius: 6px; border: 2px solid #CBD5E0; 
-            margin-right: 15px; cursor: pointer; flex-shrink: 0; 
-            display: flex; align-items: center; justify-content: center; background: white;
-        }
-        .check-box.checked { background: #4ADE80; border-color: #4ADE80; }
-        .check-box.checked::after { content: '✓'; color: white; font-weight: 900; font-size: 14px; }
-
-        /* Mic Button V6 */
-        .mic-v6 { 
-            position: fixed; bottom: 40px; right: 25px; 
-            width: 70px; height: 70px; border-radius: 50%; 
-            background: var(--theme); color: white;
-            display: flex; justify-content: center; align-items: center; 
-            box-shadow: 0 8px 20px rgba(183, 148, 244, 0.4); z-index: 100; cursor: pointer; 
-        }
-        .mic-on { background: #F56565; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.1);} 100% {transform: scale(1);} }
+        /* Mic "Quyền Lực" */
+        .mic-btn { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); width: 80px; height: 80px; border-radius: 50%; background: var(--theme); color: white; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 25px rgba(183, 148, 244, 0.5); z-index: 100; cursor: pointer; }
+        .mic-btn.active { background: #FF4757; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% {box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4);} 70% {box-shadow: 0 0 0 20px rgba(255, 71, 87, 0);} }
     </style>
 </head>
 <body>
 
-<div id="landing" class="screen active" onclick="switchPage('workspace')">
-    <div class="simple-book">📓</div>
-    <h2 style="font-weight: 900;">BẤM ĐỂ MỞ SỔ<br>NÀ CƯNG!</h2>
-    <p style="color: #A0AEC0; font-weight: 600; font-size: 14px;">(V6 Classic Return)</p>
+<div id="landing" class="screen active">
+    <div class="book-container" onclick="switchPage('workspace')">
+        <div class="v10-book">📓</div>
+        <h2 style="font-weight: 900; margin-top: 20px;">CHẠM ĐỂ MỞ SỔ NÀ CƯNG!</h2>
+        <p style="color: #94A3B8; font-weight: 600;">Ra lệnh: "Mở công việc", "Xóa hết"...</p>
+    </div>
 </div>
 
 <div id="workspace" class="screen hidden">
-    <div class="header-v6">
-        <h1 class="slogan">Não lag? Mở Notezy 😎</h1>
+    <div class="header">
+        <h1 style="font-weight: 900; letter-spacing: -1.5px; margin: 0;">Não lag? Mở Notezy 😎</h1>
     </div>
-    <div class="tab-bar">
-        <button id="t-w" class="tab-btn active-tab" onclick="setTab('work')">WORK</button>
-        <button id="t-p" class="tab-btn" onclick="setTab('personal')">PERSONAL</button>
+    <div class="tab-group">
+        <div id="tab-work" class="tab active-tab" onclick="setTab('work')">WORK</div>
+        <div id="tab-personal" class="tab" onclick="setTab('personal')">PERSONAL</div>
     </div>
     <div id="list" class="list"></div>
 </div>
 
-<div class="mic-v6" id="master-mic" onclick="toggleSpeech()">
+<div class="mic-btn" id="main-mic" onclick="toggleVoice()">
     <span class="material-icons-round" style="font-size: 35px;">mic</span>
 </div>
 
 <script>
     const API_KEY = "AIzaSyBguiessoOjSXzzM5BmZ4kd9Si3BSIg4Ng";
-    let notes = JSON.parse(localStorage.getItem('notezy_v6')) || [];
+    let notes = JSON.parse(localStorage.getItem('notezy_v10')) || [];
     let currentTab = 'work', rec, isListening = false;
 
-    function toggleSpeech() {
-        if(!isListening) {
-            initSpeech();
-            responsiveVoice.speak("Hóng nà cưng!", "Vietnamese Female");
+    function toggleVoice() {
+        if (!isListening) {
+            const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!Speech) return;
+            rec = new Speech(); rec.lang = 'vi-VN'; rec.continuous = false;
+            rec.onstart = () => { isListening = true; document.getElementById('main-mic').classList.add('active'); };
+            rec.onresult = (e) => { handleVoiceCommand(e.results[0][0].transcript); };
+            rec.onend = () => { isListening = false; document.getElementById('main-mic').classList.remove('active'); };
+            rec.start();
+            responsiveVoice.speak("Tui nghe nà cưng!", "Vietnamese Female");
         } else {
-            isListening = false;
-            if(rec) rec.stop();
+            rec.stop();
         }
     }
 
-    function initSpeech() {
-        const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if(!Speech) return;
-        rec = new Speech(); rec.lang = 'vi-VN'; rec.continuous = false;
-        rec.onstart = () => { 
-            isListening = true; 
-            document.getElementById('master-mic').classList.add('mic-on'); 
-        };
-        rec.onresult = (e) => { 
-            processAI(e.results[0][0].transcript);
-        };
-        rec.onend = () => { 
-            document.getElementById('master-mic').classList.remove('mic-on');
-            isListening = false;
-        };
-        rec.start();
-    }
+    async function handleVoiceCommand(txt) {
+        const cmd = txt.toLowerCase();
+        
+        // Lệnh điều khiển hệ thống
+        if (cmd.includes("công việc") || cmd.includes("work")) { setTab('work'); switchPage('workspace'); return; }
+        if (cmd.includes("cá nhân") || cmd.includes("personal")) { setTab('personal'); switchPage('workspace'); return; }
+        if (cmd.includes("xóa hết") || cmd.includes("dọn dẹp")) { notes = notes.filter(n => n.type !== currentTab); save(); responsiveVoice.speak("Sạch bong kin kít rồi nà cưng!", "Vietnamese Female"); return; }
+        if (cmd.includes("trang chủ") || cmd.includes("quay lại")) { document.getElementById('workspace').className='screen hidden'; document.getElementById('landing').className='screen active'; return; }
 
-    async function processAI(txt) {
-        if(document.getElementById('landing').classList.contains('active')) switchPage('workspace');
-        const isDone = /xong|đã|rồi/.test(txt.toLowerCase());
-        const p = `Phân loại "${txt}" vào "work" hoặc "personal". Trả về JSON: {"type": "work/personal", "reply": "câu khịa gọi cưng", "text": "nội dung"}`;
+        // Nếu không phải lệnh, thì là Ghi chú
+        if (document.getElementById('landing').classList.contains('active')) switchPage('workspace');
+        const isDone = /xong|đã|rồi/.test(cmd);
+        
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ contents: [{ parts: [{ text: p }] }] })
+                body: JSON.stringify({ contents: [{ parts: [{ text: `Phân loại "${txt}" vào "work" hoặc "personal". Trả về JSON: {"type": "work/personal", "reply": "câu khịa gọi cưng", "text": "nội dung"}` }] }] })
             });
             const d = await res.json();
             const resAI = JSON.parse(d.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, ""));
-            let cleanText = resAI.text.replace(/xong|đã|rồi/gi, "").trim();
-            
-            notes.unshift({ id: Date.now(), text: cleanText || resAI.text, type: resAI.type, done: isDone });
+            notes.unshift({ id: Date.now(), text: resAI.text.replace(/xong|đã|rồi/gi, "").trim(), type: resAI.type, done: isDone });
             save();
-            responsiveVoice.speak(isDone ? "Cưng làm xong rồi hả? Ghê ta!" : resAI.reply, "Vietnamese Female");
+            responsiveVoice.speak(isDone ? "Xong rồi hả cưng? Giỏi ta!" : resAI.reply, "Vietnamese Female");
             setTab(resAI.type);
-        } catch(e) { 
+        } catch(e) {
             notes.unshift({ id: Date.now(), text: txt, type: currentTab, done: isDone });
-            save(); 
+            save();
         }
     }
 
-    function save() { localStorage.setItem('notezy_v6', JSON.stringify(notes)); render(); }
+    function save() { localStorage.setItem('notezy_v10', JSON.stringify(notes)); render(); }
     function render() {
-        const l = document.getElementById('list'); l.innerHTML = '';
+        const container = document.getElementById('list'); container.innerHTML = '';
         notes.filter(n => n.type === currentTab).forEach(n => {
-            l.innerHTML += `<div class="card ${n.done?'done':''}">
-                <div class="check-box ${n.done?'checked':''}" onclick="toggleDone(${n.id})"></div>
-                <span style="flex:1; font-weight:800; font-size: 1rem;">${n.text}</span>
-                <span class="material-icons-round" onclick="del(${n.id})" style="opacity:0.2; font-size:22px; cursor:pointer;">delete_outline</span>
+            container.innerHTML += `<div class="note-card ${n.done?'done':''}">
+                <div onclick="toggleDone(${n.id})" style="width:22px; height:22px; border:2px solid #CBD5E0; border-radius:6px; margin-right:15px; display:flex; align-items:center; justify-content:center; background:${n.done?'#4ADE80':'white'}; border-color:${n.done?'#4ADE80':'#CBD5E0'}">
+                    ${n.done?'<span style="color:white; font-weight:900; font-size:12px;">✓</span>':''}
+                </div>
+                <span style="flex:1; font-weight:800;">${n.text}</span>
+                <span class="material-icons-round" onclick="del(${n.id})" style="opacity:0.2; font-size:20px;">delete</span>
             </div>`;
         });
     }
 
-    function toggleDone(id) {
-        const n = notes.find(x => x.id === id);
-        n.done = !n.done;
-        if(n.done) responsiveVoice.speak("Nay ngoan ta, cũng biết xong việc!", "Vietnamese Female");
-        save();
-    }
-
+    function toggleDone(id) { const n = notes.find(x => x.id === id); n.done = !n.done; save(); }
     function del(id) { notes = notes.filter(n => n.id !== id); save(); }
-    function setTab(t) { 
-        currentTab = t; 
-        document.getElementById('t-w').className = t === 'work' ? 'tab-btn active-tab' : 'tab-btn';
-        document.getElementById('t-p').className = t === 'personal' ? 'tab-btn active-tab' : 'tab-btn';
-        render(); 
-    }
+    function setTab(t) { currentTab = t; document.getElementById('tab-work').className = t==='work'?'tab active-tab':'tab'; document.getElementById('tab-personal').className = t==='personal'?'tab active-tab':'tab'; render(); }
     function switchPage(p) { document.getElementById('landing').className='screen hidden'; document.getElementById('workspace').className='screen active'; render(); }
     window.onload = render;
 </script>
